@@ -112,7 +112,8 @@ class OscillatingCircleTrajectory extends TrajectoryComponent {
 }
 
 class LemniscateRTrajectory extends TrajectoryComponent {
-    //    Ratio of 'size' of X component to 'size' of Y component ('size' refers to amplitude in this case)
+//    Ratio of 'size' of X component to 'size' of Y component
+//    ('size' here refers to the amplitude)
     protected double RATIO;       // hyperparameter
 
     public LemniscateRTrajectory(double size, double speed, double delay) {
@@ -144,7 +145,7 @@ class LemniscateRTrajectory extends TrajectoryComponent {
 }
 
 class LemniscateLTrajectory extends TrajectoryComponent {
-//    Ratio of 'size' of X component to 'size' of Y component
+    //    Ratio of 'size' of X component to 'size' of Y component
 //    ('size' here refers to the amplitude)
     protected double RATIO;       // hyperparameter
 
