@@ -9,6 +9,8 @@ public class RotationComponent extends Component {
         this.angularVelocity = angularVelocity;
         pivot = new Vector2D(x, y);
         rotateTransform = new Rotate(0, x, y);
+
+        setComponentClass(ComponentClass.valueOf("ROTATION"));
     }
 
     public double getAngularVelocity() {
@@ -35,5 +37,13 @@ public class RotationComponent extends Component {
 
     public void rotate(double timeInSeconds) {
         rotateTransform.setAngle(angularVelocity * timeInSeconds);
+    }
+
+    public void insertionCallback(EntityManager entityManager, GameObject gameObject) {
+
+    }
+
+    public void deletionCallback(EntityManager entityManager, GameObject gameObject) {
+
     }
 }

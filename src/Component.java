@@ -1,15 +1,11 @@
 public abstract class Component {
+    private ComponentClass componentClass;
 
-}
-
-class TextureComponent extends Component {
-    private final String textureName;
-
-    public TextureComponent(String textureName) {
-        this.textureName = textureName;
+    public void setComponentClass(ComponentClass componentClass) {
+        this.componentClass = componentClass;
     }
 
-    public String getTextureName() {
-        return textureName;
+    public ComponentClass getComponentClass() {
+        return componentClass;
     }
 }

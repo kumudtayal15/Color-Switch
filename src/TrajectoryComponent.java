@@ -14,6 +14,8 @@ public class TrajectoryComponent extends Component {
         this.size = size;
         this.speed = speed;
         this.delay = delay;
+
+        setComponentClass(ComponentClass.valueOf("TRAJECTORY"));
     }
 
     public Vector2D getPositionVector(double timeInSeconds) {
@@ -94,7 +96,7 @@ class OscillatingCircleTrajectory extends TrajectoryComponent {
             e.printStackTrace();
         }
 
-        this.freq = 2 * Math.pow(speed, 1 / 3.0);     // hyperparameter
+        this.freq = 2 * Math.pow(Math.abs(speed), 1 / 3.0);     // hyperparameter
         this.shift = (k + 1) * size / 2.0;
         this.amp = (k - 1) * size / 2.0;
     }

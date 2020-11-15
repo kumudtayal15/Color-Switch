@@ -1,5 +1,4 @@
 public class GameObject {
-    // dummy game object
 
     private int ID;
 

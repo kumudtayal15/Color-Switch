@@ -1,14 +1,15 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class EntityManager {
     private int lowestUnassignedEid;
-    private final HashMap<String, HashMap<GameObject,
+    private final HashMap<ComponentClass, HashMap<GameObject,
             Component>> componentMap;
     private final ArrayList<GameObject> gameObjectList;
 
     public EntityManager() {
-        gameObjectList = new ArrayList<GameObject>();
+        gameObjectList = new ArrayList<>();
         componentMap = new HashMap<>();
         lowestUnassignedEid = 1;
     }
@@ -30,30 +31,32 @@ public class EntityManager {
     }
 
     public void addComponent(Component component, GameObject gameObject) {
-        String componentName = component.getClass().toString();
-        componentMap.putIfAbsent(componentName, new HashMap<>());
-        componentMap.get(componentName).put(gameObject, component);
+        componentMap.putIfAbsent(component.getComponentClass(), new HashMap<>());
+        componentMap.get(component.getComponentClass()).put(gameObject, component);
     }
 
-    public Component getComponentByClass(Class<?> componentClass, GameObject gameObject) {
-        return componentMap.get(componentClass.toString()).get(gameObject);
+    public void addComponent(Component component, GameObject gameObject, ComponentCallback callBack) {
+        /*
+        Overloads the addComponent method to support component callbacks
+         */
+
+        addComponent(component, gameObject);
+        callBack.initialize(this, gameObject);
     }
 
-    public static void main(String[] args) {
-        EntityManager entityManager = new EntityManager();
-
-        GameObject ball1 = new GameObject();
-        GameObject ball2 = new GameObject();
-
-        entityManager.registerAll(ball1, ball2);
-        entityManager.addComponent(new TextureComponent("Carbon"), ball1);
-
-        System.out.println(ball1.getID());
-        System.out.println(ball2.getID());
-
-        TextureComponent tex = (TextureComponent) entityManager.getComponentByClass(
-                TextureComponent.class,
-                ball1);
-        System.out.println(tex.getTextureName());
+    public Component getComponent(ComponentClass componentClass, GameObject gameObject) {
+        return componentMap.get(componentClass).get(gameObject);
     }
+
+    public List<GameObject> getGameObjects(ComponentClass componentClass) {
+        ArrayList<GameObject> gameObjectList = new ArrayList<>(0);
+        HashMap<GameObject, Component> entityComponentMap = componentMap.get(componentClass);
+
+        if (entityComponentMap != null) {
+            gameObjectList.addAll(entityComponentMap.keySet());
+        }
+
+        return gameObjectList;
+    }
+
 }
