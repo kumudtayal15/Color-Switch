@@ -45,17 +45,17 @@ public class ParticulateCircle extends CompoundObstacle {
 
             MeshComponent meshComponent = new MeshComponent(particleMesh, meshColor);
 
-            entityManager.addComponent(
-                    meshComponent,
+            entityManager.addComponents(
                     particle,
-                    meshComponent::insertionCallback);
+                    meshComponent::insertionCallback,
+                    meshComponent);
 
-            TrajectoryComponent circleTrajectory = new OscillatingCircleTrajectory(
+            TrajectoryComponent circleTrajectory = new CircleTrajectory(
                     trajectoryRadius, trajectorySpeed, i * 2 * Math.PI / particleCount);
-            entityManager.addComponent(
-                    circleTrajectory,
-                    particle
-            );
+            entityManager.addComponents(
+                    particle,
+                    circleTrajectory);
+
         }
     }
 }

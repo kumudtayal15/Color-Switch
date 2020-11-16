@@ -30,18 +30,22 @@ public class EntityManager {
         }
     }
 
-    public void addComponent(Component component, GameObject gameObject) {
-        componentMap.putIfAbsent(component.getComponentClass(), new HashMap<>());
-        componentMap.get(component.getComponentClass()).put(gameObject, component);
+    public void addComponents(GameObject gameObject, Component... components) {
+        for (Component component : components) {
+            componentMap.putIfAbsent(component.getComponentClass(), new HashMap<>());
+            componentMap.get(component.getComponentClass()).put(gameObject, component);
+        }
     }
 
-    public void addComponent(Component component, GameObject gameObject, ComponentCallback callBack) {
+    public void addComponents(GameObject gameObject, ComponentCallback callBack, Component... components) {
         /*
-        Overloads the addComponent method to support component callbacks
+        Overloads the addComponents method to support component callbacks
          */
 
-        addComponent(component, gameObject);
-        callBack.initialize(this, gameObject);
+        for (Component component : components) {
+            addComponents(gameObject, component);
+            callBack.initialize(this, gameObject);
+        }
     }
 
     public Component getComponent(ComponentClass componentClass, GameObject gameObject) {

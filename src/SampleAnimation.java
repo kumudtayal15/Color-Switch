@@ -42,9 +42,9 @@ public class SampleAnimation extends Application {
         for (int i = 0; i < PARTICLE_COUNT; i++) {
             circles[i] = new Circle(300, 300, 20, Color.RED);
             if (i < PARTICLE_COUNT / 2) {
-                trajectories[i] = new LemniscateLTrajectory(amplitude, speed, delay * i);
+                trajectories[i] = new CircleTrajectory(amplitude, -speed, delay * i);
             } else {
-                trajectories[i] = new LemniscateRTrajectory(amplitude, speed, delay * i);
+                trajectories[i] = new CircleTrajectory(amplitude, -speed, delay * i);
             }
         }
         root.getChildren().addAll(circles);
