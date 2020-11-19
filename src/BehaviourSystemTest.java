@@ -3,7 +3,6 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class BehaviourSystemTest extends Application {
@@ -20,7 +19,7 @@ public class BehaviourSystemTest extends Application {
         final double RADIUS = 200;
         final double SPEED = 2;
         final int PARTICLE_COUNT = 20;
-        final double PARTICLE_RADIUS = 25;
+        final double PARTICLE_RADIUS = 27;
 
         EntityManager entityManager = new EntityManager();
         ParticulateCircle particulateCircle1 = new ParticulateCircle(
@@ -32,40 +31,25 @@ public class BehaviourSystemTest extends Application {
                 PARTICLE_RADIUS
         );
 
-        ParticulateCircle particulateCircle2 = new ParticulateCircle(
+        QuadArcCircle quadArcCircle = new QuadArcCircle(
                 new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
                 entityManager,
-                2 * RADIUS,
-                -SPEED,
-                PARTICLE_COUNT,
-                2 * PARTICLE_RADIUS
+                1.5 * RADIUS,
+                50,
+                100
         );
 
-        PrimitiveObstacle rrect = new PrimitiveObstacle(new Vector2D(10, 50));
-        entityManager.register(rrect);
+        QuadArcCircle quadArcCircle2 = new QuadArcCircle(
+                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
+                entityManager,
+                1.5 * RADIUS - 70,
+                40,
+                -100
+        );
 
-        Rectangle roundedRect =
-                new Rectangle(SCENE_WIDTH / 2, SCENE_HEIGHT / 2, 20, 50);
-        roundedRect.setArcWidth(20);
-        roundedRect.setArcHeight(20);
-        MeshComponent newMeshComponent = new MeshComponent(roundedRect, Color.WHITE);
-        entityManager.addComponents(
-                rrect,
-                newMeshComponent::insertionCallback,
-                newMeshComponent);
-
-        RotationComponent rrc = new RotationComponent(
-                500,
-                SCENE_WIDTH / 2 + 10,
-                SCENE_HEIGHT / 2 + 25);
-        entityManager.addComponents(rrect, rrc::insertionCallback, rrc);
-
-        CircleTrajectory rct = new CircleTrajectory(300, 5, 0);
-        entityManager.addComponents(rrect, rct);
-
-        root.getChildren().add(particulateCircle1.container);
-        root.getChildren().add(particulateCircle2.container);
-        root.getChildren().add(rrect.mesh);
+//        root.getChildren().add(particulateCircle1.container);
+        root.getChildren().add(quadArcCircle.container);
+        root.getChildren().add(quadArcCircle2.container);
 
         PhysicsBehaviourSystem physicsBehaviourSystem = new PhysicsBehaviourSystem(entityManager);
         AnimationTimer timer = new AnimationTimer() {
@@ -81,6 +65,5 @@ public class BehaviourSystemTest extends Application {
         stage.setTitle("Rendering system test");
         stage.setScene(new Scene(root, SCENE_WIDTH, SCENE_HEIGHT, Color.web("#292929")));
         stage.show();
-
     }
 }

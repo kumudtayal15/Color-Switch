@@ -5,10 +5,10 @@ public class RotationComponent extends Component {
     private Vector2D pivot;
     private final Rotate rotateTransform;
 
-    public RotationComponent(double angularVelocity, double x, double y) {
+    public RotationComponent(double angularVelocity, double pivotX, double pivotY) {
         this.angularVelocity = angularVelocity;
-        pivot = new Vector2D(x, y);
-        rotateTransform = new Rotate(0, x, y);
+        pivot = new Vector2D(pivotX, pivotY);
+        rotateTransform = new Rotate(0, pivotX, pivotY);
 
         setComponentClass(ComponentClass.valueOf("ROTATION"));
     }

@@ -52,9 +52,7 @@ public class ParticulateCircle extends CompoundObstacle {
 
             TrajectoryComponent circleTrajectory = new CircleTrajectory(
                     trajectoryRadius, trajectorySpeed, i * 2 * Math.PI / particleCount);
-            entityManager.addComponents(
-                    particle,
-                    circleTrajectory);
+            entityManager.addComponents(particle, circleTrajectory);
 
         }
     }
