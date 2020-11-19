@@ -15,39 +15,39 @@ public class Triangle extends CompoundObstacle {
 
         PrimitiveObstacle[] roundedRectangle = new PrimitiveObstacle[3];
 
-        Rectangle[] sides = new Rectangle[3];
+        Rectangle[] side = new Rectangle[3];
         final double THIRTY = Math.PI / 6;
         double centroidToMid = sideLength * Math.tan(THIRTY) / 2;
 
-        sides[0] = new Rectangle(
+        side[0] = new Rectangle(
                 centroidToMid * Math.cos(THIRTY) - sideThickness / 2,
                 -centroidToMid * Math.sin(THIRTY) - sideLength / 2,
                 sideThickness, sideLength);
-        sides[0].setRotate(-30);
+        side[0].setRotate(-30);
 
-        sides[1] = new Rectangle(
+        side[1] = new Rectangle(
                 -centroidToMid * Math.cos(THIRTY) - sideThickness / 2,
                 -centroidToMid * Math.sin(THIRTY) - sideLength / 2,
                 sideThickness, sideLength
         );
-        sides[1].setRotate(30);
+        side[1].setRotate(30);
 
-        sides[2] = new Rectangle(
+        side[2] = new Rectangle(
                 -sideThickness / 2,
                 centroidToMid - sideLength / 2,
                 sideThickness, sideLength
         );
-        sides[2].setRotate(90);
+        side[2].setRotate(90);
 
         MeshComponent meshComponent;
         for (int i = 0; i < 3; i++) {
-            sides[i].setArcWidth(sideThickness);
-            sides[i].setArcHeight(sideThickness);
+            side[i].setArcWidth(sideThickness);
+            side[i].setArcHeight(sideThickness);
 
             roundedRectangle[i] = new PrimitiveObstacle(null);
             entityManager.register(roundedRectangle[i]);
             meshComponent = new MeshComponent(
-                    sides[i], colorMapping[(i + 3) % 4]);
+                    side[i], colorMapping[(i + 3) % 4]);
             entityManager.addComponents(
                     roundedRectangle[i],
                     meshComponent::insertionCallback,
@@ -67,5 +67,9 @@ public class Triangle extends CompoundObstacle {
         Transform object must be added to the container instead.
          */
         this.container.getTransforms().add(rotationComponent.getRotateTransform());
+
+//        TrajectoryComponent trajectoryComponent = new CircleTrajectory(
+//                100, 50, 0);
+//        entityManager.addComponents(this, trajectoryComponent);
     }
 }

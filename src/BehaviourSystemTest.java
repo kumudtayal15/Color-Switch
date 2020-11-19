@@ -22,8 +22,8 @@ public class BehaviourSystemTest extends Application {
         final double PARTICLE_RADIUS = 27;
 
         EntityManager entityManager = new EntityManager();
-        ParticulateCircle particulateCircle1 = new ParticulateCircle(
-                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
+        ParticulateCircle particulateCircle = new ParticulateCircle(
+                new Vector2D(SCENE_WIDTH / 2 + 1.5 * RADIUS, SCENE_HEIGHT / 2),
                 entityManager,
                 RADIUS,
                 SPEED,
@@ -40,15 +40,26 @@ public class BehaviourSystemTest extends Application {
         );
 
         Triangle triangle = new Triangle(
-                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
+                new Vector2D(SCENE_WIDTH / 2 - 1.5 * RADIUS, SCENE_HEIGHT / 2),
                 entityManager,
                 350,
                 30,
                 150
         );
+//
+        Rhombus rhombus = new Rhombus(
+                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
+                entityManager,
+                350,
+                30,
+                150,
+                65
+        );
 
+        root.getChildren().add(particulateCircle.container);
         root.getChildren().add(triangle.container);
         root.getChildren().add(quadArcCircle.container);
+        root.getChildren().add(rhombus.container);
 
         PhysicsBehaviourSystem physicsBehaviourSystem = new PhysicsBehaviourSystem(entityManager);
         AnimationTimer timer = new AnimationTimer() {
