@@ -16,29 +16,28 @@ public class QuadArcCircle extends CompoundObstacle {
         container.setLayoutY(anchorPoint.y);
 
         Vector2D circleCenter = new Vector2D(0, 0);
-        PrimitiveObstacle[] solidArcs = new PrimitiveObstacle[4];
-        Color[] colorMapping = {Color.web("#8C13FB"), Color.web("#F6DF0E"), Color.web("#35E2F2"), Color.web("#FF0080")};
+        PrimitiveObstacle[] solidArc = new PrimitiveObstacle[4];
 
 //        Arcs are numbered anticlockwise, from the first quadrant
         MeshComponent meshComponent;
         RotationComponent rotationComponent;
         for (int i = 0; i < 4; i++) {
-            solidArcs[i] = new PrimitiveObstacle(circleCenter);
-            entityManager.register(solidArcs[i]);
+            solidArc[i] = new PrimitiveObstacle(circleCenter);
+            entityManager.register(solidArc[i]);
 
             Shape arcMesh = getSolidArc(circleCenter, outerRadius, thickness, i * 90);
             meshComponent = new MeshComponent(
                     arcMesh,
                     colorMapping[i]);
             entityManager.addComponents(
-                    solidArcs[i],
+                    solidArc[i],
                     meshComponent::insertionCallback,
                     meshComponent);
             container.getChildren().add(arcMesh);
 
             rotationComponent = new RotationComponent(rotationSpeed, circleCenter.x, circleCenter.y);
             entityManager.addComponents(
-                    solidArcs[i],
+                    solidArc[i],
                     rotationComponent::insertionCallback,
                     rotationComponent);
         }

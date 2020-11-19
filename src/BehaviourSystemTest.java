@@ -36,20 +36,19 @@ public class BehaviourSystemTest extends Application {
                 entityManager,
                 1.5 * RADIUS,
                 50,
-                100
+                50
         );
 
-        QuadArcCircle quadArcCircle2 = new QuadArcCircle(
+        Triangle triangle = new Triangle(
                 new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
                 entityManager,
-                1.5 * RADIUS - 70,
-                40,
-                -100
+                350,
+                30,
+                150
         );
 
-//        root.getChildren().add(particulateCircle1.container);
+        root.getChildren().add(triangle.container);
         root.getChildren().add(quadArcCircle.container);
-        root.getChildren().add(quadArcCircle2.container);
 
         PhysicsBehaviourSystem physicsBehaviourSystem = new PhysicsBehaviourSystem(entityManager);
         AnimationTimer timer = new AnimationTimer() {
