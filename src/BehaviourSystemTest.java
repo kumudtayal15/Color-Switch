@@ -40,13 +40,17 @@ public class BehaviourSystemTest extends Application {
         );
 
         Triangle triangle = new Triangle(
-                new Vector2D(SCENE_WIDTH / 2 - 1.5 * RADIUS, SCENE_HEIGHT / 2),
+                new Vector2D(0, 0),
                 entityManager,
-                350,
+                300,
                 30,
-                150
+                500
         );
-//
+        Group triangleGroup = new Group();
+        triangleGroup.setTranslateY(SCENE_HEIGHT / 2);
+        triangleGroup.getChildren().add(triangle.container);
+        entityManager.addComponents(triangle, new StraightLineTrajectory(300, 300, 0));
+
         Rhombus rhombus = new Rhombus(
                 new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
                 entityManager,
@@ -57,16 +61,19 @@ public class BehaviourSystemTest extends Application {
         );
 
         root.getChildren().add(particulateCircle.container);
-        root.getChildren().add(triangle.container);
+        root.getChildren().add(triangleGroup);
         root.getChildren().add(quadArcCircle.container);
         root.getChildren().add(rhombus.container);
 
         PhysicsBehaviourSystem physicsBehaviourSystem = new PhysicsBehaviourSystem(entityManager);
         AnimationTimer timer = new AnimationTimer() {
 
+//            final double startTime = System.currentTimeMillis();
             @Override
             public void handle(long l) {
                 double secondsElapsed = l * Math.pow(10, -9);
+//                double secondsElapsed = (System.currentTimeMillis() - startTime) / 1000d;
+//                System.out.println("Time elapsed: " + secondsElapsed);
                 physicsBehaviourSystem.update(secondsElapsed);
             }
         };

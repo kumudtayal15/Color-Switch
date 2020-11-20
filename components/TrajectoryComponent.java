@@ -1,19 +1,37 @@
-// TODO: 08/11/20 600 is a VOODOO constant! Replace with SCREEN_WIDTH
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 public class TrajectoryComponent extends Component {
-    protected final double size;
-    protected final double speed;
-    protected final double delay;
+    protected double size;
+    protected double speed;
+    protected double delay;
+    protected double SCENE_WIDTH;
+    protected double SCREEN_HEIGHT;
 
     public TrajectoryComponent(double size, double speed, double delay) {
         this.size = size;
         this.speed = speed;
         this.delay = delay;
+
+        try (InputStream input = new FileInputStream("hyperparameters/display.properties")) {
+            Properties properties = new Properties();
+            properties.load(input);
+
+            try {
+                SCENE_WIDTH = Double.parseDouble(
+                        properties.getProperty("sceneWidth"));
+                SCREEN_HEIGHT = Double.parseDouble(
+                        properties.getProperty("sceneHeight"));
+            } catch (NullPointerException e) {
+                System.out.println("Error: Invalid property");
+                e.printStackTrace();
+                System.exit(1);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         setComponentClass(ComponentClass.valueOf("TRAJECTORY"));
     }
@@ -33,7 +51,7 @@ class SinWaveTrajectory extends TrajectoryComponent {
     @Override
     public Vector2D getPositionVector(double timeInSeconds) {
         return new Vector2D(
-                (size * (speed * timeInSeconds - delay)) % 600,
+                (size * (speed * timeInSeconds - delay)) % SCENE_WIDTH,
                 size * Math.sin(speed * timeInSeconds - delay)
         );
     }
@@ -48,9 +66,8 @@ class StraightLineTrajectory extends TrajectoryComponent {
     @Override
     public Vector2D getPositionVector(double timeInSeconds) {
         return new Vector2D(
-//                (speed * timeInSeconds - delay) % 600,
-//                20 * Math.sin(speed * timeInSeconds - delay),
-//                size
+                (speed * timeInSeconds - delay) % SCENE_WIDTH, 0
+//                20 * Math.sin(speed * timeInSeconds - delay)
         );
     }
 }
@@ -81,7 +98,7 @@ class OscillatingCircleTrajectory extends TrajectoryComponent {
     public OscillatingCircleTrajectory(double size, double speed, double delay) {
         super(size, speed, delay);
 
-        try (InputStream input = new FileInputStream("src/trajectory.properties")) {
+        try (InputStream input = new FileInputStream("hyperparameters/trajectory.properties")) {
             Properties properties = new Properties();
             properties.load(input);
             String propertyName = "oscillatingcircle.radialDistRatio";
@@ -114,14 +131,14 @@ class OscillatingCircleTrajectory extends TrajectoryComponent {
 }
 
 class LemniscateRTrajectory extends TrajectoryComponent {
-//    Ratio of 'size' of X component to 'size' of Y component
+    //    Ratio of 'size' of X component to 'size' of Y component
 //    ('size' here refers to the amplitude)
     protected double RATIO;       // hyperparameter
 
     public LemniscateRTrajectory(double size, double speed, double delay) {
         super(size, speed, delay);
 
-        try (InputStream input = new FileInputStream("src/trajectory.properties")) {
+        try (InputStream input = new FileInputStream("hyperparameters/trajectory.properties")) {
             Properties properties = new Properties();
             properties.load(input);
             String propertyName = "lemniscate.ratio";
@@ -154,7 +171,7 @@ class LemniscateLTrajectory extends TrajectoryComponent {
     public LemniscateLTrajectory(double size, double speed, double delay) {
         super(size, speed, delay);
 
-        try (InputStream input = new FileInputStream("src/trajectory.properties")) {
+        try (InputStream input = new FileInputStream("hyperparameters/trajectory.properties")) {
             Properties properties = new Properties();
             properties.load(input);
             String propertyName = "lemniscate.ratio";

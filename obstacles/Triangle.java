@@ -67,9 +67,5 @@ public class Triangle extends CompoundObstacle {
         Transform object must be added to the container instead.
          */
         this.container.getTransforms().add(rotationComponent.getRotateTransform());
-
-//        TrajectoryComponent trajectoryComponent = new CircleTrajectory(
-//                100, 50, 0);
-//        entityManager.addComponents(this, trajectoryComponent);
     }
 }

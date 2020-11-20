@@ -20,12 +20,11 @@ public class PhysicsBehaviourSystem extends BehaviourSystem {
                     ComponentClass.valueOf("TRAJECTORY"),
                     gameObject);
 
-            meshComponent = (MeshComponent) entityManager.getComponent(
-                    ComponentClass.valueOf("MESH"),
-                    gameObject);
-
-            meshComponent.getMesh().setTranslateX(trajectoryComponent.getPositionVector(t).x);
-            meshComponent.getMesh().setTranslateY(trajectoryComponent.getPositionVector(t).y);
+//            if (gameObject instanceof Obstacle) {
+                Obstacle obstacle = (Obstacle) gameObject;
+                obstacle.getNode().setTranslateX(trajectoryComponent.getPositionVector(t).x);
+                obstacle.getNode().setTranslateY(trajectoryComponent.getPositionVector(t).y);
+//            }
         }
 
         gameObjects = entityManager.getGameObjects(ComponentClass.valueOf("ROTATION"));
