@@ -10,6 +10,11 @@ public class MeshComponent extends Component {
         setComponentClass(ComponentClass.valueOf("MESH"));
     }
 
+    public MeshComponent(Shape mesh) {
+        this.mesh = mesh;
+        setComponentClass(ComponentClass.valueOf("MESH"));
+    }
+
     public Shape getMesh() {
         return mesh;
     }

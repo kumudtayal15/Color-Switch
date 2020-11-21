@@ -15,6 +15,12 @@ public class BehaviourSystemTest extends Application {
         final double SCENE_WIDTH = 1920;
         final double SCENE_HEIGHT = 1080;
         Group root = new Group();
+//        root.setTranslateX(SCENE_WIDTH / 2);
+//        root.setTranslateY(SCENE_HEIGHT / 2);
+//        GridPane root = new GridPane();
+//        root.setHgap(100);
+//        root.setVgap(150);
+//        root.setGridLinesVisible(true);
 
         final double RADIUS = 200;
         final double SPEED = 2;
@@ -22,19 +28,31 @@ public class BehaviourSystemTest extends Application {
         final double PARTICLE_RADIUS = 27;
 
         EntityManager entityManager = new EntityManager();
-        ParticulateCircle particulateCircle = new ParticulateCircle(
-                new Vector2D(SCENE_WIDTH / 2 + 1.5 * RADIUS, SCENE_HEIGHT / 2),
-                entityManager,
-                RADIUS,
-                SPEED,
-                PARTICLE_COUNT,
-                PARTICLE_RADIUS
-        );
 
-        QuadArcCircle quadArcCircle = new QuadArcCircle(
+        ParticulateSquare particulateSquare = new ParticulateSquare(
                 new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
                 entityManager,
-                1.5 * RADIUS,
+                400, 300,
+                24, 22
+        );
+        particulateSquare.create();
+        root.getChildren().add(particulateSquare.container);
+
+        ParticulateCircle particulateCircle = new ParticulateCircle(
+                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
+                entityManager,
+                200,
+                2,
+                20,
+                27
+        );
+//        particulateCircle.create();
+//        root.getChildren().add(particulateCircle.container);
+
+        QuadArcCircle quadArcCircle = new QuadArcCircle(
+                new Vector2D(0, 0),
+                entityManager,
+                RADIUS,
                 50,
                 50
         );
@@ -42,17 +60,17 @@ public class BehaviourSystemTest extends Application {
         Triangle triangle = new Triangle(
                 new Vector2D(0, 0),
                 entityManager,
-                300,
-                30,
-                500
+                400,
+                40,
+                300
         );
-        Group triangleGroup = new Group();
-        triangleGroup.setTranslateY(SCENE_HEIGHT / 2);
-        triangleGroup.getChildren().add(triangle.container);
-        entityManager.addComponents(triangle, new StraightLineTrajectory(300, 300, 0));
+//        Group triangleGroup = new Group();
+////        triangleGroup.setTranslateY(SCENE_HEIGHT / 2);
+//        triangleGroup.getChildren().add(triangle.container);
+//        entityManager.addComponents(triangle, new HorizontalLineTrajectory(0, 700, 0));
 
         Rhombus rhombus = new Rhombus(
-                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
+                new Vector2D(0, 0),
                 entityManager,
                 350,
                 30,
@@ -60,15 +78,38 @@ public class BehaviourSystemTest extends Application {
                 65
         );
 
-        root.getChildren().add(particulateCircle.container);
-        root.getChildren().add(triangleGroup);
-        root.getChildren().add(quadArcCircle.container);
-        root.getChildren().add(rhombus.container);
+        ParticleLemniscate particleLemniscate = new ParticleLemniscate(
+                new Vector2D(0, 0),
+                entityManager,
+                150,
+                1,
+                12,
+                25
+        );
+
+//        root.getChildren().add(particulateCircle.container);
+//        GridPane.setColumnIndex(particulateCircle.container, 0);
+//        GridPane.setRowIndex(particulateCircle.container, 0);
+//
+//        root.getChildren().add(triangle.container);
+//        GridPane.setConstraints(triangle.container, 1, 1);
+////        GridPane.setColumnSpan(triangle.container, 2);
+//
+//        root.getChildren().add(quadArcCircle.container);
+//        GridPane.setConstraints(quadArcCircle.container, 2, 0);
+//
+//        root.getChildren().add(rhombus.container);
+//        GridPane.setConstraints(rhombus.container, 0, 1);
+//
+//        root.getChildren().add(particleLemniscate.container);
+//        GridPane.setConstraints(particleLemniscate.container, 1, 0);
+//        GridPane.setMargin(particleLemniscate.container, new Insets(0, 50, 0, 50));
+
 
         PhysicsBehaviourSystem physicsBehaviourSystem = new PhysicsBehaviourSystem(entityManager);
         AnimationTimer timer = new AnimationTimer() {
 
-//            final double startTime = System.currentTimeMillis();
+            //            final double startTime = System.currentTimeMillis();
             @Override
             public void handle(long l) {
                 double secondsElapsed = l * Math.pow(10, -9);
@@ -80,7 +121,8 @@ public class BehaviourSystemTest extends Application {
 
         timer.start();
         stage.setTitle("Rendering system test");
-        stage.setScene(new Scene(root, SCENE_WIDTH, SCENE_HEIGHT, Color.web("#292929")));
+        final Color BLACK = Color.web("#292929");
+        stage.setScene(new Scene(root, SCENE_WIDTH, SCENE_HEIGHT, BLACK));
         stage.show();
     }
 }
