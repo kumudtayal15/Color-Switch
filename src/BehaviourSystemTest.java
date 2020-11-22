@@ -17,26 +17,55 @@ public class BehaviourSystemTest extends Application {
         Group root = new Group();
 //        root.setTranslateX(SCENE_WIDTH / 2);
 //        root.setTranslateY(SCENE_HEIGHT / 2);
-//        GridPane root = new GridPane();
-//        root.setHgap(100);
-//        root.setVgap(150);
-//        root.setGridLinesVisible(true);
-
-        final double RADIUS = 200;
-        final double SPEED = 2;
-        final int PARTICLE_COUNT = 20;
-        final double PARTICLE_RADIUS = 27;
 
         EntityManager entityManager = new EntityManager();
 
+        ParticulateSinWave sinWave = new ParticulateSinWave(
+                new Vector2D(0, SCENE_HEIGHT / 2),
+                entityManager,
+                200, 4,
+                20, 24
+        );
+//        sinWave.create();
+//        root.getChildren().add(sinWave.container);
+
         ParticulateSquare particulateSquare = new ParticulateSquare(
-                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
+                new Vector2D(SCENE_WIDTH / 2 - 200, SCENE_HEIGHT / 2 + 200),
                 entityManager,
                 400, 300,
                 24, 22
         );
-        particulateSquare.create();
-        root.getChildren().add(particulateSquare.container);
+//        particulateSquare.create();
+//        root.getChildren().add(particulateSquare.container);
+
+        ParticulateHex particulateHex = new ParticulateHex(
+                new Vector2D(SCENE_WIDTH / 2 - 200, SCENE_HEIGHT / 2 + 200),
+                entityManager,
+                300, 300,
+                28, 25
+        );
+        particulateHex.create();
+        root.getChildren().add(particulateHex.container);
+
+        ParticulateTriangle particulateTriangle = new ParticulateTriangle(
+                new Vector2D(SCENE_WIDTH / 2 - 250, SCENE_HEIGHT / 2 + 200),
+                entityManager,
+                500, 200,
+                24, 22
+        );
+//        particulateTriangle.create();
+//        root.getChildren().add(particulateTriangle.container);
+
+        HarmonicCircle harmonicCircle = new HarmonicCircle(
+                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
+                entityManager,
+                200,
+                2,
+                20,
+                27
+        );
+//        harmonicCircle.create();
+//        root.getChildren().add(harmonicCircle.container);
 
         ParticulateCircle particulateCircle = new ParticulateCircle(
                 new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
@@ -50,60 +79,46 @@ public class BehaviourSystemTest extends Application {
 //        root.getChildren().add(particulateCircle.container);
 
         QuadArcCircle quadArcCircle = new QuadArcCircle(
-                new Vector2D(0, 0),
+                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
                 entityManager,
-                RADIUS,
-                50,
+                300,
+                70,
                 50
         );
+//        root.getChildren().add(quadArcCircle.container);
 
         Triangle triangle = new Triangle(
-                new Vector2D(0, 0),
+                new Vector2D(0, SCENE_HEIGHT / 2),
                 entityManager,
                 400,
                 40,
                 300
         );
 //        Group triangleGroup = new Group();
-////        triangleGroup.setTranslateY(SCENE_HEIGHT / 2);
+//        triangleGroup.setTranslateY(SCENE_HEIGHT / 2);
 //        triangleGroup.getChildren().add(triangle.container);
 //        entityManager.addComponents(triangle, new HorizontalLineTrajectory(0, 700, 0));
+//        root.getChildren().add(triangle.container);
 
         Rhombus rhombus = new Rhombus(
-                new Vector2D(0, 0),
+                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
                 entityManager,
-                350,
-                30,
+                450,
+                50,
                 150,
-                65
+                70
         );
+//        root.getChildren().add(rhombus.container);
 
         ParticleLemniscate particleLemniscate = new ParticleLemniscate(
-                new Vector2D(0, 0),
+                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
                 entityManager,
-                150,
+                200,
                 1,
-                12,
-                25
+                16,
+                30
         );
-
-//        root.getChildren().add(particulateCircle.container);
-//        GridPane.setColumnIndex(particulateCircle.container, 0);
-//        GridPane.setRowIndex(particulateCircle.container, 0);
-//
-//        root.getChildren().add(triangle.container);
-//        GridPane.setConstraints(triangle.container, 1, 1);
-////        GridPane.setColumnSpan(triangle.container, 2);
-//
-//        root.getChildren().add(quadArcCircle.container);
-//        GridPane.setConstraints(quadArcCircle.container, 2, 0);
-//
-//        root.getChildren().add(rhombus.container);
-//        GridPane.setConstraints(rhombus.container, 0, 1);
-//
 //        root.getChildren().add(particleLemniscate.container);
-//        GridPane.setConstraints(particleLemniscate.container, 1, 0);
-//        GridPane.setMargin(particleLemniscate.container, new Insets(0, 50, 0, 50));
 
 
         PhysicsBehaviourSystem physicsBehaviourSystem = new PhysicsBehaviourSystem(entityManager);

@@ -6,6 +6,11 @@ import java.util.function.Function;
 abstract public class PolygonTrajectory extends TrajectoryComponent {
     protected final double sideTraversalTime;
     protected int numOfSides;
+    /*
+    actual speed along a side, scaled by this factor
+    produces the apparent speed along the X/Y axis
+     */
+    protected double speedScaleFactor;
     protected final ArrayList<Function<Double, Vector2D>> sideTrajectories;
 
     public PolygonTrajectory(double size, double speed, double delay) {

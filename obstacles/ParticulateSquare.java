@@ -1,4 +1,4 @@
-import javafx.scene.shape.Rectangle;
+// TODO: 22/11/20 only rotates in anticlockwise direction!?
 
 public class ParticulateSquare extends ParticulateObstacle {
 

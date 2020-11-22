@@ -6,10 +6,9 @@ public class SinWaveTrajectory extends TrajectoryComponent {
 
     @Override
     public Vector2D getPositionVector(double timeInSeconds) {
+        double x = size * (speed  * timeInSeconds - delay);
         return new Vector2D(
-                (size * (speed * timeInSeconds - delay)) % SCENE_WIDTH,
-                size * Math.sin(speed * timeInSeconds - delay)
+                x % (SCENE_WIDTH + 200) , size * Math.sin(x / size)
         );
     }
 }
-
