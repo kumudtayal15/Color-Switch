@@ -5,6 +5,11 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 public class BehaviourSystemTest extends Application {
     public static void main(String[] args) {
         launch(args);
@@ -12,8 +17,17 @@ public class BehaviourSystemTest extends Application {
 
     @Override
     public void start(Stage stage) {
-        final double SCENE_WIDTH = 1920;
-        final double SCENE_HEIGHT = 1080;
+        double SCENE_WIDTH = 0, SCENE_HEIGHT = 0;
+
+        try (InputStream input = new FileInputStream("hyperparameters/display.properties")) {
+            Properties properties = new Properties();
+            properties.load(input);
+            SCENE_WIDTH = Double.parseDouble(properties.getProperty("scene.width"));
+            SCENE_HEIGHT = Double.parseDouble(properties.getProperty("scene.height"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         Group root = new Group();
 //        root.setTranslateX(SCENE_WIDTH / 2);
 //        root.setTranslateY(SCENE_HEIGHT / 2);
@@ -41,8 +55,8 @@ public class BehaviourSystemTest extends Application {
         ParticulateHex particulateHex = new ParticulateHex(
                 new Vector2D(SCENE_WIDTH / 2 - 200, SCENE_HEIGHT / 2 + 200),
                 entityManager,
-                300, 300,
-                28, 25
+                250, 300,
+                28, 20
         );
         particulateHex.create();
         root.getChildren().add(particulateHex.container);

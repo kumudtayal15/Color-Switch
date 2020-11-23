@@ -11,15 +11,15 @@ public class ParticulateHex extends ParticulateObstacle {
         super(anchorPoint, entityManager, trajectorySideLength, trajectorySpeed, particleCount, particleRadius);
         this.delayFactor = (6 * trajectorySideLength / trajectorySpeed) / particleCount;
 
-//        entityManager.register(this);
-//        RotationComponent rotationComponent = new RotationComponent(
-//                100,
-//                trajectorySideLength / 2,
-//                -trajectorySideLength * Math.sin(Math.PI / 3)
-//        );
-//
-//        entityManager.addComponents(this, rotationComponent);
-//        this.container.getTransforms().add(rotationComponent.getRotateTransform());
+        entityManager.register(this);
+        RotationComponent rotationComponent = new RotationComponent(
+                150,
+                trajectorySideLength / 2,
+                -trajectorySideLength * Math.sin(Math.PI / 3)
+        );
+
+        entityManager.addComponents(this, rotationComponent);
+        this.container.getTransforms().add(rotationComponent.getRotateTransform());
     }
 
     @Override

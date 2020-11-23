@@ -17,9 +17,9 @@ abstract public class TrajectoryComponent extends Component {
 
             try {
                 SCENE_WIDTH = Double.parseDouble(
-                        properties.getProperty("sceneWidth"));
+                        properties.getProperty("scene.width"));
                 SCREEN_HEIGHT = Double.parseDouble(
-                        properties.getProperty("sceneHeight"));
+                        properties.getProperty("scene.height"));
             } catch (NullPointerException e) {
                 System.out.println("Error: Invalid property");
                 e.printStackTrace();
