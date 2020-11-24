@@ -17,7 +17,7 @@ public class MeshComponent extends Component {
     }
 
     public Bounds getAbsoluteBounds() {
-        return mesh.localToScene(mesh.getLayoutBounds());
+        return mesh.localToScene(mesh.getBoundsInLocal());
     }
 
     public Shape getMesh() {

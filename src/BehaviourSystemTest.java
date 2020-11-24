@@ -1,6 +1,8 @@
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -29,6 +31,9 @@ public class BehaviourSystemTest extends Application {
         }
 
         Pane root = new Pane();
+        Canvas canvas = new Canvas(SCENE_WIDTH, SCENE_HEIGHT);
+
+        root.getChildren().add(canvas);
 
 //        root.setTranslateX(SCENE_WIDTH / 2);
 //        root.setTranslateY(SCENE_HEIGHT / 2);
@@ -36,15 +41,6 @@ public class BehaviourSystemTest extends Application {
         Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT, BLACK);
 
         EntityManager entityManager = new EntityManager();
-
-        ParticulateSinWave sinWave = new ParticulateSinWave(
-                new Vector2D(0, SCENE_HEIGHT / 2),
-                entityManager,
-                200, 4,
-                20, 24
-        );
-//        sinWave.create();
-//        root.getChildren().add(sinWave.container);
 
         ParticulateSquare particulateSquare = new ParticulateSquare(
                 new Vector2D(SCENE_WIDTH / 2 - 200, SCENE_HEIGHT / 2 + 200),
@@ -65,7 +61,7 @@ public class BehaviourSystemTest extends Application {
 //        root.getChildren().add(particulateHex.container);
 
         ParticulateTriangle particulateTriangle = new ParticulateTriangle(
-                new Vector2D(SCENE_WIDTH / 2 - 250, SCENE_HEIGHT / 2 + 200),
+                new Vector2D(SCENE_WIDTH / 2 - 250, SCENE_HEIGHT / 2 - 200),
                 entityManager,
                 500, 200,
                 24, 22
@@ -85,7 +81,7 @@ public class BehaviourSystemTest extends Application {
 //        root.getChildren().add(harmonicCircle.container);
 
         ParticulateCircle particulateCircle = new ParticulateCircle(
-                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
+                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2 - 300),
                 entityManager,
                 200,
                 2,
@@ -95,57 +91,60 @@ public class BehaviourSystemTest extends Application {
 //        particulateCircle.create();
 //        root.getChildren().add(particulateCircle.container);
 
-        QuadArcCircle quadArcCircle = new QuadArcCircle(
-                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
-                entityManager,
-                300,
-                70,
-                50
-        );
-        root.getChildren().add(quadArcCircle.container);
+//        QuadArcCircle quadArcCircle = new QuadArcCircle(
+//                new Vector2D(SCENE_WIDTH / 2, 0),
+//                entityManager,
+//                300,
+//                70,
+//                50
+//        );
+//        root.getChildren().add(quadArcCircle.container);
 
-        Triangle triangle = new Triangle(
-                new Vector2D(0, SCENE_HEIGHT / 2),
-                entityManager,
-                400,
-                40,
-                300
-        );
+//        Triangle triangle = new Triangle(
+//                new Vector2D(0, SCENE_HEIGHT / 2),
+//                entityManager,
+//                400,
+//                40,
+//                300
+//        );
 //        Group triangleGroup = new Group();
 //        triangleGroup.setTranslateY(SCENE_HEIGHT / 2);
 //        triangleGroup.getChildren().add(triangle.container);
 //        entityManager.addComponents(triangle, new HorizontalLineTrajectory(0, 700, 0));
 //        root.getChildren().add(triangle.container);
-
-        Rhombus rhombus = new Rhombus(
-                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
-                entityManager,
-                450,
-                50,
-                150,
-                70
-        );
+//
+//        Rhombus rhombus = new Rhombus(
+//                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
+//                entityManager,
+//                450,
+//                50,
+//                50,
+//                70
+//        );
 //        root.getChildren().add(rhombus.container);
 
         ParticleLemniscate particleLemniscate = new ParticleLemniscate(
                 new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
                 entityManager,
                 200,
-                1,
+                1.5,
                 16,
                 30
         );
-//        root.getChildren().add(particleLemniscate.container);
-
-
-        PhysicsBehaviourSystem physicsBehaviourSystem = new PhysicsBehaviourSystem(entityManager);
+        root.getChildren().add(particleLemniscate.container);
 
         /*
         Ball decoupled from entity manager
          */
         Ball ball = new Ball(root);
-        ball.create(new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2));
+        ball.create(new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT - 200), entityManager);
         scene.setOnKeyPressed(ball::impulse);
+
+        PhysicsBehaviourSystem physicsBehaviourSystem = new PhysicsBehaviourSystem(entityManager);
+        CollisionBehaviourSystem collisionBehaviourSystem = new CollisionBehaviourSystem(entityManager);
+//        collisionBehaviourSystem.setObjectTracking(true);
+        collisionBehaviourSystem.setGraphicsContext(canvas.getGraphicsContext2D());
+        collisionBehaviourSystem.setTrackedBall(ball);
 
         AnimationTimer timer = new AnimationTimer() {
 
@@ -154,7 +153,8 @@ public class BehaviourSystemTest extends Application {
             @Override
             public void handle(long l) {
                 double secondsElapsed = (l - tNought) * Math.pow(10, -9);
-                physicsBehaviourSystem.update(secondsElapsed);
+                physicsBehaviourSystem.update(l * Math.pow(10, -9));
+                collisionBehaviourSystem.update(secondsElapsed);
             }
         };
 

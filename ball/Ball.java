@@ -1,5 +1,4 @@
 import javafx.animation.AnimationTimer;
-import javafx.geometry.Bounds;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
@@ -15,6 +14,7 @@ public class Ball extends GameObject {
     private final Pane parent;
     protected final AnimationTimer motionTimer;
     protected final Circle skin;
+    protected boolean isAlive;
     protected Color color;
     protected double velocity;
     protected double VELOCITY_UP;
@@ -33,11 +33,11 @@ public class Ball extends GameObject {
             e.printStackTrace();
         }
 
+        this.isAlive = true;
         this.velocity = 0;
         skin = new Circle(20, color);
         this.parent = parent;
 
-        Bounds parentBounds = parent.getLayoutBounds();
         motionTimer = new AnimationTimer() {
             double prevTimeStamp = System.nanoTime();
 
@@ -46,11 +46,11 @@ public class Ball extends GameObject {
                 update((l - prevTimeStamp) * Math.pow(10, -9));
                 prevTimeStamp = l;
 
-                if (skin.getTranslateY() <= parentBounds.getMinY() + skin.getRadius()) {
+                if (!isAlive) {
                     parent.getChildren().remove(skin);
                     parent.getChildren().add(new Emitter(new Vector2D(
-                            (parentBounds.getMinX() + parentBounds.getWidth()) / 2,
-                            skin.getRadius()
+                            skin.getTranslateX(),
+                            skin.getTranslateY()
                     )));
 
                     this.stop();
@@ -59,7 +59,8 @@ public class Ball extends GameObject {
         };
     }
 
-    public void create(Vector2D initalPosition) {
+    public void create(Vector2D initalPosition, EntityManager entityManager) {
+        entityManager.register(this);
         skin.setTranslateX(initalPosition.x);
         skin.setTranslateY(initalPosition.y - skin.getRadius());
         parent.getChildren().add(skin);
@@ -79,16 +80,7 @@ public class Ball extends GameObject {
         }
     }
 
-    public void increaseVelocity(double delta) {
-        this.velocity += delta;
-    }
-
-    public double getVelocity() {
-        return velocity;
-    }
-
     public void setVelocity(double velocity) {
         this.velocity = velocity;
     }
-
 }
