@@ -42,7 +42,8 @@ public class Particle extends Circle {
 
         double theta = random.nextFloat() * (2 * Math.PI);
         this.dx = Math.cos(theta) * vx;
-        this.dy = -Math.abs(Math.sin(theta)) * vy;
+//        this.dy = -Math.abs(Math.sin(theta)) * vy;
+        this.dy = Math.sin(theta) * vy;
 
         this.setRadius(PARTICLE_RADIUS);
         this.setFill(colorMapping[random.nextInt(4)]);

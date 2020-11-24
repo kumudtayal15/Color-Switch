@@ -1,7 +1,7 @@
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -28,9 +28,12 @@ public class BehaviourSystemTest extends Application {
             e.printStackTrace();
         }
 
-        Group root = new Group();
+        Pane root = new Pane();
+
 //        root.setTranslateX(SCENE_WIDTH / 2);
 //        root.setTranslateY(SCENE_HEIGHT / 2);
+        final Color BLACK = Color.web("#292929");
+        Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT, BLACK);
 
         EntityManager entityManager = new EntityManager();
 
@@ -58,8 +61,8 @@ public class BehaviourSystemTest extends Application {
                 250, 300,
                 28, 20
         );
-        particulateHex.create();
-        root.getChildren().add(particulateHex.container);
+//        particulateHex.create();
+//        root.getChildren().add(particulateHex.container);
 
         ParticulateTriangle particulateTriangle = new ParticulateTriangle(
                 new Vector2D(SCENE_WIDTH / 2 - 250, SCENE_HEIGHT / 2 + 200),
@@ -99,7 +102,7 @@ public class BehaviourSystemTest extends Application {
                 70,
                 50
         );
-//        root.getChildren().add(quadArcCircle.container);
+        root.getChildren().add(quadArcCircle.container);
 
         Triangle triangle = new Triangle(
                 new Vector2D(0, SCENE_HEIGHT / 2),
@@ -136,22 +139,30 @@ public class BehaviourSystemTest extends Application {
 
 
         PhysicsBehaviourSystem physicsBehaviourSystem = new PhysicsBehaviourSystem(entityManager);
+
+        /*
+        Ball decoupled from entity manager
+         */
+        Ball ball = new Ball(root);
+        ball.create(new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2));
+        scene.setOnKeyPressed(ball::impulse);
+
         AnimationTimer timer = new AnimationTimer() {
 
-            //            final double startTime = System.currentTimeMillis();
+            final double tNought = System.nanoTime();
+
             @Override
             public void handle(long l) {
-                double secondsElapsed = l * Math.pow(10, -9);
-//                double secondsElapsed = (System.currentTimeMillis() - startTime) / 1000d;
-//                System.out.println("Time elapsed: " + secondsElapsed);
+                double secondsElapsed = (l - tNought) * Math.pow(10, -9);
                 physicsBehaviourSystem.update(secondsElapsed);
             }
         };
 
-        timer.start();
+
         stage.setTitle("Rendering system test");
-        final Color BLACK = Color.web("#292929");
-        stage.setScene(new Scene(root, SCENE_WIDTH, SCENE_HEIGHT, BLACK));
+        stage.setScene(scene);
+
+        timer.start();
         stage.show();
     }
 }

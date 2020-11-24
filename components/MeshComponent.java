@@ -1,3 +1,4 @@
+import javafx.geometry.Bounds;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
@@ -13,6 +14,10 @@ public class MeshComponent extends Component {
     public MeshComponent(Shape mesh) {
         this.mesh = mesh;
         setComponentClass(ComponentClass.valueOf("MESH"));
+    }
+
+    public Bounds getAbsoluteBounds() {
+        return mesh.localToScene(mesh.getLayoutBounds());
     }
 
     public Shape getMesh() {
