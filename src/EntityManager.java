@@ -62,5 +62,4 @@ public class EntityManager {
 
         return gameObjectList;
     }
-
 }

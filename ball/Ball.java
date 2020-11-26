@@ -35,7 +35,7 @@ public class Ball extends GameObject {
 
         this.isAlive = true;
         this.velocity = 0;
-        skin = new Circle(20, color);
+        skin = new Circle(15, color);
         this.parent = parent;
 
         motionTimer = new AnimationTimer() {
@@ -43,15 +43,27 @@ public class Ball extends GameObject {
 
             @Override
             public void handle(long l) {
+//                System.out.printf("%s ", (skin.getTranslateY() <= parent.getHeight() / 2) ? "ABOVE" : "BELOW");
+//                System.out.printf("%.2f\n", skin.getTranslateY());
                 update((l - prevTimeStamp) * Math.pow(10, -9));
                 prevTimeStamp = l;
 
                 if (!isAlive) {
+//                    Rectangle rect = new Rectangle(0, 0, 1920, 1080);
+//                    rect.setFill(Color.WHITE);
+//                    parent.getChildren().add(rect);
+//                    FadeTransition fadeTransition = new FadeTransition(Duration.millis(1000), rect);
+//                    fadeTransition.setFromValue(1.0);
+//                    fadeTransition.setToValue(0.0);
+//                    fadeTransition.setCycleCount(Transition.INDEFINITE);
+//                    fadeTransition.play();
+
                     parent.getChildren().remove(skin);
                     parent.getChildren().add(new Emitter(new Vector2D(
                             skin.getTranslateX(),
                             skin.getTranslateY()
                     )));
+
 
                     this.stop();
                 }
@@ -59,10 +71,10 @@ public class Ball extends GameObject {
         };
     }
 
-    public void create(Vector2D initalPosition, EntityManager entityManager) {
+    public void create(Vector2D initialPosition, EntityManager entityManager) {
         entityManager.register(this);
-        skin.setTranslateX(initalPosition.x);
-        skin.setTranslateY(initalPosition.y - skin.getRadius());
+        skin.setTranslateX(initialPosition.x);
+        skin.setTranslateY(initialPosition.y - skin.getRadius());
         parent.getChildren().add(skin);
 
         motionTimer.start();
@@ -82,5 +94,9 @@ public class Ball extends GameObject {
 
     public void setVelocity(double velocity) {
         this.velocity = velocity;
+    }
+
+    public double getVelocity() {
+        return velocity;
     }
 }

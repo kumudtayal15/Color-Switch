@@ -1,12 +1,9 @@
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +16,7 @@ public class BehaviourSystemTest extends Application {
 
     @Override
     public void start(Stage stage) {
+//        System.out.println(Screen.getPrimary().getBounds());
         double SCENE_WIDTH = 0, SCENE_HEIGHT = 0;
 
         try (InputStream input = new FileInputStream("hyperparameters/display.properties")) {
@@ -31,138 +29,77 @@ public class BehaviourSystemTest extends Application {
         }
 
         Pane root = new Pane();
-        Canvas canvas = new Canvas(SCENE_WIDTH, SCENE_HEIGHT);
 
-        root.getChildren().add(canvas);
-
-//        root.setTranslateX(SCENE_WIDTH / 2);
-//        root.setTranslateY(SCENE_HEIGHT / 2);
         final Color BLACK = Color.web("#292929");
         Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT, BLACK);
+        Canvas canvas = new Canvas(scene.getWidth(), scene.getHeight());
+        root.getChildren().add(canvas);
 
         EntityManager entityManager = new EntityManager();
 
-        ParticulateSquare particulateSquare = new ParticulateSquare(
-                new Vector2D(SCENE_WIDTH / 2 - 200, SCENE_HEIGHT / 2 + 200),
-                entityManager,
-                400, 300,
-                24, 22
-        );
-//        particulateSquare.create();
-//        root.getChildren().add(particulateSquare.container);
+        Ball ball = new Ball(root);
+        ball.create(new Vector2D(scene.getWidth() / 2, scene.getHeight() - 100), entityManager);
+        scene.setOnKeyPressed(ball::impulse);
 
-        ParticulateHex particulateHex = new ParticulateHex(
-                new Vector2D(SCENE_WIDTH / 2 - 200, SCENE_HEIGHT / 2 + 200),
+        ParticulateSquare particulateSquare = new ParticulateSquare(
+                new Vector2D(SCENE_WIDTH / 2 - 125, SCENE_HEIGHT / 2 + 150 - 300),
                 entityManager,
                 250, 300,
-                28, 20
+                16, 17
         );
-//        particulateHex.create();
-//        root.getChildren().add(particulateHex.container);
-
-        ParticulateTriangle particulateTriangle = new ParticulateTriangle(
-                new Vector2D(SCENE_WIDTH / 2 - 250, SCENE_HEIGHT / 2 - 200),
-                entityManager,
-                500, 200,
-                24, 22
-        );
-//        particulateTriangle.create();
-//        root.getChildren().add(particulateTriangle.container);
-
-        HarmonicCircle harmonicCircle = new HarmonicCircle(
-                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
-                entityManager,
-                200,
-                2,
-                20,
-                27
-        );
-//        harmonicCircle.create();
-//        root.getChildren().add(harmonicCircle.container);
+        particulateSquare.create();
+        root.getChildren().add(particulateSquare.container);
 
         ParticulateCircle particulateCircle = new ParticulateCircle(
-                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2 - 300),
+                new Vector2D(SCENE_WIDTH / 2, -500),
                 entityManager,
-                200,
-                2,
-                20,
-                27
+                150,
+                1,
+                24,
+                15
         );
 //        particulateCircle.create();
 //        root.getChildren().add(particulateCircle.container);
 
-//        QuadArcCircle quadArcCircle = new QuadArcCircle(
-//                new Vector2D(SCENE_WIDTH / 2, 0),
-//                entityManager,
-//                300,
-//                70,
-//                50
-//        );
-//        root.getChildren().add(quadArcCircle.container);
-
-//        Triangle triangle = new Triangle(
-//                new Vector2D(0, SCENE_HEIGHT / 2),
-//                entityManager,
-//                400,
-//                40,
-//                300
-//        );
-//        Group triangleGroup = new Group();
-//        triangleGroup.setTranslateY(SCENE_HEIGHT / 2);
-//        triangleGroup.getChildren().add(triangle.container);
-//        entityManager.addComponents(triangle, new HorizontalLineTrajectory(0, 700, 0));
-//        root.getChildren().add(triangle.container);
-//
-//        Rhombus rhombus = new Rhombus(
-//                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
-//                entityManager,
-//                450,
-//                50,
-//                50,
-//                70
-//        );
-//        root.getChildren().add(rhombus.container);
-
         ParticleLemniscate particleLemniscate = new ParticleLemniscate(
-                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
+                new Vector2D(SCENE_WIDTH / 2, -500),
                 entityManager,
-                200,
+                100,
                 1.5,
                 16,
-                30
+                17
         );
         root.getChildren().add(particleLemniscate.container);
 
         /*
         Ball decoupled from entity manager
          */
-        Ball ball = new Ball(root);
-        ball.create(new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT - 200), entityManager);
-        scene.setOnKeyPressed(ball::impulse);
 
-        PhysicsBehaviourSystem physicsBehaviourSystem = new PhysicsBehaviourSystem(entityManager);
-        CollisionBehaviourSystem collisionBehaviourSystem = new CollisionBehaviourSystem(entityManager);
-//        collisionBehaviourSystem.setObjectTracking(true);
-        collisionBehaviourSystem.setGraphicsContext(canvas.getGraphicsContext2D());
-        collisionBehaviourSystem.setTrackedBall(ball);
+        PhysicsSystem physicsSystem = new PhysicsSystem(entityManager);
 
-        AnimationTimer timer = new AnimationTimer() {
+        CollisionSystem collisionSystem = new CollisionSystem(entityManager);
+        collisionSystem.setPlayer(ball);
 
-            final double tNought = System.nanoTime();
+        RenderSystem renderSystem = new RenderSystem(entityManager, canvas.getGraphicsContext2D());
+        renderSystem.setPlayer(ball);
+        renderSystem.setObjectTracking(true);
 
-            @Override
-            public void handle(long l) {
-                double secondsElapsed = (l - tNought) * Math.pow(10, -9);
-                physicsBehaviourSystem.update(l * Math.pow(10, -9));
-                collisionBehaviourSystem.update(secondsElapsed);
-            }
-        };
+        ScrollingSystem scrollingSystem = new ScrollingSystem(entityManager, root.getLayoutBounds());
+        scrollingSystem.setPlayer(ball);
+        scrollingSystem.addAll(
+                particulateSquare.container,
+                particleLemniscate.container
+        );
 
+        physicsSystem.init();
+        collisionSystem.init();
+        renderSystem.init();
+        scrollingSystem.init();
 
         stage.setTitle("Rendering system test");
         stage.setScene(scene);
 
-        timer.start();
         stage.show();
     }
+
 }

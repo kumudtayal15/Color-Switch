@@ -16,7 +16,7 @@ public class Particle extends Circle {
             Color.web("#FF0080")};
 
     static Random random = new Random();
-    protected double PARTICLE_RADIUS;
+    protected double MAX_PARTICLE_RADIUS;
     protected double dx;
     protected double dy;
     protected double GRAVITY;
@@ -29,7 +29,7 @@ public class Particle extends Circle {
             Properties properties = new Properties();
             properties.load(input);
 
-            this.PARTICLE_RADIUS = Double.parseDouble(properties.getProperty("radius"));
+            this.MAX_PARTICLE_RADIUS = Double.parseDouble(properties.getProperty("radius"));
             this.GRAVITY = Double.parseDouble(properties.getProperty("gravity"));
             vx = Double.parseDouble(properties.getProperty("x.velocity")) * random.nextDouble();
             vy = Double.parseDouble(properties.getProperty("y.velocity")) * random.nextDouble();
@@ -42,10 +42,9 @@ public class Particle extends Circle {
 
         double theta = random.nextFloat() * (2 * Math.PI);
         this.dx = Math.cos(theta) * vx;
-//        this.dy = -Math.abs(Math.sin(theta)) * vy;
         this.dy = Math.sin(theta) * vy;
 
-        this.setRadius(PARTICLE_RADIUS);
+        this.setRadius(MAX_PARTICLE_RADIUS * Math.max(random.nextFloat(), 0.4));
         this.setFill(colorMapping[random.nextInt(4)]);
     }
 

@@ -1,9 +1,22 @@
+import javafx.animation.AnimationTimer;
+
 import java.util.List;
 
-public class PhysicsBehaviourSystem extends BehaviourSystem {
+public class PhysicsSystem extends BehaviourSystem {
 
-    public PhysicsBehaviourSystem(EntityManager entityManager) {
+    public PhysicsSystem(EntityManager entityManager) {
         super(entityManager);
+        this.timer = new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+                update(l * Math.pow(10, -9));
+            }
+        };
+    }
+
+    @Override
+    public void init() {
+        timer.start();
     }
 
     @Override
