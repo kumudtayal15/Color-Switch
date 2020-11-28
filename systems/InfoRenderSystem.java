@@ -6,14 +6,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import java.util.List;
 
-public class RenderSystem extends BehaviourSystem {
+public class InfoRenderSystem extends BehaviourSystem {
+    private boolean locationCrosshairs;
     private boolean objectTracking;
     private Ball player;
     private GraphicsContext graphicsContext;
     private final Font BIG_FONT;
     private final Font SMALL_FONT;
 
-    public RenderSystem(EntityManager entityManager, GraphicsContext graphicsContext) {
+    public InfoRenderSystem(EntityManager entityManager, GraphicsContext graphicsContext) {
         super(entityManager);
 
         this.graphicsContext = graphicsContext;
@@ -42,9 +43,17 @@ public class RenderSystem extends BehaviourSystem {
 
                 graphicsContext.setFill(Color.WHITE);
                 graphicsContext.setFont(SMALL_FONT);
-
                 graphicsContext.fillText("ball height: " + (int) player.skin.getTranslateY(), 20, 50);
-//                graphicsContext.fillText("objects on screen: " + );
+
+                graphicsContext.setStroke(Color.GREEN);
+                graphicsContext.fillText(
+                        "y=" + (int) graphicsContext.getCanvas().getHeight() / 2,
+                        10, graphicsContext.getCanvas().getHeight() / 2 + 3
+                );
+                graphicsContext.strokeLine(
+                        60, graphicsContext.getCanvas().getHeight() / 2,
+                        graphicsContext.getCanvas().getWidth(), graphicsContext.getCanvas().getHeight() / 2
+                );
 
                 prevTimeStamp = l;
             }
@@ -65,14 +74,11 @@ public class RenderSystem extends BehaviourSystem {
                 graphicsContext.getCanvas().getHeight()
         );
 
-
+        if (locationCrosshairs) {
+            displayLocationCrosshairs();
+        }
 
         if (objectTracking) {
-            graphicsContext.setStroke(Color.GREEN);
-            graphicsContext.strokeLine(
-                    0, graphicsContext.getCanvas().getHeight() / 2,
-                    graphicsContext.getCanvas().getWidth(), graphicsContext.getCanvas().getHeight() / 2
-            );
 
             List<GameObject> gameObjects;
             gameObjects = entityManager.getGameObjects(ComponentClass.valueOf("MESH"));
@@ -86,7 +92,6 @@ public class RenderSystem extends BehaviourSystem {
 
                 displayBoundingRect(meshComponent.getAbsoluteBounds());
                 displayBoundingRect(player.skin.getBoundsInParent());
-                displayLocationCrosshairs();
             }
         }
     }
@@ -107,6 +112,7 @@ public class RenderSystem extends BehaviourSystem {
                 0, player.skin.getTranslateY(),
                 graphicsContext.getCanvas().getWidth(), player.skin.getTranslateY()
         );
+
         graphicsContext.strokeLine(
                 player.skin.getTranslateX(), 0,
                 player.skin.getTranslateX(), graphicsContext.getCanvas().getHeight()
@@ -115,6 +121,10 @@ public class RenderSystem extends BehaviourSystem {
 
     public void setObjectTracking(boolean objectTracking) {
         this.objectTracking = objectTracking;
+    }
+
+    public void setLocationCrosshairs(boolean locationCrosshairs) {
+        this.locationCrosshairs = locationCrosshairs;
     }
 
     public void setGraphicsContext(GraphicsContext graphicsContext) {

@@ -14,6 +14,7 @@ public class Ball extends GameObject {
     private final Pane parent;
     protected final AnimationTimer motionTimer;
     protected final Circle skin;
+    protected int score;
     protected boolean isAlive;
     protected Color color;
     protected double velocity;
@@ -43,8 +44,7 @@ public class Ball extends GameObject {
 
             @Override
             public void handle(long l) {
-//                System.out.printf("%s ", (skin.getTranslateY() <= parent.getHeight() / 2) ? "ABOVE" : "BELOW");
-//                System.out.printf("%.2f\n", skin.getTranslateY());
+
                 update((l - prevTimeStamp) * Math.pow(10, -9));
                 prevTimeStamp = l;
 
@@ -64,7 +64,6 @@ public class Ball extends GameObject {
                             skin.getTranslateY()
                     )));
 
-
                     this.stop();
                 }
             }
@@ -82,7 +81,8 @@ public class Ball extends GameObject {
 
     public void update(double dt) {
         double dy = velocity * dt + 0.5 * GRAVITY * (dt * dt);
-        skin.setTranslateY(skin.getTranslateY() + dy);
+//        skin.setTranslateY(skin.getTranslateY() + dy);
+        skin.setTranslateY(Math.min(skin.getTranslateY() + dy, 600));
         velocity += GRAVITY * dt;
     }
 
@@ -92,11 +92,19 @@ public class Ball extends GameObject {
         }
     }
 
-    public void setVelocity(double velocity) {
-        this.velocity = velocity;
-    }
-
     public double getVelocity() {
         return velocity;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public void setVelocity(double velocity) {
+        this.velocity = velocity;
     }
 }

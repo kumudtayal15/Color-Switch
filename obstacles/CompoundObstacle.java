@@ -1,7 +1,6 @@
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
-
 import java.util.ArrayDeque;
 import java.util.Collection;
 
