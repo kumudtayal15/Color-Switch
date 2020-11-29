@@ -61,17 +61,6 @@ public class BehaviourSystemTest extends Application {
         ball.create(new Vector2D(scene.getWidth() / 2, scene.getHeight()), entityManager);
         scene.setOnKeyPressed(ball::impulse);
 
-//        SVGPath svgPath = new SVGPath();
-//        svgPath.setContent("M127.75.25A128,128,0,0,1,.25,127.75v-28A100,100,0,0,0,99.74.25Z");
-//        svgPath.setTranslateX(scene.getWidth() / 2);
-//        svgPath.setTranslateY(scene.getHeight() / 2);
-//        svgPath.setFill(Color.web("#35E2F2"));
-//        Bounds svgBounds = svgPath.getLayoutBounds();
-//        canvas.getGraphicsContext2D().setStroke(Color.CRIMSON);
-//        canvas.getGraphicsContext2D().setLineWidth(20);
-//        canvas.getGraphicsContext2D().strokeRect(svgBounds.getMinX() + scene.getWidth() / 2, svgBounds.getMinY() + scene.getHeight() /2, svgBounds.getWidth(), svgBounds.getHeight());
-//        root.getChildren().add(svgPath);
-
         ParticulateSquare particulateSquare = new ParticulateSquare(
                 new Vector2D(SCENE_WIDTH / 2 - 125, SCENE_HEIGHT / 2 + 150 - 300),
                 entityManager,
@@ -106,21 +95,39 @@ public class BehaviourSystemTest extends Application {
                 new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2),
                 entityManager,
                 175,
-                "thick",
+                "thin",
                 100
         );
-        quadArcCircle.create();
-        root.getChildren().add(quadArcCircle.container);
+//        quadArcCircle.create();
+//        root.getChildren().add(quadArcCircle.container);
 
-        QuadArcCircle quadArcCircle2 = new QuadArcCircle(
-                new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2),
+//        QuadArcCircle quadArcCircle2 = new QuadArcCircle(
+//                new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2),
+//                entityManager,
+//                205,
+//                "thin",
+//                -100
+//        );
+//        quadArcCircle2.create();
+//        root.getChildren().add(quadArcCircle2.container);
+
+        Cartwheel cartwheel = new Cartwheel(
+                new Vector2D(scene.getWidth() / 2 - 100, scene.getHeight() / 2),
                 entityManager,
-                205,
-                "thin",
-                -100
+                100,
+                -50
         );
-        quadArcCircle2.create();
-        root.getChildren().add(quadArcCircle2.container);
+        cartwheel.create();
+        root.getChildren().add(cartwheel.container);
+
+        Cartwheel cartwheel2 = new Cartwheel(
+                new Vector2D(scene.getWidth() / 2 + 100, scene.getHeight() / 2),
+                entityManager,
+                100,
+                50
+        );
+        cartwheel2.create();
+        root.getChildren().add(cartwheel2.container);
 
         /*
         Ball decoupled from entity manager
@@ -139,13 +146,11 @@ public class BehaviourSystemTest extends Application {
         ScrollingSystem scrollingSystem = new ScrollingSystem(entityManager, root.getLayoutBounds());
         scrollingSystem.setPlayer(ball);
         scrollingSystem.addAll(
-//                particulateSquare.container,
-//                colorSwitcher.getContainer(),
                 star.getContainer(),
-//                particleLemniscate.container
                 quadArcCircle.container,
-                quadArcCircle2.container
-//                particulateCircle.container
+                cartwheel.container,
+                cartwheel2.container
+//                quadArcCircle2.container
         );
 
         physicsSystem.init();
