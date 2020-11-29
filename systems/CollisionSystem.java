@@ -1,5 +1,4 @@
 import javafx.animation.AnimationTimer;
-import javafx.scene.shape.Shape;
 
 import java.util.List;
 
@@ -34,13 +33,18 @@ public class CollisionSystem extends BehaviourSystem {
                     gameObject
             );
 
-            Shape intersect = Shape.intersect(meshComponent.mesh, player.skin);
+//            Shape intersect = Shape.intersect(meshComponent.mesh, player.ballMesh);
 
-            if (intersect.getBoundsInLocal().getWidth() != -1) {
+//            if (intersect.getBoundsInParent().getWidth() != -1) {
+            if (meshComponent.isCollide(player.ballMesh)) {
                 if (gameObject instanceof PrimitiveObstacle) {
                     if (!meshComponent.mesh.getFill().equals(player.color)) {
                         player.isAlive = false;
                     }
+                } else if (gameObject instanceof Star) {
+
+                } else if (gameObject instanceof ColorSwitcher) {
+
                 }
             }
         }

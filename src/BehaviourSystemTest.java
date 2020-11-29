@@ -50,21 +50,6 @@ public class BehaviourSystemTest extends Application {
 
         EntityManager entityManager = new EntityManager();
 
-//        Image image = new Image(new File("assets/colorswitcher.png").toURI().toString());
-//        ImageView imageView = new ImageView(image);
-//        imageView.setFitHeight(100);
-//        imageView.setFitWidth(100);
-//        imageView.setTranslateX(SCENE_WIDTH / 2);
-//        imageView.setTranslateY(SCENE_HEIGHT / 2);
-//        imageView.getTransforms().add(new Translate(-50, -50));
-//        root.getChildren().add(imageView);
-
-//        ColorSwitcher colorSwitcher = new ColorSwitcher(
-//                entityManager,
-//                new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2 + 150)
-//        );
-//        root.getChildren().add(colorSwitcher.container);
-
         Star star = new Star(
                 entityManager,
                 new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2 + 150)
@@ -72,9 +57,20 @@ public class BehaviourSystemTest extends Application {
         root.getChildren().add(star.getContainer());
 
         Ball ball = new Ball(root);
-        System.out.println(scene.getHeight());
+//        ball.create(new Vector2D(0, 0), entityManager);
         ball.create(new Vector2D(scene.getWidth() / 2, scene.getHeight()), entityManager);
         scene.setOnKeyPressed(ball::impulse);
+
+//        SVGPath svgPath = new SVGPath();
+//        svgPath.setContent("M127.75.25A128,128,0,0,1,.25,127.75v-28A100,100,0,0,0,99.74.25Z");
+//        svgPath.setTranslateX(scene.getWidth() / 2);
+//        svgPath.setTranslateY(scene.getHeight() / 2);
+//        svgPath.setFill(Color.web("#35E2F2"));
+//        Bounds svgBounds = svgPath.getLayoutBounds();
+//        canvas.getGraphicsContext2D().setStroke(Color.CRIMSON);
+//        canvas.getGraphicsContext2D().setLineWidth(20);
+//        canvas.getGraphicsContext2D().strokeRect(svgBounds.getMinX() + scene.getWidth() / 2, svgBounds.getMinY() + scene.getHeight() /2, svgBounds.getWidth(), svgBounds.getHeight());
+//        root.getChildren().add(svgPath);
 
         ParticulateSquare particulateSquare = new ParticulateSquare(
                 new Vector2D(SCENE_WIDTH / 2 - 125, SCENE_HEIGHT / 2 + 150 - 300),
@@ -86,7 +82,7 @@ public class BehaviourSystemTest extends Application {
 //        root.getChildren().add(particulateSquare.container);
 
         ParticulateCircle particulateCircle = new ParticulateCircle(
-                new Vector2D(SCENE_WIDTH / 2, -500),
+                new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2),
                 entityManager,
                 150,
                 1,
@@ -96,31 +92,47 @@ public class BehaviourSystemTest extends Application {
 //        particulateCircle.create();
 //        root.getChildren().add(particulateCircle.container);
 
-        ParticleLemniscate particleLemniscate = new ParticleLemniscate(
-                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
+//        ParticleLemniscate particleLemniscate = new ParticleLemniscate(
+//                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
+//                entityManager,
+//                70,
+//                1.5,
+//                12,
+//                12
+//        );
+//        root.getChildren().add(particleLemniscate.container);
+
+        QuadArcCircle quadArcCircle = new QuadArcCircle(
+                new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2),
                 entityManager,
-                70,
-                1.5,
-                12,
-                12
+                175,
+                "thick",
+                100
         );
-        root.getChildren().add(particleLemniscate.container);
+        quadArcCircle.create();
+        root.getChildren().add(quadArcCircle.container);
+
+        QuadArcCircle quadArcCircle2 = new QuadArcCircle(
+                new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2),
+                entityManager,
+                205,
+                "thin",
+                -100
+        );
+        quadArcCircle2.create();
+        root.getChildren().add(quadArcCircle2.container);
 
         /*
         Ball decoupled from entity manager
          */
-
-//        HashMap<String, BehaviourSystem> systemHashMap = new HashMap<>(4);
-//        systemHashMap.put("physics", new PhysicsSystem(entityManager));
-//        systemHashMap.put("collision", new CollisionSystem(entityManager));
 
         PhysicsSystem physicsSystem = new PhysicsSystem(entityManager);
 
         CollisionSystem collisionSystem = new CollisionSystem(entityManager);
         collisionSystem.setPlayer(ball);
 
-//        InfoRenderSystem infoRenderSystem = new InfoRenderSystem(entityManager, canvas.getGraphicsContext2D());
-//        infoRenderSystem.setPlayer(ball);
+        InfoRenderSystem infoRenderSystem = new InfoRenderSystem(entityManager, canvas.getGraphicsContext2D());
+        infoRenderSystem.setPlayer(ball);
 //        infoRenderSystem.setObjectTracking(true);
 //        infoRenderSystem.setLocationCrosshairs(true);
 
@@ -130,12 +142,15 @@ public class BehaviourSystemTest extends Application {
 //                particulateSquare.container,
 //                colorSwitcher.getContainer(),
                 star.getContainer(),
-                particleLemniscate.container
+//                particleLemniscate.container
+                quadArcCircle.container,
+                quadArcCircle2.container
+//                particulateCircle.container
         );
 
         physicsSystem.init();
         collisionSystem.init();
-//        infoRenderSystem.init();
+        infoRenderSystem.init();
         scrollingSystem.init();
 
         stage.setTitle("Rendering system test");

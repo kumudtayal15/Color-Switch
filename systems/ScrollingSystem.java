@@ -1,15 +1,20 @@
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 public class ScrollingSystem extends BehaviourSystem {
     private Ball player;
     private final List<Node> nodes;
     private final double SCROLL_THRESHOLD;
-    private static final double SCROLL_AMT = 5;
+    private double SCROLL_AMT;
 
     public ScrollingSystem(EntityManager entityManager, Bounds rootPaneBounds) {
         super(entityManager);
@@ -20,6 +25,16 @@ public class ScrollingSystem extends BehaviourSystem {
                 update(l * Math.pow(10, -9));
             }
         };
+
+        try (InputStream input = new FileInputStream("hyperparameters/anim.properties")) {
+            Properties properties = new Properties();
+            properties.load(input);
+
+            SCROLL_AMT = Double.parseDouble(properties.getProperty("scroll.amount"));
+        } catch (IOException e) {
+            System.out.println("IO Exception occurred");
+            e.printStackTrace();
+        }
 
         this.nodes = new ArrayList<>();
         this.SCROLL_THRESHOLD = rootPaneBounds.getHeight() / 2;
@@ -37,7 +52,8 @@ public class ScrollingSystem extends BehaviourSystem {
         Condition for scrolling: Ball has an upward velocity, and is
         above the threshold.
          */
-        if (player.getVelocity() <= 0 && player.skin.getTranslateY() <= SCROLL_THRESHOLD) {
+//        if (player.getVelocity() <= 0 && player.skin.getTranslateY() <= SCROLL_THRESHOLD) {
+        if (player.getVelocity() <= 0 && player.ballMeshWrapper.getTranslateY() <= SCROLL_THRESHOLD) {
             for (Node node : nodes) {
                 node.setTranslateY(node.getTranslateY() + SCROLL_AMT);
             }

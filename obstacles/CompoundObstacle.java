@@ -4,6 +4,7 @@ import javafx.scene.paint.Color;
 import java.util.ArrayDeque;
 import java.util.Collection;
 
+//abstract public class CompoundObstacle extends Obstacle {
 public class CompoundObstacle extends Obstacle {
 
     protected final Group container;
@@ -19,6 +20,8 @@ public class CompoundObstacle extends Obstacle {
         this.children = new ArrayDeque<>();
         this.container = new Group();
     }
+
+//    abstract void create();
 
     @Override
     public Node getNode() {

@@ -43,7 +43,7 @@ public class InfoRenderSystem extends BehaviourSystem {
 
                 graphicsContext.setFill(Color.WHITE);
                 graphicsContext.setFont(SMALL_FONT);
-                graphicsContext.fillText("ball height: " + (int) player.skin.getTranslateY(), 20, 50);
+                graphicsContext.fillText("ball height: " + (int) player.ballMeshWrapper.getTranslateY(), 20, 50);
 
                 graphicsContext.setStroke(Color.GREEN);
                 graphicsContext.fillText(
@@ -91,7 +91,7 @@ public class InfoRenderSystem extends BehaviourSystem {
                 );
 
                 displayBoundingRect(meshComponent.getAbsoluteBounds());
-                displayBoundingRect(player.skin.getBoundsInParent());
+                displayBoundingRect(player.ballMeshWrapper.getBoundsInParent());
             }
         }
     }
@@ -109,13 +109,13 @@ public class InfoRenderSystem extends BehaviourSystem {
     private void displayLocationCrosshairs() {
         graphicsContext.setStroke(Color.RED);
         graphicsContext.strokeLine(
-                0, player.skin.getTranslateY(),
-                graphicsContext.getCanvas().getWidth(), player.skin.getTranslateY()
+                0, player.ballMeshWrapper.getTranslateY(),
+                graphicsContext.getCanvas().getWidth(), player.ballMeshWrapper.getTranslateY()
         );
 
         graphicsContext.strokeLine(
-                player.skin.getTranslateX(), 0,
-                player.skin.getTranslateX(), graphicsContext.getCanvas().getHeight()
+                player.ballMeshWrapper.getTranslateX(), 0,
+                player.ballMeshWrapper.getTranslateX(), graphicsContext.getCanvas().getHeight()
         );
     }
 
