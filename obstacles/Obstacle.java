@@ -7,6 +7,8 @@ abstract public class Obstacle extends GameObject {
         this.anchorPoint = anchorPoint;
     }
 
+    abstract public void translate(Vector2D coordinates);
+
     public Vector2D getAnchorPoint() {
         return anchorPoint;
     }

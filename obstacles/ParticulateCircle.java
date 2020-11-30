@@ -1,5 +1,3 @@
-import javafx.scene.shape.Rectangle;
-
 public class ParticulateCircle extends ParticulateObstacle {
 
     public ParticulateCircle(

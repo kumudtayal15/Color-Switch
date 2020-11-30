@@ -1,6 +1,6 @@
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.paint.Color;
+
 import java.util.ArrayDeque;
 import java.util.Collection;
 
@@ -17,15 +17,28 @@ public class CompoundObstacle extends Obstacle {
 
     public CompoundObstacle(Vector2D anchorPoint) {
         super(anchorPoint);
+
         this.children = new ArrayDeque<>();
         this.container = new Group();
+
+        this.container.setLayoutX(anchorPoint.x);
+        this.container.setLayoutY(anchorPoint.y);
     }
 
 //    abstract void create();
 
     @Override
-    public Node getNode() {
+    public Group getNode() {
         return container;
+    }
+
+    @Override
+    public void translate(Vector2D coordinates) {
+        this.getAnchorPoint().x = coordinates.x;
+        this.getAnchorPoint().y = coordinates.y;
+
+        this.container.setLayoutX(coordinates.x);
+        this.container.setLayoutY(coordinates.y);
     }
 
     public void addChild(Obstacle childObstacle) {

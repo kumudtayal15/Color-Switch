@@ -10,8 +10,6 @@ public class Triangle extends CompoundObstacle {
             double rotationSpeed) {
 
         super(anchorPoint);
-        container.setLayoutX(anchorPoint.x);
-        container.setLayoutY(anchorPoint.y);
 
         PrimitiveObstacle[] roundedRectangle = new PrimitiveObstacle[3];
 

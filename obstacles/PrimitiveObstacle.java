@@ -12,4 +12,10 @@ public class PrimitiveObstacle extends Obstacle {
     public Node getNode() {
         return mesh;
     }
+
+    @Override
+    public void translate(Vector2D coordinates) {
+//        this.mesh.setTr
+
+    }
 }

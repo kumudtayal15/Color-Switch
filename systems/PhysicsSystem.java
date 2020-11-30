@@ -1,11 +1,12 @@
 import javafx.animation.AnimationTimer;
+import javafx.scene.layout.Pane;
 
 import java.util.List;
 
 public class PhysicsSystem extends BehaviourSystem {
 
-    public PhysicsSystem(EntityManager entityManager) {
-        super(entityManager);
+    public PhysicsSystem(EntityManager entityManager, Pane sceneGraphRoot) {
+        super(entityManager, sceneGraphRoot);
         this.timer = new AnimationTimer() {
             @Override
             public void handle(long l) {

@@ -23,7 +23,7 @@ public class Star extends GameObject {
         entityManager.addComponents(this, new MeshComponent(starPath, Color.WHITE));
     }
 
-    public Group getContainer() {
+    public Group getNode() {
         return container;
     }
 }

@@ -2,6 +2,7 @@ import javafx.animation.AnimationTimer;
 import javafx.geometry.Bounds;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import java.util.List;
@@ -14,8 +15,10 @@ public class InfoRenderSystem extends BehaviourSystem {
     private final Font BIG_FONT;
     private final Font SMALL_FONT;
 
-    public InfoRenderSystem(EntityManager entityManager, GraphicsContext graphicsContext) {
-        super(entityManager);
+    public InfoRenderSystem(EntityManager entityManager, Pane sceneGraphRoot, Ball player, GraphicsContext graphicsContext) {
+        super(entityManager, sceneGraphRoot);
+
+        this.player = player;
 
         this.graphicsContext = graphicsContext;
         BIG_FONT = new Font("Consolas", 30);

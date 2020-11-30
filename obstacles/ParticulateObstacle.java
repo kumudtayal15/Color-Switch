@@ -19,8 +19,6 @@ abstract public class ParticulateObstacle extends CompoundObstacle {
             double particleRadius) {
 
         super(anchorPoint);
-        container.setLayoutX(anchorPoint.x);
-        container.setLayoutY(anchorPoint.y);
 
         if (particleCount % 4 != 0) {
             throw new InvalidParameterException("Number of particles should be divisible by 4");

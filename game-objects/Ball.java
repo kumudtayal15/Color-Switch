@@ -133,4 +133,9 @@ public class Ball extends GameObject {
     public void setVelocity(double velocity) {
         this.velocity = velocity;
     }
+
+    public void setColor(Color color) {
+        this.color = color;
+        ballMesh.setFill(color);
+    }
 }

@@ -1,6 +1,7 @@
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,12 +13,12 @@ import java.util.Properties;
 
 public class ScrollingSystem extends BehaviourSystem {
     private Ball player;
-    private final List<Node> nodes;
+    protected final List<Node> nodes;
     private final double SCROLL_THRESHOLD;
     private double SCROLL_AMT;
 
-    public ScrollingSystem(EntityManager entityManager, Bounds rootPaneBounds) {
-        super(entityManager);
+    public ScrollingSystem(EntityManager entityManager, Pane sceneGraphRoot, Bounds rootPaneBounds) {
+        super(entityManager, sceneGraphRoot);
 
         timer = new AnimationTimer() {
             @Override
@@ -43,6 +44,7 @@ public class ScrollingSystem extends BehaviourSystem {
     @Override
     public void init() {
         assert player != null;
+        System.out.println(nodes);
         timer.start();
     }
 
@@ -64,7 +66,11 @@ public class ScrollingSystem extends BehaviourSystem {
         nodes.add(e);
     }
 
-    public void addAll(Node ... es) {
+    public void remove(Node e) {
+        nodes.remove(e);
+    }
+
+    public void addAll(Node... es) {
         this.nodes.addAll(Arrays.asList(es));
     }
 

@@ -1,37 +1,54 @@
 import javafx.scene.Group;
-import javafx.scene.effect.Glow;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.transform.Translate;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
 
-import java.io.File;
+import java.util.Random;
 
 public class ColorSwitcher extends GameObject {
-    static final String imageLocation = "assets/colorswitcher.png";
-    static final Image image = new Image(new File(imageLocation).toURI().toString());
     static final double rotationSpeed = 100;
-    static final double radius = 50;
-    protected final ImageView imageView;
+    static final double radius = 20;
+    static final Color[] colorMapping = {
+            Color.web("#8C13FB"),
+            Color.web("#F6DF0E"),
+            Color.web("#35E2F2"),
+            Color.web("#FF0080")};
     protected final Group container;
-    protected Color color;
+    protected Color deltaColor;
 
-    public ColorSwitcher(EntityManager entityManager, Vector2D anchorPoint) {
+    public ColorSwitcher(Vector2D anchorPoint, EntityManager entityManager) {
         container = new Group();
-        imageView = new ImageView(image);
-        imageView.setFitWidth(radius);
-        imageView.setFitHeight(radius);
-        imageView.getTransforms().add(new Translate(-radius / 2, -radius / 2));
-        container.getChildren().add(imageView);
+
         container.setTranslateX(anchorPoint.x);
         container.setTranslateY(anchorPoint.y);
 
+        this.deltaColor = colorMapping[new Random(System.currentTimeMillis()).nextInt(4)];
+
         entityManager.register(this);
+
+        Circle circleMesh = new Circle(radius);
+        entityManager.addComponents(this, new MeshComponent(circleMesh));
+        container.getChildren().add(circleMesh);
+
+        for (int i = 0; i < 4; i++) {
+            Shape roundArc = getRoundArc(i * 90, colorMapping[i % 4]);
+            container.getChildren().add(roundArc);
+        }
+
         RotationComponent rotationComponent = new RotationComponent(rotationSpeed, 0, 0);
         entityManager.addComponents(this, rotationComponent);
         container.getTransforms().add(rotationComponent.getRotateTransform());
     }
 
+    private Shape getRoundArc(double startAngle, Color color) {
+        Arc arc = new Arc(0, 0,radius, radius, startAngle, 90);
+        arc.setType(ArcType.ROUND);
+        arc.setFill(color);
+
+        return arc;
+    }
     public static double getRotationSpeed() {
         return rotationSpeed;
     }
@@ -40,11 +57,15 @@ public class ColorSwitcher extends GameObject {
         return radius;
     }
 
-    public Group getContainer() {
+    public Group getNode() {
         return container;
     }
 
-    public void setColor(Color color) {
-        this.color = color;
+    public Color getDeltaColor() {
+        return deltaColor;
+    }
+
+    public void setDeltaColor(Color deltaColor) {
+        this.deltaColor = deltaColor;
     }
 }

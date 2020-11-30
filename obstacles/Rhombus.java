@@ -11,8 +11,6 @@ public class Rhombus extends CompoundObstacle {
             double skewAngle) {
 
         super(anchorPoint);
-        container.setLayoutX(anchorPoint.x);
-        container.setLayoutY(anchorPoint.y);
 
         PrimitiveObstacle[] roundedRectangle = new PrimitiveObstacle[4];
 

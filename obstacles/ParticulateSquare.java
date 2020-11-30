@@ -1,5 +1,7 @@
 // TODO: 22/11/20 only rotates in anticlockwise direction!?
 
+import javafx.scene.transform.Translate;
+
 public class ParticulateSquare extends ParticulateObstacle {
 
     public ParticulateSquare(
@@ -12,6 +14,7 @@ public class ParticulateSquare extends ParticulateObstacle {
 
         super(anchorPoint, entityManager, trajectorySideLength, trajectorySpeed, particleCount, particleRadius);
         this.delayFactor = (4 * trajectorySideLength / trajectorySpeed) / particleCount;
+        this.container.getTransforms().add(new Translate(-trajectorySideLength / 2, trajectorySideLength / 2));
     }
 
 //    @Override

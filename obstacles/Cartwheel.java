@@ -17,8 +17,6 @@ public class Cartwheel extends CompoundObstacle {
             double rotationSpeed) {
 
         super(anchorPoint);
-        container.setLayoutX(anchorPoint.x);
-        container.setLayoutY(anchorPoint.y);
 
         this.entityManager = entityManager;
         this.length = length;

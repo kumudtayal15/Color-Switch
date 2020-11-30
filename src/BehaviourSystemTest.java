@@ -50,11 +50,17 @@ public class BehaviourSystemTest extends Application {
 
         EntityManager entityManager = new EntityManager();
 
-        Star star = new Star(
-                entityManager,
-                new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2 + 150)
+//        Star star = new Star(
+//                entityManager,
+//                new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2 + 150)
+//        );
+//        root.getChildren().add(star.getNode());
+
+        ColorSwitcher colorSwitcher = new ColorSwitcher(
+                new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2 + 150),
+                entityManager
         );
-        root.getChildren().add(star.getContainer());
+        root.getChildren().add(colorSwitcher.getNode());
 
         Ball ball = new Ball(root);
 //        ball.create(new Vector2D(0, 0), entityManager);
@@ -62,7 +68,7 @@ public class BehaviourSystemTest extends Application {
         scene.setOnKeyPressed(ball::impulse);
 
         ParticulateSquare particulateSquare = new ParticulateSquare(
-                new Vector2D(SCENE_WIDTH / 2 - 125, SCENE_HEIGHT / 2 + 150 - 300),
+                new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2),
                 entityManager,
                 250, 300,
                 16, 17
@@ -91,15 +97,30 @@ public class BehaviourSystemTest extends Application {
 //        );
 //        root.getChildren().add(particleLemniscate.container);
 
+//        Triangle triangle = new Triangle(
+//                new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2 - 200),
+//                entityManager,
+//                350,
+//                20,
+//                -100
+//        );
+//        root.getChildren().add(triangle.getNode());
+
         QuadArcCircle quadArcCircle = new QuadArcCircle(
-                new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2),
+                new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2 - 200),
                 entityManager,
-                175,
-                "thin",
+                150,
+                "thick",
                 100
         );
-//        quadArcCircle.create();
-//        root.getChildren().add(quadArcCircle.container);
+        quadArcCircle.create();
+        root.getChildren().add(quadArcCircle.container);
+
+        ColorSwitcher colorSwitcher1 = new ColorSwitcher(
+                quadArcCircle.getAnchorPoint(),
+                entityManager
+        );
+        root.getChildren().add(colorSwitcher1.getNode());
 
 //        QuadArcCircle quadArcCircle2 = new QuadArcCircle(
 //                new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2),
@@ -112,7 +133,7 @@ public class BehaviourSystemTest extends Application {
 //        root.getChildren().add(quadArcCircle2.container);
 
         Cartwheel cartwheel = new Cartwheel(
-                new Vector2D(scene.getWidth() / 2 - 100, scene.getHeight() / 2),
+                new Vector2D(scene.getWidth() / 2 - 100, -100),
                 entityManager,
                 100,
                 -50
@@ -126,32 +147,32 @@ public class BehaviourSystemTest extends Application {
                 100,
                 50
         );
-        cartwheel2.create();
-        root.getChildren().add(cartwheel2.container);
+//        cartwheel2.create();
+//        root.getChildren().add(cartwheel2.container);
 
         /*
         Ball decoupled from entity manager
          */
 
-        PhysicsSystem physicsSystem = new PhysicsSystem(entityManager);
+        PhysicsSystem physicsSystem = new PhysicsSystem(entityManager, root);
 
-        CollisionSystem collisionSystem = new CollisionSystem(entityManager);
-        collisionSystem.setPlayer(ball);
-
-        InfoRenderSystem infoRenderSystem = new InfoRenderSystem(entityManager, canvas.getGraphicsContext2D());
-        infoRenderSystem.setPlayer(ball);
+        InfoRenderSystem infoRenderSystem = new InfoRenderSystem(entityManager, root, ball, canvas.getGraphicsContext2D());
 //        infoRenderSystem.setObjectTracking(true);
 //        infoRenderSystem.setLocationCrosshairs(true);
 
-        ScrollingSystem scrollingSystem = new ScrollingSystem(entityManager, root.getLayoutBounds());
+        ScrollingSystem scrollingSystem = new ScrollingSystem(entityManager, root, root.getLayoutBounds());
         scrollingSystem.setPlayer(ball);
         scrollingSystem.addAll(
-                star.getContainer(),
-                quadArcCircle.container,
+//                star.getNode(),
+                colorSwitcher.getNode(),
+                colorSwitcher1.getNode(),
+//                triangle.getNode(),
                 cartwheel.container,
-                cartwheel2.container
-//                quadArcCircle2.container
+                cartwheel2.container,
+                quadArcCircle.container
         );
+
+        CollisionSystem collisionSystem = new CollisionSystem(entityManager, root, ball, scrollingSystem);
 
         physicsSystem.init();
         collisionSystem.init();
