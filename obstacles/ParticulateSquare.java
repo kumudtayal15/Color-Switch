@@ -27,5 +27,4 @@ public class ParticulateSquare extends ParticulateObstacle {
         return new SquareTrajectory(trajectorySize, trajectorySpeed, 0);
     }
 
-
 }

@@ -1,14 +1,16 @@
 import javafx.animation.AnimationTimer;
-import javafx.geometry.Bounds;
 import javafx.scene.layout.Pane;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Properties;
 
 public class SpawnSystem extends BehaviourSystem {
     private final SpawnPolicy spawnPolicy;
+    protected Deque<Obstacle> obstacleDeque;
     private Obstacle topObstacle;
     private final EntityManager entityManager;
     private final ScrollingSystem scrollingSystem;
@@ -16,6 +18,7 @@ public class SpawnSystem extends BehaviourSystem {
 
     public SpawnSystem(EntityManager entityManager, Pane sceneGraphRoot, ScrollingSystem scrollingSystem) {
         super(entityManager, sceneGraphRoot);
+
         timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
@@ -23,7 +26,7 @@ public class SpawnSystem extends BehaviourSystem {
             }
         };
 
-        try (InputStream input = new FileInputStream("anim.properties")) {
+        try (InputStream input = new FileInputStream("hyperparameters/anim.properties")) {
             Properties properties = new Properties();
             properties.load(input);
 
@@ -33,6 +36,7 @@ public class SpawnSystem extends BehaviourSystem {
             e.printStackTrace();
         }
 
+        this.obstacleDeque = new ArrayDeque<>(3);
         this.spawnPolicy = new SpawnPolicy();
         this.entityManager = entityManager;
         this.sceneGraphRoot = sceneGraphRoot;
@@ -41,26 +45,52 @@ public class SpawnSystem extends BehaviourSystem {
 
     @Override
     public void init() {
-//        assert topObstacle != null;
+        assert obstacleDeque.peekFirst() != null;
         spawnNextObstacle();
         timer.start();
     }
 
     @Override
     public void update(double t) {
-        Bounds topObstacleBounds = topObstacle.getNode().getBoundsInParent();
-        if (topObstacleBounds.getMinY() >= 0) {
+        Obstacle head = obstacleDeque.getFirst();
+        if (head.getNode().getBoundsInParent().getMinY() > sceneGraphRoot.getHeight()) {
+            rejectOutOfBoundsObstacle();
+        }
+
+        Obstacle tail = obstacleDeque.getLast();
+        if (tail.getNode().getBoundsInParent().getMinY() > 0) {
             spawnNextObstacle();
         }
     }
 
-    public void setTopObstacle(Obstacle topObstacle) {
-        this.topObstacle = topObstacle;
+    private void spawnNextObstacle() {
+        QuadArcCircle quadArcCircle = new QuadArcCircle(
+                new Vector2D(sceneGraphRoot.getWidth() / 2, -400),
+                entityManager,
+                150,
+                "thick",
+                100
+        );
+        quadArcCircle.create();
+        sceneGraphRoot.getChildren().add(quadArcCircle.getNode());
+        scrollingSystem.add(quadArcCircle.getNode());
+
+//        Lemniscate lemniscate = new Lemniscate(
+//                new Vector2D(sceneGraphRoot.getWidth() / 2, -400),
+//                entityManager,
+//                90,
+//                1,
+//                12,
+//                16
+//        );
+//        sceneGraphRoot.getChildren().add(lemniscate.getNode());
+//        scrollingSystem.add(lemniscate.getNode());
+
+        obstacleDeque.addLast(quadArcCircle);
     }
 
-    private void spawnNextObstacle() {
-//        topObstacle = spawnPolicy.next();
-        sceneGraphRoot.getChildren().add(topObstacle.getNode());
-        scrollingSystem.add(topObstacle.getNode());
+    private void rejectOutOfBoundsObstacle() {
+        Obstacle head = obstacleDeque.removeFirst();
+        head.markForDeletion(sceneGraphRoot, scrollingSystem, entityManager);
     }
 }

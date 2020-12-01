@@ -56,12 +56,6 @@ public class BehaviourSystemTest extends Application {
 //        );
 //        root.getChildren().add(star.getNode());
 
-        ColorSwitcher colorSwitcher = new ColorSwitcher(
-                new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2 + 150),
-                entityManager
-        );
-        root.getChildren().add(colorSwitcher.getNode());
-
         Ball ball = new Ball(root);
 //        ball.create(new Vector2D(0, 0), entityManager);
         ball.create(new Vector2D(scene.getWidth() / 2, scene.getHeight()), entityManager);
@@ -87,7 +81,7 @@ public class BehaviourSystemTest extends Application {
 //        particulateCircle.create();
 //        root.getChildren().add(particulateCircle.container);
 
-//        ParticleLemniscate particleLemniscate = new ParticleLemniscate(
+//        Lemniscate particleLemniscate = new Lemniscate(
 //                new Vector2D(SCENE_WIDTH / 2, SCENE_HEIGHT / 2),
 //                entityManager,
 //                70,
@@ -107,7 +101,7 @@ public class BehaviourSystemTest extends Application {
 //        root.getChildren().add(triangle.getNode());
 
         QuadArcCircle quadArcCircle = new QuadArcCircle(
-                new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2 - 200),
+                new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2),
                 entityManager,
                 150,
                 "thick",
@@ -116,39 +110,39 @@ public class BehaviourSystemTest extends Application {
         quadArcCircle.create();
         root.getChildren().add(quadArcCircle.container);
 
-        ColorSwitcher colorSwitcher1 = new ColorSwitcher(
-                quadArcCircle.getAnchorPoint(),
-                entityManager
-        );
-        root.getChildren().add(colorSwitcher1.getNode());
-
-//        QuadArcCircle quadArcCircle2 = new QuadArcCircle(
-//                new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2),
-//                entityManager,
-//                205,
-//                "thin",
-//                -100
+//        ColorSwitcher colorSwitcher1 = new ColorSwitcher(
+//                quadArcCircle.getAnchorPoint(),
+//                entityManager
 //        );
-//        quadArcCircle2.create();
-//        root.getChildren().add(quadArcCircle2.container);
-
-        Cartwheel cartwheel = new Cartwheel(
-                new Vector2D(scene.getWidth() / 2 - 100, -100),
+//        root.getChildren().add(colorSwitcher1.getNode());
+//
+//        Cartwheel cartwheel = new Cartwheel(
+//                new Vector2D(scene.getWidth() / 2 - 100, scene.getHeight() / 2 - 450),
+//                entityManager,
+//                100,
+//                50
+//        );
+//        cartwheel.create();
+//        root.getChildren().add(cartwheel.container);
+//
+//        Cartwheel cartwheel1 = new Cartwheel(
+//                new Vector2D(scene.getWidth() / 2 + 100, scene.getHeight() / 2 - 450),
+//                entityManager,
+//                100,
+//                -50
+//        );
+//        cartwheel1.create();
+//        root.getChildren().add(cartwheel1.container);
+//
+        Lemniscate lemniscate = new Lemniscate(
+                new Vector2D(scene.getWidth() / 2, -500),
                 entityManager,
-                100,
-                -50
+                90,
+                1,
+                12,
+                16
         );
-        cartwheel.create();
-        root.getChildren().add(cartwheel.container);
-
-        Cartwheel cartwheel2 = new Cartwheel(
-                new Vector2D(scene.getWidth() / 2 + 100, scene.getHeight() / 2),
-                entityManager,
-                100,
-                50
-        );
-//        cartwheel2.create();
-//        root.getChildren().add(cartwheel2.container);
+//        root.getChildren().add(lemniscate.getNode());
 
         /*
         Ball decoupled from entity manager
@@ -162,22 +156,18 @@ public class BehaviourSystemTest extends Application {
 
         ScrollingSystem scrollingSystem = new ScrollingSystem(entityManager, root, root.getLayoutBounds());
         scrollingSystem.setPlayer(ball);
-        scrollingSystem.addAll(
-//                star.getNode(),
-                colorSwitcher.getNode(),
-                colorSwitcher1.getNode(),
-//                triangle.getNode(),
-                cartwheel.container,
-                cartwheel2.container,
-                quadArcCircle.container
-        );
+        scrollingSystem.add(quadArcCircle.getNode());
 
         CollisionSystem collisionSystem = new CollisionSystem(entityManager, root, ball, scrollingSystem);
 
+        SpawnSystem spawnSystem = new SpawnSystem(entityManager, root, scrollingSystem);
+        spawnSystem.obstacleDeque.push(quadArcCircle);
+
         physicsSystem.init();
         collisionSystem.init();
-        infoRenderSystem.init();
+//        infoRenderSystem.init();
         scrollingSystem.init();
+        spawnSystem.init();
 
         stage.setTitle("Rendering system test");
         stage.setScene(scene);

@@ -23,28 +23,17 @@ public class EntityManager {
         gameObjectList.add(gameObject);
     }
 
-    public void registerAll(GameObject... gameObjects) {
-        for (GameObject g : gameObjects) {
-            g.setGameObjectID(generateNewEid());
-            gameObjectList.add(g);
+    public void deregister(GameObject gameObject) {
+        for (HashMap<GameObject, Component> hm : componentMap.values()) {
+            hm.remove(gameObject);
         }
+        gameObjectList.set(gameObject.getID(), null);
     }
 
     public void addComponents(GameObject gameObject, Component... components) {
         for (Component component : components) {
             componentMap.putIfAbsent(component.getComponentClass(), new HashMap<>());
             componentMap.get(component.getComponentClass()).put(gameObject, component);
-        }
-    }
-
-    public void addComponents(GameObject gameObject, ComponentCallback callBack, Component... components) {
-        /*
-        Overloads the addComponents method to support component callbacks
-         */
-
-        for (Component component : components) {
-            addComponents(gameObject, component);
-            callBack.initialize(this, gameObject);
         }
     }
 

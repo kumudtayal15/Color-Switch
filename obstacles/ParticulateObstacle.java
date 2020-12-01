@@ -1,4 +1,6 @@
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
+
 import java.security.InvalidParameterException;
 
 abstract public class ParticulateObstacle extends CompoundObstacle {
@@ -43,13 +45,18 @@ abstract public class ParticulateObstacle extends CompoundObstacle {
             PrimitiveObstacle particle = new PrimitiveObstacle(null);
             entityManager.register(particle);
 
-            MeshComponent meshComponent = this.generateParticle();
-            meshComponent.mesh.setFill(colorMapping[i / (particleCount / 4)]);
+            Shape particleMesh = this.generateParticle();
+            MeshComponent meshComponent = new MeshComponent(
+                    particleMesh,
+                    colorMapping[i / (particleCount / 4)]
+            );
+//            meshComponent.mesh.setFill(colorMapping[i / (particleCount / 4)]);
             entityManager.addComponents(
                     particle,
-                    meshComponent::insertionCallback,
+//                    meshComponent::insertionCallback,
                     meshComponent
             );
+            particle.mesh = particleMesh;
             this.addChild(particle);
 
             TrajectoryComponent trajectoryComponent = generateTrajectory();
@@ -61,10 +68,9 @@ abstract public class ParticulateObstacle extends CompoundObstacle {
         }
     }
 
-    public MeshComponent generateParticle() {
-        return new MeshComponent(new Circle(particleRadius));
+    public Shape generateParticle() {
+        return new Circle(particleRadius);
     }
 
     abstract public TrajectoryComponent generateTrajectory();
-
 }

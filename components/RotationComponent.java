@@ -38,15 +38,4 @@ public class RotationComponent extends Component {
     public void rotate(double timeInSeconds) {
         rotateTransform.setAngle(angularVelocity * timeInSeconds);
     }
-
-    public void insertionCallback(EntityManager entityManager, GameObject gameObject) {
-        MeshComponent meshComponent =
-                (MeshComponent) entityManager.getComponent(ComponentClass.valueOf("MESH"), gameObject);
-
-        meshComponent.getMesh().getTransforms().add(this.rotateTransform);
-    }
-
-    public void deletionCallback(EntityManager entityManager, GameObject gameObject) {
-
-    }
 }

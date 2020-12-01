@@ -44,13 +44,16 @@ public class Triangle extends CompoundObstacle {
 
             roundedRectangle[i] = new PrimitiveObstacle(null);
             entityManager.register(roundedRectangle[i]);
+
             meshComponent = new MeshComponent(
                     side[i], colorMapping[(i + 3) % 4]);
+
             entityManager.addComponents(
                     roundedRectangle[i],
-                    meshComponent::insertionCallback,
+//                    meshComponent::insertionCallback,
                     meshComponent);
 
+            roundedRectangle[i].mesh = side[i];
             this.addChild(roundedRectangle[i]);
         }
 

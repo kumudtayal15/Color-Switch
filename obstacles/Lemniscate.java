@@ -8,8 +8,8 @@ import javafx.scene.shape.Circle;
 
 import java.security.InvalidParameterException;
 
-public class ParticleLemniscate extends CompoundObstacle {
-    public ParticleLemniscate(
+public class Lemniscate extends CompoundObstacle {
+    public Lemniscate(
             Vector2D anchorPoint,
             EntityManager entityManager,
             double trajectoryRadius,
@@ -38,15 +38,17 @@ public class ParticleLemniscate extends CompoundObstacle {
 
             entityManager.addComponents(
                     lParticle,
-                    lMeshComponent::insertionCallback,
+//                    lMeshComponent::insertionCallback,
                     lMeshComponent
             );
+            lParticle.mesh = lParticleMesh;
 
             entityManager.addComponents(
                     rParticle,
-                    rMeshComponent::insertionCallback,
+//                    rMeshComponent::insertionCallback,
                     rMeshComponent
             );
+            rParticle.mesh = rParticleMesh;
 
             this.addChild(lParticle);
             this.addChild(rParticle);

@@ -1,4 +1,5 @@
 import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 
 abstract public class Obstacle extends GameObject {
     private Vector2D anchorPoint;
@@ -7,7 +8,7 @@ abstract public class Obstacle extends GameObject {
         this.anchorPoint = anchorPoint;
     }
 
-    abstract public void translate(Vector2D coordinates);
+    abstract void markForDeletion(Pane sceneGraphRoot, ScrollingSystem scrollingSystem, EntityManager entityManager);
 
     public Vector2D getAnchorPoint() {
         return anchorPoint;

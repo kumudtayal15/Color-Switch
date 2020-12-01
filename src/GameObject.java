@@ -1,4 +1,4 @@
-public class GameObject {
+abstract public class GameObject {
 
     private int ID;
 

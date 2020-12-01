@@ -50,12 +50,15 @@ public class Rhombus extends CompoundObstacle {
             entityManager.register(roundedRectangle[i]);
 
             meshComponent = new MeshComponent(
-                    side[i], colorMapping[i]);
+                    side[i], colorMapping[i]
+            );
             entityManager.addComponents(
                     roundedRectangle[i],
-                    meshComponent::insertionCallback,
-                    meshComponent);
+//                    meshComponent::insertionCallback,
+                    meshComponent
+            );
 
+            roundedRectangle[i].mesh = side[i];
             this.addChild(roundedRectangle[i]);
         }
 

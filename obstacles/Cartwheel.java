@@ -44,9 +44,16 @@ public class Cartwheel extends CompoundObstacle {
 
             entityManager.addComponents(
                     wheelArm[i],
-                    meshComponent::insertionCallback,
+//                    meshComponent::insertionCallback,
                     meshComponent
             );
+
+            wheelArm[i].mesh = wheelArmMesh;
+
+            /*
+            addChild method not used, since the mesh is wrapped in a Group
+             */
+            this.children.add(wheelArm[i]);
             container.getChildren().add(armMeshContainer);
 
             rotationComponent = new RotationComponent(rotationSpeed, wheelCenter.x, wheelCenter.y);
@@ -55,7 +62,6 @@ public class Cartwheel extends CompoundObstacle {
                     rotationComponent
             );
             armMeshContainer.getTransforms().add(rotationComponent.getRotateTransform());
-
         }
     }
 

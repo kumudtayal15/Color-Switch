@@ -1,4 +1,5 @@
 import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 
 public class PrimitiveObstacle extends Obstacle {
@@ -9,13 +10,12 @@ public class PrimitiveObstacle extends Obstacle {
     }
 
     @Override
-    public Node getNode() {
-        return mesh;
+    void markForDeletion(Pane sceneGraphRoot, ScrollingSystem scrollingSystem, EntityManager entityManager) {
+        entityManager.deregister(this);
     }
 
     @Override
-    public void translate(Vector2D coordinates) {
-//        this.mesh.setTr
-
+    public Node getNode() {
+        return mesh;
     }
 }

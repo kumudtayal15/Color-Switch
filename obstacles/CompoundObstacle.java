@@ -1,4 +1,5 @@
 import javafx.scene.Group;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayDeque;
@@ -9,6 +10,7 @@ public class CompoundObstacle extends Obstacle {
 
     protected final Group container;
     protected final Collection<Obstacle> children;
+
     protected static final Color[] colorMapping = {
             Color.web("#8C13FB"),
             Color.web("#F6DF0E"),
@@ -28,17 +30,18 @@ public class CompoundObstacle extends Obstacle {
 //    abstract void create();
 
     @Override
-    public Group getNode() {
-        return container;
+    void markForDeletion(Pane sceneGraphRoot, ScrollingSystem scrollingSystem, EntityManager entityManager) {
+        for (Obstacle o : children) {
+            o.markForDeletion(sceneGraphRoot, scrollingSystem, entityManager);
+        }
+
+        sceneGraphRoot.getChildren().remove(this.container);
+        scrollingSystem.remove(this.container);
     }
 
     @Override
-    public void translate(Vector2D coordinates) {
-        this.getAnchorPoint().x = coordinates.x;
-        this.getAnchorPoint().y = coordinates.y;
-
-        this.container.setLayoutX(coordinates.x);
-        this.container.setLayoutY(coordinates.y);
+    public Group getNode() {
+        return container;
     }
 
     public void addChild(Obstacle childObstacle) {

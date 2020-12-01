@@ -49,17 +49,19 @@ public class QuadArcCircle extends CompoundObstacle {
 
             entityManager.addComponents(
                     solidArc[i],
-                    meshComponent::insertionCallback,
-                    meshComponent);
-            container.getChildren().add(arcMesh);
+//                    meshComponent::insertionCallback,
+                    meshComponent
+            );
+            solidArc[i].mesh = arcMesh;
+            this.addChild(solidArc[i]);
 
             rotationComponent = new RotationComponent(rotationSpeed, circleCenter.x, circleCenter.y);
             entityManager.addComponents(
                     solidArc[i],
-                    rotationComponent::insertionCallback,
-                    rotationComponent);
+                    rotationComponent
+            );
+            solidArc[i].mesh.getTransforms().add(rotationComponent.getRotateTransform());
         }
-
     }
 
     private Shape getSolidArc(Vector2D circleCenter, double radius, double startAngle) {
