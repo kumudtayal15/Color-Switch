@@ -6,7 +6,7 @@ import java.util.ArrayDeque;
 import java.util.Collection;
 
 //abstract public class CompoundObstacle extends Obstacle {
-public class CompoundObstacle extends Obstacle {
+abstract public class CompoundObstacle extends Obstacle {
 
     protected final Group container;
     protected final Collection<Obstacle> children;
@@ -27,7 +27,9 @@ public class CompoundObstacle extends Obstacle {
         this.container.setLayoutY(anchorPoint.y);
     }
 
-//    abstract void create();
+    abstract void create(int colorIdx);
+
+    abstract public Color getMeshColorSynced(int i, int colorIdx);
 
     @Override
     void markForDeletion(Pane sceneGraphRoot, ScrollingSystem scrollingSystem, EntityManager entityManager) {

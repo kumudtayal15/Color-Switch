@@ -11,7 +11,9 @@ abstract public class BehaviourSystem {
         this.sceneGraphRoot = sceneGraphRoot;
     }
 
-    abstract public void init();
+    public void init() {
+        timer.start();
+    }
 
     abstract public void update(double t);
 }

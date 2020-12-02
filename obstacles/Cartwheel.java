@@ -1,4 +1,5 @@
 import javafx.scene.Group;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
@@ -10,6 +11,7 @@ public class Cartwheel extends CompoundObstacle {
     protected double length;
     protected double rotationSpeed;
 
+    // TODO: 02-12-2020 length is a redundant parameter
     public Cartwheel(
             Vector2D anchorPoint,
             EntityManager entityManager,
@@ -23,7 +25,7 @@ public class Cartwheel extends CompoundObstacle {
         this.rotationSpeed = rotationSpeed;
     }
 
-    public void create() {
+    public void create(int colorIdx) {
         Vector2D wheelCenter = new Vector2D(0, 0);
         PrimitiveObstacle[] wheelArm = new PrimitiveObstacle[4];
 
@@ -39,7 +41,8 @@ public class Cartwheel extends CompoundObstacle {
 
             meshComponent = new MeshComponent(
                     wheelArmMesh,
-                    colorMapping[(i + 1) % 4]
+                    getMeshColorSynced(i, colorIdx)
+//                    colorMapping[(i + 1) % 4]
             );
 
             entityManager.addComponents(
@@ -63,6 +66,11 @@ public class Cartwheel extends CompoundObstacle {
             );
             armMeshContainer.getTransforms().add(rotationComponent.getRotateTransform());
         }
+    }
+
+    @Override
+    public Color getMeshColorSynced(int i, int colorIdx) {
+        return colorMapping[(i + (colorIdx + 2)) % 4];
     }
 
     private Group getArmContainer(Vector2D wheelCenter, double length, double orientation) {

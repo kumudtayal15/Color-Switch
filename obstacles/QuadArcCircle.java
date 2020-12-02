@@ -1,3 +1,4 @@
+import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
@@ -31,7 +32,7 @@ public class QuadArcCircle extends CompoundObstacle {
         this.rotationSpeed = rotationSpeed;
     }
 
-    public void create() {
+    public void create(int colorIdx) {
         Vector2D circleCenter = new Vector2D(0, 0);
         PrimitiveObstacle[] solidArc = new PrimitiveObstacle[4];
 
@@ -45,7 +46,8 @@ public class QuadArcCircle extends CompoundObstacle {
             Shape arcMesh = getSolidArc(circleCenter, radius, i * 90 - 45);
             meshComponent = new MeshComponent(
                     arcMesh,
-                    colorMapping[i]);
+                    getMeshColorSynced(i, colorIdx)
+            );
 
             entityManager.addComponents(
                     solidArc[i],
@@ -62,6 +64,11 @@ public class QuadArcCircle extends CompoundObstacle {
             );
             solidArc[i].mesh.getTransforms().add(rotationComponent.getRotateTransform());
         }
+    }
+
+    @Override
+    public Color getMeshColorSynced(int i, int colorIdx) {
+        return colorMapping[(i + (colorIdx + 1)) % 4];
     }
 
     private Shape getSolidArc(Vector2D circleCenter, double radius, double startAngle) {

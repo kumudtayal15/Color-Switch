@@ -11,7 +11,6 @@ import java.util.Properties;
 public class SpawnSystem extends BehaviourSystem {
     private final SpawnPolicy spawnPolicy;
     protected Deque<Obstacle> obstacleDeque;
-    private Obstacle topObstacle;
     private final EntityManager entityManager;
     private final ScrollingSystem scrollingSystem;
     private double OBSTACLE_BUFFER;
@@ -54,7 +53,7 @@ public class SpawnSystem extends BehaviourSystem {
     public void update(double t) {
         Obstacle head = obstacleDeque.getFirst();
         if (head.getNode().getBoundsInParent().getMinY() > sceneGraphRoot.getHeight()) {
-            rejectOutOfBoundsObstacle();
+            removeHead();
         }
 
         Obstacle tail = obstacleDeque.getLast();
@@ -64,32 +63,54 @@ public class SpawnSystem extends BehaviourSystem {
     }
 
     private void spawnNextObstacle() {
-        QuadArcCircle quadArcCircle = new QuadArcCircle(
-                new Vector2D(sceneGraphRoot.getWidth() / 2, -400),
-                entityManager,
-                150,
-                "thick",
-                100
-        );
-        quadArcCircle.create();
-        sceneGraphRoot.getChildren().add(quadArcCircle.getNode());
-        scrollingSystem.add(quadArcCircle.getNode());
-
-//        Lemniscate lemniscate = new Lemniscate(
+//        QuadArcCircle quadArcCircle = new QuadArcCircle(
 //                new Vector2D(sceneGraphRoot.getWidth() / 2, -400),
 //                entityManager,
-//                90,
-//                1,
-//                12,
-//                16
+//                150,
+//                "thick",
+//                100
 //        );
-//        sceneGraphRoot.getChildren().add(lemniscate.getNode());
-//        scrollingSystem.add(lemniscate.getNode());
+//        quadArcCircle.create();
+//        sceneGraphRoot.getChildren().add(quadArcCircle.getNode());
+//        scrollingSystem.add(quadArcCircle.getNode());
 
-        obstacleDeque.addLast(quadArcCircle);
+//        ParticulateSquare particulateSquare = new ParticulateSquare(
+//                new Vector2D(sceneGraphRoot.getWidth() / 2, -200),
+//                entityManager,
+//                200, 300,
+//                16,
+//                17
+//        );
+//        particulateSquare.create();
+//        sceneGraphRoot.getChildren().add(particulateSquare.getNode());
+//        scrollingSystem.add(particulateSquare.getNode());
+
+//        Lemniscate particleLemniscate = new Lemniscate(
+//                new Vector2D(sceneGraphRoot.getWidth() / 2, -300),
+//                entityManager,
+//                70,
+//                1.5,
+//                12,
+//                12
+//        );
+//        sceneGraphRoot.getChildren().add(particleLemniscate.getNode());
+//        scrollingSystem.add(particleLemniscate.getNode());
+
+        Triangle triangle = new Triangle(
+                new Vector2D(sceneGraphRoot.getWidth() / 2, -300),
+                entityManager,
+                250,
+                25,
+                -100
+        );
+        triangle.create(0);
+        sceneGraphRoot.getChildren().add(triangle.getNode());
+        scrollingSystem.add(triangle.getNode());
+
+        obstacleDeque.addLast(triangle);
     }
 
-    private void rejectOutOfBoundsObstacle() {
+    private void removeHead() {
         Obstacle head = obstacleDeque.removeFirst();
         head.markForDeletion(sceneGraphRoot, scrollingSystem, entityManager);
     }

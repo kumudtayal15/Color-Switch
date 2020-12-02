@@ -9,6 +9,12 @@ import javafx.scene.shape.Circle;
 import java.security.InvalidParameterException;
 
 public class Lemniscate extends CompoundObstacle {
+    protected EntityManager entityManager;
+    protected double trajectoryRadius;
+    protected double trajectorySpeed;
+    protected int particleCount;
+    protected double particleRadius;
+
     public Lemniscate(
             Vector2D anchorPoint,
             EntityManager entityManager,
@@ -18,34 +24,40 @@ public class Lemniscate extends CompoundObstacle {
             double particleRadius) {
 
         super(anchorPoint);
-        container.setLayoutX(anchorPoint.x);
-        container.setLayoutY(anchorPoint.y);
 
         if (particleCount % 4 != 0) {
             throw new InvalidParameterException("Number of particles should be divisible by 4");
         }
 
+        this.entityManager = entityManager;
+        this.trajectoryRadius = trajectoryRadius;
+        this.trajectorySpeed = trajectorySpeed;
+        this.particleCount = particleCount;
+        this.particleRadius = particleRadius;
+    }
+
+    public void create(int colorIdx) {
         for (int i = 0; i < particleCount; i++) {
             PrimitiveObstacle lParticle = new PrimitiveObstacle(null);
             PrimitiveObstacle rParticle = new PrimitiveObstacle(null);
 
+            entityManager.register(lParticle);
+            entityManager.register(rParticle);
+
             Circle lParticleMesh = new Circle(particleRadius);
             Circle rParticleMesh = new Circle(particleRadius);
-
-            Color meshColor = colorMapping[i / (particleCount / 4)];
+            Color meshColor = getMeshColorSynced(i / (particleCount / 4), colorIdx);
             MeshComponent lMeshComponent = new MeshComponent(lParticleMesh, meshColor);
             MeshComponent rMeshComponent = new MeshComponent(rParticleMesh, meshColor);
 
             entityManager.addComponents(
                     lParticle,
-//                    lMeshComponent::insertionCallback,
                     lMeshComponent
             );
             lParticle.mesh = lParticleMesh;
 
             entityManager.addComponents(
                     rParticle,
-//                    rMeshComponent::insertionCallback,
                     rMeshComponent
             );
             rParticle.mesh = rParticleMesh;
@@ -68,5 +80,10 @@ public class Lemniscate extends CompoundObstacle {
                     )
             );
         }
+    }
+
+    @Override
+    public Color getMeshColorSynced(int i, int colorIdx) {
+        return colorMapping[i % 4];
     }
 }

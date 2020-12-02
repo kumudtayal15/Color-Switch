@@ -1,3 +1,4 @@
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
@@ -36,7 +37,7 @@ abstract public class ParticulateObstacle extends CompoundObstacle {
         this.delayFactor = Double.NaN;
     }
 
-    public void create() {
+    public void create(int colorIdx) {
         if (Double.isNaN(delayFactor)) {
             throw new NullPointerException("Specify a delay factor");
         }
@@ -48,12 +49,10 @@ abstract public class ParticulateObstacle extends CompoundObstacle {
             Shape particleMesh = this.generateParticle();
             MeshComponent meshComponent = new MeshComponent(
                     particleMesh,
-                    colorMapping[i / (particleCount / 4)]
+                    getMeshColorSynced(i, colorIdx)
             );
-//            meshComponent.mesh.setFill(colorMapping[i / (particleCount / 4)]);
             entityManager.addComponents(
                     particle,
-//                    meshComponent::insertionCallback,
                     meshComponent
             );
             particle.mesh = particleMesh;
@@ -66,6 +65,11 @@ abstract public class ParticulateObstacle extends CompoundObstacle {
                     trajectoryComponent
             );
         }
+    }
+
+    @Override
+    public Color getMeshColorSynced(int i, int colorIdx) {
+        return colorMapping[i / (particleCount / 4)];
     }
 
     public Shape generateParticle() {

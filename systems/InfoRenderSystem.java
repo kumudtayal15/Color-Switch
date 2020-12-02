@@ -65,11 +65,6 @@ public class InfoRenderSystem extends BehaviourSystem {
     }
 
     @Override
-    public void init() {
-        timer.start();
-    }
-
-    @Override
     public void update(double t) {
         graphicsContext.clearRect(
                 0, 0,

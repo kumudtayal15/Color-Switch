@@ -1,6 +1,11 @@
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Triangle extends CompoundObstacle {
+    protected EntityManager entityManager;
+    protected double sideLength;
+    protected double sideThickness;
+    protected double rotationSpeed;
 
     public Triangle(
             Vector2D anchorPoint,
@@ -10,7 +15,13 @@ public class Triangle extends CompoundObstacle {
             double rotationSpeed) {
 
         super(anchorPoint);
+        this.entityManager = entityManager;
+        this.sideLength = sideLength;
+        this.sideThickness = sideThickness;
+        this.rotationSpeed = rotationSpeed;
+    }
 
+    public void create(int colorIdx) {
         PrimitiveObstacle[] roundedRectangle = new PrimitiveObstacle[3];
 
         Rectangle[] side = new Rectangle[3];
@@ -20,7 +31,8 @@ public class Triangle extends CompoundObstacle {
         side[0] = new Rectangle(
                 centroidToMid * Math.cos(THIRTY) - sideThickness / 2,
                 -centroidToMid * Math.sin(THIRTY) - sideLength / 2,
-                sideThickness, sideLength);
+                sideThickness, sideLength
+        );
         side[0].setRotate(-30);
 
         side[1] = new Rectangle(
@@ -46,12 +58,15 @@ public class Triangle extends CompoundObstacle {
             entityManager.register(roundedRectangle[i]);
 
             meshComponent = new MeshComponent(
-                    side[i], colorMapping[(i + 3) % 4]);
+                    side[i],
+                    getMeshColorSynced(i, colorIdx)
+            );
 
             entityManager.addComponents(
                     roundedRectangle[i],
 //                    meshComponent::insertionCallback,
-                    meshComponent);
+                    meshComponent
+            );
 
             roundedRectangle[i].mesh = side[i];
             this.addChild(roundedRectangle[i]);
@@ -68,5 +83,11 @@ public class Triangle extends CompoundObstacle {
         Transform object must be added to the container instead.
          */
         this.container.getTransforms().add(rotationComponent.getRotateTransform());
+    }
+
+    @Override
+    public Color getMeshColorSynced(int i, int colorIdx) {
+        // TODO: 02-12-2020 Fix mapping scheme
+        return colorMapping[i];
     }
 }

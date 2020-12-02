@@ -16,11 +16,6 @@ public class PhysicsSystem extends BehaviourSystem {
     }
 
     @Override
-    public void init() {
-        timer.start();
-    }
-
-    @Override
     public void update(double t) {
         List<GameObject> gameObjects;
 

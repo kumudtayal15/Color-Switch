@@ -44,7 +44,6 @@ public class ScrollingSystem extends BehaviourSystem {
     @Override
     public void init() {
         assert player != null;
-        System.out.println(nodes);
         timer.start();
     }
 
