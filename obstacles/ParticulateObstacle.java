@@ -5,12 +5,10 @@ import javafx.scene.shape.Shape;
 import java.security.InvalidParameterException;
 
 abstract public class ParticulateObstacle extends CompoundObstacle {
-    protected final Vector2D anchorPoint;
-    protected final EntityManager entityManager;
-    protected final double trajectorySize;
-    protected final double trajectorySpeed;
-    protected final int particleCount;
-    protected final double particleRadius;
+    protected double trajectorySize;
+    protected double trajectorySpeed;
+    protected int particleCount;
+    protected double particleRadius;
     protected double delayFactor;
 
     public ParticulateObstacle(
@@ -21,20 +19,22 @@ abstract public class ParticulateObstacle extends CompoundObstacle {
             int particleCount,
             double particleRadius) {
 
-        super(anchorPoint);
+        super(anchorPoint, entityManager);
 
         if (particleCount % 4 != 0) {
             throw new InvalidParameterException("Number of particles should be divisible by 4");
         }
 
-        this.anchorPoint = anchorPoint;
-        this.entityManager = entityManager;
         this.trajectorySize = trajectorySize;
         this.trajectorySpeed = trajectorySpeed;
         this.particleCount = particleCount;
         this.particleRadius = particleRadius;
 
         this.delayFactor = Double.NaN;
+    }
+
+    public ParticulateObstacle(Vector2D anchorPoint, EntityManager entityManager, Level level) {
+        super(anchorPoint, entityManager, level);
     }
 
     public void create(int colorIdx) {
@@ -49,7 +49,7 @@ abstract public class ParticulateObstacle extends CompoundObstacle {
             Shape particleMesh = this.generateParticle();
             MeshComponent meshComponent = new MeshComponent(
                     particleMesh,
-                    getMeshColorSynced(i, colorIdx)
+                    getMeshColorSynced(i / (particleCount / 4), colorIdx)
             );
             entityManager.addComponents(
                     particle,

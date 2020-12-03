@@ -7,7 +7,6 @@ import javafx.scene.transform.Translate;
 
 public class Cartwheel extends CompoundObstacle {
 
-    protected EntityManager entityManager;
     protected double length;
     protected double rotationSpeed;
 
@@ -18,11 +17,27 @@ public class Cartwheel extends CompoundObstacle {
             double length,
             double rotationSpeed) {
 
-        super(anchorPoint);
+        super(anchorPoint, entityManager);
 
         this.entityManager = entityManager;
         this.length = length;
         this.rotationSpeed = rotationSpeed;
+    }
+
+    public Cartwheel(Vector2D anchorPoint, EntityManager entityManager, Level level) {
+        super(anchorPoint, entityManager, level);
+        this.length = 100;
+        switch (level) {
+            case EASY:
+                this.rotationSpeed = 100;
+                break;
+            case MEDIUM:
+                this.rotationSpeed = 150;
+                break;
+            case HARD:
+                this.rotationSpeed = 200;
+                break;
+        }
     }
 
     public void create(int colorIdx) {

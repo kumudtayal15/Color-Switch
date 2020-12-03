@@ -2,7 +2,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
 abstract public class Obstacle extends GameObject {
-    private Vector2D anchorPoint;
+    protected Vector2D anchorPoint;
 
     public Obstacle(Vector2D anchorPoint) {
         this.anchorPoint = anchorPoint;

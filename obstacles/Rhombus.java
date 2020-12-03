@@ -2,7 +2,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Rhombus extends CompoundObstacle {
-    protected EntityManager entityManager;
     protected double sideLength;
     protected double sideThickness;
     protected double rotationSpeed;
@@ -16,19 +15,38 @@ public class Rhombus extends CompoundObstacle {
             double rotationSpeed,
             double skewAngle) {
 
-        super(anchorPoint);
-        this.entityManager = entityManager;
+        super(anchorPoint, entityManager);
         this.sideLength = sideLength;
         this.sideThickness = sideThickness;
         this.rotationSpeed = rotationSpeed;
         this.skewAngle = skewAngle;
     }
 
+    public Rhombus(Vector2D anchorPoint, EntityManager entityManager, Level level) {
+        super(anchorPoint, entityManager, level);
+
+        this.sideLength = 200;
+        this.sideThickness = 25;
+        this.skewAngle = 75;
+
+        switch (level) {
+            case EASY:
+                this.rotationSpeed = 100;
+                break;
+            case MEDIUM:
+                this.rotationSpeed = 150;
+                break;
+            case HARD:
+                this.rotationSpeed = 200;
+                break;
+        }
+    }
+
     public void create(int colorIdx) {
         PrimitiveObstacle[] roundedRectangle = new PrimitiveObstacle[4];
 
         Rectangle[] side = new Rectangle[4];
-        final double skewAngleInRad = skewAngle * (Math.PI / 180);
+        final double skewAngleInRad = Math.toRadians(skewAngle);
 
         side[0] = new Rectangle(
                 sideLength / 2 - sideThickness / 2,
@@ -86,6 +104,6 @@ public class Rhombus extends CompoundObstacle {
 
     @Override
     public Color getMeshColorSynced(int i, int colorIdx) {
-        return colorMapping[i];
+        return colorMapping[(i + (colorIdx + 3)) % 4];
     }
 }

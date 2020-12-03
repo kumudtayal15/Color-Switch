@@ -2,7 +2,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Triangle extends CompoundObstacle {
-    protected EntityManager entityManager;
     protected double sideLength;
     protected double sideThickness;
     protected double rotationSpeed;
@@ -14,11 +13,30 @@ public class Triangle extends CompoundObstacle {
             double sideThickness,
             double rotationSpeed) {
 
-        super(anchorPoint);
+        super(anchorPoint, entityManager);
         this.entityManager = entityManager;
         this.sideLength = sideLength;
         this.sideThickness = sideThickness;
         this.rotationSpeed = rotationSpeed;
+    }
+
+    public Triangle(Vector2D anchorPoint, EntityManager entityManager, Level level) {
+        super(anchorPoint, entityManager, level);
+
+        this.sideLength = 250;
+        this.sideThickness = 25;
+
+        switch (level) {
+            case EASY:
+                this.rotationSpeed = 100;
+                break;
+            case MEDIUM:
+                this.rotationSpeed = 150;
+                break;
+            case HARD:
+                this.rotationSpeed = 200;
+                break;
+        }
     }
 
     public void create(int colorIdx) {
@@ -88,6 +106,6 @@ public class Triangle extends CompoundObstacle {
     @Override
     public Color getMeshColorSynced(int i, int colorIdx) {
         // TODO: 02-12-2020 Fix mapping scheme
-        return colorMapping[i];
+        return colorMapping[(i + colorIdx) % 4];
     }
 }

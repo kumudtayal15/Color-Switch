@@ -63,51 +63,16 @@ public class SpawnSystem extends BehaviourSystem {
     }
 
     private void spawnNextObstacle() {
-//        QuadArcCircle quadArcCircle = new QuadArcCircle(
-//                new Vector2D(sceneGraphRoot.getWidth() / 2, -400),
-//                entityManager,
-//                150,
-//                "thick",
-//                100
-//        );
-//        quadArcCircle.create();
-//        sceneGraphRoot.getChildren().add(quadArcCircle.getNode());
-//        scrollingSystem.add(quadArcCircle.getNode());
-
-//        ParticulateSquare particulateSquare = new ParticulateSquare(
-//                new Vector2D(sceneGraphRoot.getWidth() / 2, -200),
-//                entityManager,
-//                200, 300,
-//                16,
-//                17
-//        );
-//        particulateSquare.create();
-//        sceneGraphRoot.getChildren().add(particulateSquare.getNode());
-//        scrollingSystem.add(particulateSquare.getNode());
-
-//        Lemniscate particleLemniscate = new Lemniscate(
-//                new Vector2D(sceneGraphRoot.getWidth() / 2, -300),
-//                entityManager,
-//                70,
-//                1.5,
-//                12,
-//                12
-//        );
-//        sceneGraphRoot.getChildren().add(particleLemniscate.getNode());
-//        scrollingSystem.add(particleLemniscate.getNode());
-
-        Triangle triangle = new Triangle(
+        Lemniscate lemniscate = new Lemniscate(
                 new Vector2D(sceneGraphRoot.getWidth() / 2, -300),
                 entityManager,
-                250,
-                25,
-                -100
+                Level.EASY
         );
-        triangle.create(0);
-        sceneGraphRoot.getChildren().add(triangle.getNode());
-        scrollingSystem.add(triangle.getNode());
+        lemniscate.create(0);
+        sceneGraphRoot.getChildren().add(lemniscate.getNode());
+        scrollingSystem.add(lemniscate.getNode());
 
-        obstacleDeque.addLast(triangle);
+        obstacleDeque.addLast(lemniscate);
     }
 
     private void removeHead() {

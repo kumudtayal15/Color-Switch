@@ -3,12 +3,16 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.NonInvertibleTransformException;
+import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.Random;
 
 public class BehaviourSystemTest extends Application {
     public static void main(String[] args) {
@@ -16,7 +20,7 @@ public class BehaviourSystemTest extends Application {
     }
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws NonInvertibleTransformException {
 
 //        System.out.println(Screen.getPrimary().getBounds());
         double SCENE_WIDTH = 0, SCENE_HEIGHT = 0;
@@ -46,50 +50,40 @@ public class BehaviourSystemTest extends Application {
 //        SYSTEMS
         PhysicsSystem physicsSystem = new PhysicsSystem(entityManager, root);
 
-        InfoRenderSystem infoRenderSystem = new InfoRenderSystem(entityManager, root, ball, canvas.getGraphicsContext2D());
-//        infoRenderSystem.setObjectTracking(true);
-//        infoRenderSystem.setLocationCrosshairs(true);
+        ProfilingSystem profilingSystem = new ProfilingSystem(entityManager, root, ball, canvas.getGraphicsContext2D());
+//        profilingSystem.setObjectTracking(true);
+        profilingSystem.setLocationCrosshairs(true);
 
         ScrollingSystem scrollingSystem = new ScrollingSystem(entityManager, root, root.getLayoutBounds());
         scrollingSystem.setPlayer(ball);
 
         CollisionSystem collisionSystem = new CollisionSystem(entityManager, root, ball, scrollingSystem);
 
-        Cartwheel cartwheel1 = new Cartwheel(
-                new Vector2D(scene.getWidth() / 2 - 50, scene.getHeight() / 2),
-                entityManager,
-                10,
-                -100
-        );
-        cartwheel1.create(1);
-        root.getChildren().add(cartwheel1.getNode());
-        scrollingSystem.add(cartwheel1.getNode());
+        SpawnSystem spawnSystem = new SpawnSystem(entityManager, root, scrollingSystem);
 
-        QuadArcCircle quadArcCircle = new QuadArcCircle(
-                new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2),
-                entityManager,
-                200,
-                "thick",
-                100
-        );
-        quadArcCircle.create(1);
-        root.getChildren().add(quadArcCircle.getNode());
-        scrollingSystem.add(quadArcCircle.getNode());
+        final Vector2D SCREEN_CENTRE = new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2);
+        ParticulateHex particulateHex = new ParticulateHex(SCREEN_CENTRE, entityManager, Level.EASY);
+        particulateHex.create();
+        root.getChildren().add(particulateHex.getNode());
 
-//        Cartwheel cartwheel2 = new Cartwheel(
-//                new Vector2D(scene.getWidth() / 2 + 100, scene.getHeight() / 2),
-//                entityManager,
-//                100,
-//                -100
-//        );
-//        cartwheel2.create(1);
-//        root.getChildren().add(cartwheel2.getNode());
-//        scrollingSystem.add(cartwheel2.getNode());
+        Random random = new Random();
+        int rotationAngle = Math.max(random.nextInt(180), 90);
+        Rotate rotateTransform = new Rotate(0, scene.getWidth() / 2, scene.getHeight() / 2);
+        root.getTransforms().add(rotateTransform);
+        Rectangle rectangle = new Rectangle(
+                scene.getWidth() / 2 - 40, 0,
+                80, 30
+        );
+        rectangle.setFill(Color.WHITE);
+        root.getChildren().add(rectangle);
+        rectangle.getTransforms().add(rotateTransform.createInverse());
 
         physicsSystem.init();
-        collisionSystem.init();
-        infoRenderSystem.init();
-        scrollingSystem.init();
+//        collisionSystem.init();
+//        profilingSystem.init();
+//        scrollingSystem.init();
+//        spawnSystem.obstacleDeque.push(lemniscate);
+//        spawnSystem.init();
 
         stage.setTitle("Rendering system test");
         stage.setScene(scene);

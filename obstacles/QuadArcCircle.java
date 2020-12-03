@@ -9,7 +9,6 @@ import java.util.HashMap;
 
 public class QuadArcCircle extends CompoundObstacle {
     private final HashMap<String, String> ARC_WIDTH;
-    protected EntityManager entityManager;
     protected double radius;
     protected double rotationSpeed;
     protected String width;
@@ -21,15 +20,37 @@ public class QuadArcCircle extends CompoundObstacle {
             String width,
             double rotationSpeed) {
 
-        super(anchorPoint);
+        super(anchorPoint, entityManager);
 
         this.ARC_WIDTH = new HashMap<>(2);
         ARC_WIDTH.put("thin", "M113.36.21,128,0C128.74,69.73,71.85,127,.71,128H.21L0,113.64a4.17,4.17,0,0,0,.5,0C63.56,112.76,114,62,113.36.21Z");
         ARC_WIDTH.put("thick", "M127.75.25A128,128,0,0,1,.25,127.75v-28A100,100,0,0,0,99.74.25Z");
-        this.entityManager = entityManager;
         this.radius = radius;
         this.width = width;
         this.rotationSpeed = rotationSpeed;
+    }
+
+    public QuadArcCircle(Vector2D anchorPoint, EntityManager entityManager, Level level) {
+        super(anchorPoint, entityManager, level);
+
+        this.ARC_WIDTH = new HashMap<>(2);
+        ARC_WIDTH.put("thin", "M113.36.21,128,0C128.74,69.73,71.85,127,.71,128H.21L0,113.64a4.17,4.17,0,0,0,.5,0C63.56,112.76,114,62,113.36.21Z");
+        ARC_WIDTH.put("thick", "M127.75.25A128,128,0,0,1,.25,127.75v-28A100,100,0,0,0,99.74.25Z");
+
+        this.radius = 200;
+        this.width = "thick";
+
+        switch (level) {
+            case EASY:
+                this.rotationSpeed = 100;
+                break;
+            case MEDIUM:
+                this.rotationSpeed = 150;
+                break;
+            case HARD:
+                this.rotationSpeed = 200;
+                break;
+        }
     }
 
     public void create(int colorIdx) {

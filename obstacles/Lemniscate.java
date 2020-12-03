@@ -9,7 +9,6 @@ import javafx.scene.shape.Circle;
 import java.security.InvalidParameterException;
 
 public class Lemniscate extends CompoundObstacle {
-    protected EntityManager entityManager;
     protected double trajectoryRadius;
     protected double trajectorySpeed;
     protected int particleCount;
@@ -23,7 +22,7 @@ public class Lemniscate extends CompoundObstacle {
             int particleCount,
             double particleRadius) {
 
-        super(anchorPoint);
+        super(anchorPoint, entityManager);
 
         if (particleCount % 4 != 0) {
             throw new InvalidParameterException("Number of particles should be divisible by 4");
@@ -34,6 +33,25 @@ public class Lemniscate extends CompoundObstacle {
         this.trajectorySpeed = trajectorySpeed;
         this.particleCount = particleCount;
         this.particleRadius = particleRadius;
+    }
+
+    public Lemniscate(Vector2D anchorPoint, EntityManager entityManager, Level level) {
+        super(anchorPoint, entityManager, level);
+        this.trajectoryRadius = 100;
+        this.particleCount = 12;
+        this.particleRadius = 18;
+
+        switch (level) {
+            case EASY:
+                trajectorySpeed = 1;
+                break;
+            case MEDIUM:
+                trajectorySpeed = 1.3;
+                break;
+            case HARD:
+                trajectorySpeed = 1.8;
+                break;
+        }
     }
 
     public void create(int colorIdx) {

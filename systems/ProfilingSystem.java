@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import java.util.List;
 
-public class InfoRenderSystem extends BehaviourSystem {
+public class ProfilingSystem extends BehaviourSystem {
     private boolean locationCrosshairs;
     private boolean objectTracking;
     private Ball player;
@@ -15,7 +15,7 @@ public class InfoRenderSystem extends BehaviourSystem {
     private final Font BIG_FONT;
     private final Font SMALL_FONT;
 
-    public InfoRenderSystem(EntityManager entityManager, Pane sceneGraphRoot, Ball player, GraphicsContext graphicsContext) {
+    public ProfilingSystem(EntityManager entityManager, Pane sceneGraphRoot, Ball player, GraphicsContext graphicsContext) {
         super(entityManager, sceneGraphRoot);
 
         this.player = player;

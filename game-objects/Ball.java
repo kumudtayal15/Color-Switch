@@ -6,6 +6,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.Shape;
+import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 
 import java.io.FileInputStream;
@@ -16,7 +17,7 @@ import java.util.Properties;
 
 public class Ball extends GameObject {
 
-    private final Pane parent;
+    private final Pane sceneGraphRoot;
     protected final AnimationTimer motionTimer;
     protected final Shape ballMesh;
     protected final Group ballMeshWrapper;
@@ -29,7 +30,7 @@ public class Ball extends GameObject {
     private double SCALE_FACTOR;
     private double ICON_SIZE;
 
-    public Ball(Pane parent) {
+    public Ball(Pane sceneGraphRoot) {
         final HashMap<String, String> meshSVGMap = new HashMap<>(3);
         meshSVGMap.put("crochet", "M49.85,116.47A91.26,91.26,0,0,0,51.4,214l48-48ZM110,176.62,60.69,225.93a92,92,0,0,0,17.8,15L126.39,193ZM189.92,96.7,120.61,166,137,182.41l67.91-67.91a92,92,0,0,0-15-17.8ZM147.61,193l40.19,40.2a91.38,91.38,0,0,0,24.47-104.85ZM75.25,47.27,91.64,80.05a91.92,91.92,0,0,0-32.83,24.17L110,155.4l68-68a91.1,91.1,0,0,0-13.62-7.36l16.39-32.78A23.51,23.51,0,0,0,207.51,24C207.51,11,197,0,184,0s-23.5,11-23.5,24a23.46,23.46,0,0,0,6.84,16.56L150,75.19a91.51,91.51,0,0,0-44,0L88.66,40.56A23.46,23.46,0,0,0,95.5,24C95.5,11,85,0,72,0S48.5,11,48.5,24A23.51,23.51,0,0,0,75.25,47.27ZM137,203.62,92.35,248.28c28,11.88,56.47,10.2,83.19-6.12Z");
         meshSVGMap.put("tennis", "M256,128a127.15,127.15,0,0,0-37.49-90.51q-4.29-4.29-8.9-8.11c-9.07,28.89-13.85,61.88-13.85,96,0,35.85,5.24,70.27,15.19,100.13q3.9-3.33,7.56-7A127.15,127.15,0,0,0,256,128Zm-75.36-2.64c0-37.53,5.57-73.88,16.12-105.37a128.28,128.28,0,0,0-137.11-.27c10.62,31.56,16.22,68,16.22,105.64,0,39.48-6.12,77.41-17.7,110A128.2,128.2,0,0,0,198.25,235c-11.53-32.48-17.61-70.32-17.61-109.68Zm-119.89,0c0-34.24-4.82-67.35-14-96.31-3.21,2.64-6.32,5.46-9.3,8.44a128,128,0,0,0,0,181q3.84,3.84,8,7.31c10-29.93,15.3-64.47,15.3-100.46Z");
@@ -59,7 +60,6 @@ public class Ball extends GameObject {
         this.velocity = 0;
 
         ballMeshWrapper = new Group();
-//        ballMesh = new Circle(15, color);
         SVGPath path = new SVGPath();
         path.setFill(color);
         path.setContent(ballMeshSVG);
@@ -69,7 +69,7 @@ public class Ball extends GameObject {
         ballMesh = path;
         ballMeshWrapper.getChildren().add(ballMesh);
 
-        this.parent = parent;
+        this.sceneGraphRoot = sceneGraphRoot;
 
         motionTimer = new AnimationTimer() {
             double prevTimeStamp = System.nanoTime();
@@ -81,8 +81,8 @@ public class Ball extends GameObject {
                 prevTimeStamp = l;
 
                 if (!isAlive) {
-                    parent.getChildren().remove(ballMeshWrapper);
-                    parent.getChildren().add(new Emitter(new Vector2D(
+                    sceneGraphRoot.getChildren().remove(ballMeshWrapper);
+                    sceneGraphRoot.getChildren().add(new Emitter(new Vector2D(
                             ballMeshWrapper.getTranslateX(),
                             ballMeshWrapper.getTranslateY()
                     )));
@@ -97,7 +97,7 @@ public class Ball extends GameObject {
         entityManager.register(this);
         ballMeshWrapper.setTranslateX(initialPosition.x);
         ballMeshWrapper.setTranslateY(initialPosition.y);
-        parent.getChildren().add(ballMeshWrapper);
+        sceneGraphRoot.getChildren().add(ballMeshWrapper);
 
         RotationComponent rotationComponent = new RotationComponent(100, 0, 0);
         entityManager.addComponents(this, rotationComponent);
@@ -115,6 +115,13 @@ public class Ball extends GameObject {
     public void impulse(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.W) {
             setVelocity(-VELOCITY_UP);
+        }
+        else if (keyEvent.getCode() == KeyCode.LEFT) {
+            Rotate rotate = (Rotate) sceneGraphRoot.getTransforms().get(0);
+            rotate.setAngle(rotate.getAngle() - 90);
+        } else if (keyEvent.getCode() == KeyCode.RIGHT) {
+            Rotate rotate = (Rotate) sceneGraphRoot.getTransforms().get(0);
+            rotate.setAngle(rotate.getAngle() + 90);
         }
     }
 

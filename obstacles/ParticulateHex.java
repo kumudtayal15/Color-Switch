@@ -1,3 +1,5 @@
+import javafx.scene.paint.Color;
+
 public class ParticulateHex extends ParticulateObstacle {
 
     public ParticulateHex(
@@ -9,17 +11,39 @@ public class ParticulateHex extends ParticulateObstacle {
             double particleRadius) {
 
         super(anchorPoint, entityManager, trajectorySideLength, trajectorySpeed, particleCount, particleRadius);
-        this.delayFactor = (6 * trajectorySideLength / trajectorySpeed) / particleCount;
 
-        entityManager.register(this);
-        RotationComponent rotationComponent = new RotationComponent(
-                150,
-                trajectorySideLength / 2,
-                -trajectorySideLength * Math.sin(Math.PI / 3)
-        );
+        this.delayFactor = (6 * trajectorySize / trajectorySpeed) / particleCount;
+        this.container.setLayoutX(anchorPoint.x - trajectorySize / 2);
+        this.container.setLayoutY(anchorPoint.y + trajectorySize * Math.cos(Math.PI / 6));
+    }
 
-        entityManager.addComponents(this, rotationComponent);
-        this.container.getTransforms().add(rotationComponent.getRotateTransform());
+    public ParticulateHex(Vector2D anchorPoint, EntityManager entityManager, Level level) {
+        super(anchorPoint, entityManager, level);
+
+        this.trajectorySize = 200;
+        this.particleCount = 20;
+        this.particleRadius = 20;
+
+        switch (level) {
+            case EASY:
+                this.trajectorySpeed = 170;
+                break;
+            case MEDIUM:
+                this.trajectorySpeed = 250;
+                break;
+            case HARD:
+                this.trajectorySpeed = 300;
+                break;
+        }
+
+        this.delayFactor = (6 * trajectorySize / trajectorySpeed) / particleCount;
+        this.container.setLayoutX(anchorPoint.x - trajectorySize / 2);
+        this.container.setLayoutY(anchorPoint.y + trajectorySize * Math.cos(Math.PI / 6));
+    }
+
+    @Override
+    public Color getMeshColorSynced(int i, int colorIdx) {
+        return colorMapping[i % 4];
     }
 
     @Override

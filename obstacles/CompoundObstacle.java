@@ -2,14 +2,14 @@ import javafx.scene.Group;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
-import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collection;
 
-//abstract public class CompoundObstacle extends Obstacle {
 abstract public class CompoundObstacle extends Obstacle {
 
     protected final Group container;
     protected final Collection<Obstacle> children;
+    protected EntityManager entityManager;
 
     protected static final Color[] colorMapping = {
             Color.web("#8C13FB"),
@@ -17,17 +17,29 @@ abstract public class CompoundObstacle extends Obstacle {
             Color.web("#35E2F2"),
             Color.web("#FF0080")};
 
-    public CompoundObstacle(Vector2D anchorPoint) {
+    public CompoundObstacle(Vector2D anchorPoint, EntityManager entityManager) {
         super(anchorPoint);
 
-        this.children = new ArrayDeque<>();
+        this.entityManager = entityManager;
+        this.children = new ArrayList<>();
         this.container = new Group();
 
         this.container.setLayoutX(anchorPoint.x);
         this.container.setLayoutY(anchorPoint.y);
     }
 
-    abstract void create(int colorIdx);
+    public CompoundObstacle(Vector2D anchorPoint, EntityManager entityManager, Level level) {
+        /*
+        Constructor to facilitate level design
+         */
+        this(anchorPoint, entityManager);
+    }
+
+    abstract public void create(int colorIdx);
+
+    public void create() {
+        create(0);
+    }
 
     abstract public Color getMeshColorSynced(int i, int colorIdx);
 
