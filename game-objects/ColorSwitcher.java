@@ -8,7 +8,6 @@ import javafx.scene.shape.Shape;
 import java.util.Random;
 
 public class ColorSwitcher extends GameObject {
-    static final double rotationSpeed = 100;
     static final double radius = 20;
     static final Color[] colorMapping = {
             Color.web("#8C13FB"),
@@ -36,10 +35,6 @@ public class ColorSwitcher extends GameObject {
             Shape roundArc = getRoundArc(i * 90, colorMapping[i % 4]);
             container.getChildren().add(roundArc);
         }
-
-        RotationComponent rotationComponent = new RotationComponent(rotationSpeed, 0, 0);
-        entityManager.addComponents(this, rotationComponent);
-        container.getTransforms().add(rotationComponent.getRotateTransform());
     }
 
     private Shape getRoundArc(double startAngle, Color color) {
@@ -48,9 +43,6 @@ public class ColorSwitcher extends GameObject {
         arc.setFill(color);
 
         return arc;
-    }
-    public static double getRotationSpeed() {
-        return rotationSpeed;
     }
 
     public static double getRadius() {

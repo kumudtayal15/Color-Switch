@@ -43,6 +43,8 @@ public class BehaviourSystemTest extends Application {
 
         EntityManager entityManager = new EntityManager();
 
+        final Vector2D SCREEN_CENTRE = new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2);
+
         Ball ball = new Ball(root);
         ball.create(new Vector2D(scene.getWidth() / 2, scene.getHeight()), entityManager);
         scene.setOnKeyPressed(ball::impulse);
@@ -61,7 +63,6 @@ public class BehaviourSystemTest extends Application {
 
         SpawnSystem spawnSystem = new SpawnSystem(entityManager, root, scrollingSystem);
 
-        final Vector2D SCREEN_CENTRE = new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2);
         ParticulateHex particulateHex = new ParticulateHex(SCREEN_CENTRE, entityManager, Level.EASY);
 //        particulateHex.create();
 //        root.getChildren().add(particulateHex.getNode());
@@ -74,6 +75,12 @@ public class BehaviourSystemTest extends Application {
         eightPointStar.create();
         root.getChildren().add(eightPointStar.getNode());
         scrollingSystem.add(eightPointStar.getNode());
+
+        ColorSwitcher colorSwitcher = new ColorSwitcher(
+               new Vector2D(SCREEN_CENTRE.x, SCREEN_CENTRE.y),
+                entityManager
+        );
+        root.getChildren().add(colorSwitcher.getNode());
 
         Random random = new Random();
         int rotationAngle = Math.max(random.nextInt(180), 90);
@@ -89,15 +96,15 @@ public class BehaviourSystemTest extends Application {
 
         physicsSystem.init();
 //        collisionSystem.init();
-        profilingSystem.init();
+//        profilingSystem.init();
         scrollingSystem.init();
-//        spawnSystem.obstacleDeque.push(lemniscate);
-//        spawnSystem.init();
+        spawnSystem.obstacleDeque.push(eightPointStar);
+        spawnSystem.init();
 
         stage.setTitle("Rendering system test");
         stage.setScene(scene);
-;
 
+//        System.out.println(Cartwheel.class.getName());
         stage.show();
     }
 

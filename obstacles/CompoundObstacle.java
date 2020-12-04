@@ -10,6 +10,7 @@ abstract public class CompoundObstacle extends Obstacle {
     protected final Group container;
     protected final Collection<Obstacle> children;
     protected EntityManager entityManager;
+    protected Level level;
 
     protected static final Color[] colorMapping = {
             Color.web("#8C13FB"),
@@ -33,6 +34,7 @@ abstract public class CompoundObstacle extends Obstacle {
         Constructor to facilitate level design
          */
         this(anchorPoint, entityManager);
+        this.level = level;
     }
 
     abstract public void create(int colorIdx);
