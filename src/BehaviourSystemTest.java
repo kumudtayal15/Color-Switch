@@ -63,8 +63,17 @@ public class BehaviourSystemTest extends Application {
 
         final Vector2D SCREEN_CENTRE = new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2);
         ParticulateHex particulateHex = new ParticulateHex(SCREEN_CENTRE, entityManager, Level.EASY);
-        particulateHex.create();
-        root.getChildren().add(particulateHex.getNode());
+//        particulateHex.create();
+//        root.getChildren().add(particulateHex.getNode());
+
+        EightPointStar eightPointStar = new EightPointStar(
+                new Vector2D(SCREEN_CENTRE.x, SCREEN_CENTRE.y),
+                entityManager,
+                Level.EASY
+        );
+        eightPointStar.create();
+        root.getChildren().add(eightPointStar.getNode());
+        scrollingSystem.add(eightPointStar.getNode());
 
         Random random = new Random();
         int rotationAngle = Math.max(random.nextInt(180), 90);
@@ -80,13 +89,14 @@ public class BehaviourSystemTest extends Application {
 
         physicsSystem.init();
 //        collisionSystem.init();
-//        profilingSystem.init();
-//        scrollingSystem.init();
+        profilingSystem.init();
+        scrollingSystem.init();
 //        spawnSystem.obstacleDeque.push(lemniscate);
 //        spawnSystem.init();
 
         stage.setTitle("Rendering system test");
         stage.setScene(scene);
+;
 
         stage.show();
     }

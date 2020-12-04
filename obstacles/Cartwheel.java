@@ -19,7 +19,6 @@ public class Cartwheel extends CompoundObstacle {
 
         super(anchorPoint, entityManager);
 
-        this.entityManager = entityManager;
         this.length = length;
         this.rotationSpeed = rotationSpeed;
     }
@@ -41,28 +40,26 @@ public class Cartwheel extends CompoundObstacle {
     }
 
     public void create(int colorIdx) {
-        Vector2D wheelCenter = new Vector2D(0, 0);
+        Vector2D wheelCentre = new Vector2D(0, 0);
         PrimitiveObstacle[] wheelArm = new PrimitiveObstacle[4];
 
         MeshComponent meshComponent;
         RotationComponent rotationComponent;
 
         for (int i = 0; i < 4; i++) {
-            wheelArm[i] = new PrimitiveObstacle(wheelCenter);
+            wheelArm[i] = new PrimitiveObstacle(wheelCentre);
             entityManager.register(wheelArm[i]);
 
-            Group armMeshContainer = getArmContainer(wheelCenter, length, i * 90);
+            Group armMeshContainer = getArmContainer(wheelCentre, length, i * 90);
             Shape wheelArmMesh = (SVGPath) armMeshContainer.getChildren().get(0);
 
             meshComponent = new MeshComponent(
                     wheelArmMesh,
                     getMeshColorSynced(i, colorIdx)
-//                    colorMapping[(i + 1) % 4]
             );
 
             entityManager.addComponents(
                     wheelArm[i],
-//                    meshComponent::insertionCallback,
                     meshComponent
             );
 
@@ -74,7 +71,7 @@ public class Cartwheel extends CompoundObstacle {
             this.children.add(wheelArm[i]);
             container.getChildren().add(armMeshContainer);
 
-            rotationComponent = new RotationComponent(rotationSpeed, wheelCenter.x, wheelCenter.y);
+            rotationComponent = new RotationComponent(rotationSpeed, wheelCentre.x, wheelCentre.y);
             entityManager.addComponents(
                     wheelArm[i],
                     rotationComponent
