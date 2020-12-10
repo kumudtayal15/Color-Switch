@@ -8,9 +8,7 @@ import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Properties;
 import java.util.Random;
 
@@ -22,7 +20,7 @@ public class BehaviourSystemTest extends Application {
     @Override
     public void start(Stage stage) throws NonInvertibleTransformException {
 
-//        System.out.println(Screen.getPrimary().getBounds());
+
         double SCENE_WIDTH = 0, SCENE_HEIGHT = 0;
 
         try (InputStream input = new FileInputStream("hyperparameters/display.properties")) {
@@ -46,7 +44,7 @@ public class BehaviourSystemTest extends Application {
         final Vector2D SCREEN_CENTRE = new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2);
 
         Ball ball = new Ball(root);
-        ball.create(new Vector2D(scene.getWidth() / 2, scene.getHeight()), entityManager);
+        ball.create(SCREEN_CENTRE, entityManager);
         scene.setOnKeyPressed(ball::impulse);
 
 //        SYSTEMS
@@ -76,11 +74,17 @@ public class BehaviourSystemTest extends Application {
         root.getChildren().add(eightPointStar.getNode());
         scrollingSystem.add(eightPointStar.getNode());
 
-        ColorSwitcher colorSwitcher = new ColorSwitcher(
-               new Vector2D(SCREEN_CENTRE.x, SCREEN_CENTRE.y),
-                entityManager
+//        ColorSwitcher colorSwitcher = new ColorSwitcher(
+//                new Vector2D(SCREEN_CENTRE.x, SCREEN_CENTRE.y),
+//                entityManager
+//        );
+//        root.getChildren().add(colorSwitcher.getNode());
+
+        Star star = new Star(
+                entityManager,
+                SCREEN_CENTRE
         );
-        root.getChildren().add(colorSwitcher.getNode());
+        root.getChildren().add(star.getNode());
 
         Random random = new Random();
         int rotationAngle = Math.max(random.nextInt(180), 90);
@@ -101,11 +105,30 @@ public class BehaviourSystemTest extends Application {
         spawnSystem.obstacleDeque.push(eightPointStar);
         spawnSystem.init();
 
+        SaveGame saveGame = new SaveGame();
+        saveGame.setQueueContents(spawnSystem.pack());
+        try (ObjectOutputStream outputStream =
+                     new ObjectOutputStream(new FileOutputStream(saveGame.getFilePath()))) {
+            outputStream.writeObject(saveGame);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+//        SaveGame saveGame1;
+//        try(ObjectInputStream inputStream =
+//                new ObjectInputStream(new FileInputStream("74580"))) {
+//            saveGame1 = (SaveGame) inputStream.readObject();
+//            System.out.println(saveGame1);
+//            spawnSystem.unpackAndInitialize(saveGame1.getQueueContents());
+//        } catch (IOException | ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        spawnSystem.init();
+
         stage.setTitle("Rendering system test");
         stage.setScene(scene);
 
 //        System.out.println(Cartwheel.class.getName());
         stage.show();
     }
-
 }

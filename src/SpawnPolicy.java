@@ -1,16 +1,22 @@
+import javafx.scene.layout.Pane;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.BitSet;
 import java.util.Properties;
 
-public class SpawnPolicy {
-    private double OBSTACLE_BUFFER;
-    private final String[] obstacleClassNames;
-    private final double[] maxObstacleHeights;
-    private final BitSet obstacleCavity;
+abstract public class SpawnPolicy {
+    protected static final int NUM_OBSTACLES = 11;
 
-    public SpawnPolicy() {
+    protected Pane sceneGraphRoot;
+    protected EntityManager entityManager;
+    protected double OBSTACLE_BUFFER;
+    protected final String[] obstacleClassNames;
+    protected final double[] maxObstacleHeights;
+    protected final BitSet obstacleCavity;
+
+    public SpawnPolicy(EntityManager entityManager, Pane sceneGraphRoot) {
         try (InputStream input = new FileInputStream("hyperparameters/anim.properties")) {
             Properties properties = new Properties();
             properties.load(input);
@@ -21,7 +27,10 @@ public class SpawnPolicy {
             e.printStackTrace();
         }
 
-        obstacleClassNames = new String[] {
+        this.sceneGraphRoot = sceneGraphRoot;
+        this.entityManager = entityManager;
+
+        obstacleClassNames = new String[]{
                 Cartwheel.class.getName(),
                 EightPointStar.class.getName(),
                 QuadArcCircle.class.getName(),
@@ -38,10 +47,5 @@ public class SpawnPolicy {
         obstacleCavity = new BitSet();
     }
 
-//    public CompoundObstacle generateObstacle() {
-//        CompoundObstacle obstacle;
-//
-//
-//        return obstacle;
-//    }
+    abstract Obstacle getNextObstacle();
 }

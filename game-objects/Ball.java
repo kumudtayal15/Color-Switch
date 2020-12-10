@@ -125,6 +125,13 @@ public class Ball extends GameObject {
         }
     }
 
+    public void saveGame(SaveGame saveGame) {
+        saveGame.setPlayerPosition(new Vector2D(
+                ballMeshWrapper.getTranslateX(),
+                ballMeshWrapper.getTranslateY()
+        ));
+    }
+
     public double getVelocity() {
         return velocity;
     }

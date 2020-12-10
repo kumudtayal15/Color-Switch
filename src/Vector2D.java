@@ -1,6 +1,8 @@
 import javafx.geometry.Point2D;
 
-public class Vector2D {
+import java.io.Serializable;
+
+public class Vector2D implements Serializable {
     protected double x;
     protected double y;
 

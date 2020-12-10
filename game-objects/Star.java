@@ -4,7 +4,7 @@ import javafx.scene.shape.SVGPath;
 import javafx.scene.transform.Translate;
 
 public class Star extends GameObject {
-    static final double SCALE = 0.15;
+    static final double SCALE = 0.2;
     protected final Group container;
 
     public Star(EntityManager entityManager, Vector2D anchorPoint) {
