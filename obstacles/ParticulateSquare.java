@@ -15,8 +15,10 @@ public class ParticulateSquare extends ParticulateObstacle {
             double particleRadius) {
 
         super(anchorPoint, entityManager, trajectorySideLength, trajectorySpeed, particleCount, particleRadius);
-        this.container.setLayoutX(anchorPoint.x - trajectorySideLength / 2);
-        this.container.setLayoutY(anchorPoint.y + trajectorySideLength / 2);
+        this.container.getTransforms().add(new Translate(
+                -trajectorySize / 2,
+                trajectorySize / 2
+        ));
         this.delayFactor = (4 * trajectorySideLength / trajectorySpeed) / particleCount;
     }
 
@@ -44,8 +46,10 @@ public class ParticulateSquare extends ParticulateObstacle {
                 break;
         }
 
-        this.container.setLayoutX(anchorPoint.x - trajectorySize / 2);
-        this.container.setLayoutY(anchorPoint.y + trajectorySize / 2);
+        this.container.getTransforms().add(new Translate(
+                -trajectorySize / 2,
+                trajectorySize / 2
+        ));
         this.delayFactor = (4 * trajectorySize / trajectorySpeed) / particleCount;
     }
 
@@ -59,4 +63,12 @@ public class ParticulateSquare extends ParticulateObstacle {
         return new SquareTrajectory(trajectorySize, trajectorySpeed, 0);
     }
 
+    @Override
+    public Vector2D getCentre() {
+        Vector2D v = super.getCentre();
+        v.x += trajectorySize / 2;
+        v.y -= trajectorySize / 2;
+
+        return v;
+    }
 }

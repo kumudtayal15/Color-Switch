@@ -55,4 +55,13 @@ public class ParticulateTriangle extends ParticulateObstacle {
     public TrajectoryComponent generateTrajectory() {
         return new TriangleTrajectory(trajectorySize, trajectorySpeed, 0);
     }
+
+    @Override
+    public Vector2D getCentre() {
+        Vector2D v = super.getCentre();
+        v.x += trajectorySize / 2;
+        v.y -= trajectorySize / 2 * Math.tan(Math.PI / 6);
+
+        return v;
+    }
 }

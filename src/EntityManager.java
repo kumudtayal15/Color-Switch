@@ -11,7 +11,7 @@ public class EntityManager {
     public EntityManager() {
         gameObjectList = new ArrayList<>();
         componentMap = new HashMap<>();
-        lowestUnassignedEid = 1;
+        lowestUnassignedEid = 0;
     }
 
     private int generateNewEid() {

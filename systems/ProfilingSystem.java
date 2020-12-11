@@ -117,12 +117,12 @@ public class ProfilingSystem extends BehaviourSystem {
         );
     }
 
-    public void setObjectTracking(boolean objectTracking) {
-        this.objectTracking = objectTracking;
+    public void setObjectTracking() {
+        this.objectTracking = true;
     }
 
-    public void setLocationCrosshairs(boolean locationCrosshairs) {
-        this.locationCrosshairs = locationCrosshairs;
+    public void setLocationCrosshairs() {
+        this.locationCrosshairs = true;
     }
 
     public void setGraphicsContext(GraphicsContext graphicsContext) {

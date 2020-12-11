@@ -16,6 +16,7 @@ public class ColorSwitcher extends GameObject implements Collectible {
             Color.web("#FF0080")};
     protected final Group container;
     protected Color deltaColor;
+    protected int deltaColorIdx;
 
     public ColorSwitcher(Vector2D anchorPoint, EntityManager entityManager) {
         container = new Group();
@@ -23,7 +24,8 @@ public class ColorSwitcher extends GameObject implements Collectible {
         container.setTranslateX(anchorPoint.x);
         container.setTranslateY(anchorPoint.y);
 
-        this.deltaColor = colorMapping[new Random(System.currentTimeMillis()).nextInt(4)];
+        this.deltaColorIdx = new Random(System.currentTimeMillis()).nextInt(4);
+        this.deltaColor = colorMapping[deltaColorIdx];
 
         entityManager.register(this);
 
@@ -51,6 +53,10 @@ public class ColorSwitcher extends GameObject implements Collectible {
 
     public Group getNode() {
         return container;
+    }
+
+    public int getDeltaColorIdx() {
+        return deltaColorIdx;
     }
 
     public Color getDeltaColor() {

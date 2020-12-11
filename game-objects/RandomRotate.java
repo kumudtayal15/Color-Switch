@@ -22,6 +22,6 @@ public class RandomRotate extends SVGCollectible {
 
     @Override
     protected Color getColor() {
-        return Color.web("#F6DF0E");
+        return Color.WHITE;
     }
 }

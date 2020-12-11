@@ -66,8 +66,6 @@ public class BehaviourSystemTest extends Application {
         this.physicsSystem = new PhysicsSystem(entityManager, root);
 
         this.profilingSystem = new ProfilingSystem(entityManager, root, player, canvas.getGraphicsContext2D());
-//        profilingSystem.setObjectTracking(true);
-        profilingSystem.setLocationCrosshairs(true);
 
         this.scrollingSystem = new ScrollingSystem(entityManager, root, root.getLayoutBounds());
         scrollingSystem.setPlayer(player);

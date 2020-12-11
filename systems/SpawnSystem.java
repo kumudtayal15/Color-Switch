@@ -2,18 +2,32 @@ import javafx.animation.AnimationTimer;
 import javafx.geometry.Bounds;
 import javafx.scene.layout.Pane;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 
 public class SpawnSystem extends BehaviourSystem implements PlayerDeathSubscriber {
     protected Deque<Obstacle> obstacleDeque;
     private final EntityManager entityManager;
     private final ScrollingSystem scrollingSystem;
     private SpawnPolicy spawnPolicy;
+    protected double OBSTACLE_BUFFER;
+    protected Random pseudoRandomGenerator;
 
     public SpawnSystem(EntityManager entityManager, Pane sceneGraphRoot, ScrollingSystem scrollingSystem) {
         super(entityManager, sceneGraphRoot);
+
+        try (InputStream input = new FileInputStream("hyperparameters/anim.properties")) {
+            Properties properties = new Properties();
+            properties.load(input);
+
+            this.OBSTACLE_BUFFER = Double.parseDouble(properties.getProperty("obstacle.buffer"));
+        } catch (IOException e) {
+            System.out.println("I/O Exception occurred");
+            e.printStackTrace();
+        }
+
         timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
@@ -21,11 +35,13 @@ public class SpawnSystem extends BehaviourSystem implements PlayerDeathSubscribe
             }
         };
 
-        this.spawnPolicy = new RandomSpawnPolicy(entityManager, sceneGraphRoot);
+        this.spawnPolicy = new RandomSpawnPolicy(entityManager, sceneGraphRoot, scrollingSystem, OBSTACLE_BUFFER);
         this.obstacleDeque = new ArrayDeque<>(3);
         this.entityManager = entityManager;
         this.sceneGraphRoot = sceneGraphRoot;
         this.scrollingSystem = scrollingSystem;
+
+        pseudoRandomGenerator = new Random(System.currentTimeMillis());
     }
 
     @Override
@@ -49,13 +65,38 @@ public class SpawnSystem extends BehaviourSystem implements PlayerDeathSubscribe
     }
 
     private void spawnNextObstacle() {
-        CompoundObstacle obstacle = (CompoundObstacle) spawnPolicy.getNextObstacle();
+        ColorSwitcher colorSwitcher = new ColorSwitcher(
+                // TODO: 12-12-2020 dynamic distance calculation
+                new Vector2D(sceneGraphRoot.getWidth() / 2, -OBSTACLE_BUFFER / 4),
+                entityManager
+        );
+        sceneGraphRoot.getChildren().add(colorSwitcher.getNode());
+        scrollingSystem.add(colorSwitcher.getNode());
 
+
+        CompoundObstacle obstacle = (CompoundObstacle) spawnPolicy.getNextObstacle();
         assert obstacle != null;
-        obstacle.create();
+        obstacle.create(colorSwitcher.getDeltaColorIdx());
+        Vector2D obstacleCenter = obstacle.getCentre();
+
+
+        if (obstacle.isHollow) {
+            boolean toss = pseudoRandomGenerator.nextBoolean();
+            SVGCollectible collectible;
+
+            if (toss) {
+                collectible = new Star(entityManager, obstacleCenter);
+            } else {
+                collectible = new RandomRotate(entityManager, obstacleCenter);
+            }
+
+            sceneGraphRoot.getChildren().add(collectible.getNode());
+            scrollingSystem.add(collectible.getNode());
+        }
+
+
         sceneGraphRoot.getChildren().add(obstacle.getNode());
         scrollingSystem.add(obstacle.getNode());
-
         obstacleDeque.addLast(obstacle);
     }
 
@@ -97,7 +138,7 @@ public class SpawnSystem extends BehaviourSystem implements PlayerDeathSubscribe
             spawnNextObstacle();
         }
 
-        spawnPolicy = new RandomSpawnPolicy(entityManager, sceneGraphRoot);
+        spawnPolicy = new RandomSpawnPolicy(entityManager, sceneGraphRoot, scrollingSystem, OBSTACLE_BUFFER);
     }
 
     @Override

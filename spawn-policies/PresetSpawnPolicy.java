@@ -1,4 +1,5 @@
 import javafx.scene.layout.Pane;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -16,26 +17,26 @@ public class PresetSpawnPolicy extends SpawnPolicy {
     @Override
     Obstacle getNextObstacle() {
         ObstacleStateContainer container = obstacleStateContainers.get(idx);
-            CompoundObstacle obstacle = null;
+        CompoundObstacle obstacle = null;
 
-            try {
-                Class<?> obstacleClass = Class.forName(container.className);
-                Constructor<?> constructor = obstacleClass.getConstructor(
-                        Vector2D.class,
-                        EntityManager.class,
-                        Level.class
-                );
+        try {
+            Class<?> obstacleClass = Class.forName(container.className);
+            Constructor<?> constructor = obstacleClass.getConstructor(
+                    Vector2D.class,
+                    EntityManager.class,
+                    Level.class
+            );
 
-                obstacle = (CompoundObstacle) constructor.newInstance(
-                        container.position,
-                        entityManager,
-                        container.level
-                );
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                e.printStackTrace();
-            }
+            obstacle = (CompoundObstacle) constructor.newInstance(
+                    container.position,
+                    entityManager,
+                    container.level
+            );
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            e.printStackTrace();
+        }
 
-            idx += 1;
-            return obstacle;
+        idx += 1;
+        return obstacle;
     }
 }

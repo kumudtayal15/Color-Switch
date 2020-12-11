@@ -25,7 +25,7 @@ public class Rhombus extends CompoundObstacle {
     public Rhombus(Vector2D anchorPoint, EntityManager entityManager, Level level) {
         super(anchorPoint, entityManager, level);
 
-        this.sideLength = 200;
+        this.sideLength = 250;
         this.sideThickness = 25;
         this.skewAngle = 75;
 

@@ -33,6 +33,7 @@ public class Lemniscate extends CompoundObstacle {
         this.trajectorySpeed = trajectorySpeed;
         this.particleCount = particleCount;
         this.particleRadius = particleRadius;
+        this.isHollow = false;
     }
 
     public Lemniscate(Vector2D anchorPoint, EntityManager entityManager, Level level) {
@@ -52,6 +53,8 @@ public class Lemniscate extends CompoundObstacle {
                 trajectorySpeed = 1.8;
                 break;
         }
+
+        this.isHollow = false;
     }
 
     public void create(int colorIdx) {

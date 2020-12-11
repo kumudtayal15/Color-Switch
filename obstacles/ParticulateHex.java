@@ -1,4 +1,5 @@
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Translate;
 
 public class ParticulateHex extends ParticulateObstacle {
 
@@ -12,9 +13,11 @@ public class ParticulateHex extends ParticulateObstacle {
 
         super(anchorPoint, entityManager, trajectorySideLength, trajectorySpeed, particleCount, particleRadius);
 
+        this.container.getTransforms().add(new Translate(
+                -trajectorySize / 2,
+                trajectorySize * Math.cos(Math.PI / 6)
+        ));
         this.delayFactor = (6 * trajectorySize / trajectorySpeed) / particleCount;
-        this.container.setLayoutX(anchorPoint.x - trajectorySize / 2);
-        this.container.setLayoutY(anchorPoint.y + trajectorySize * Math.cos(Math.PI / 6));
     }
 
     public ParticulateHex(Vector2D anchorPoint, EntityManager entityManager, Level level) {
@@ -36,9 +39,26 @@ public class ParticulateHex extends ParticulateObstacle {
                 break;
         }
 
+        this.container.getTransforms().add(new Translate(
+                -trajectorySize / 2,
+                trajectorySize * Math.cos(Math.PI / 6)
+        ));
+
         this.delayFactor = (6 * trajectorySize / trajectorySpeed) / particleCount;
-        this.container.setLayoutX(anchorPoint.x - trajectorySize / 2);
-        this.container.setLayoutY(anchorPoint.y + trajectorySize * Math.cos(Math.PI / 6));
+    }
+
+    @Override
+    public void create(int colorIdx) {
+        super.create(colorIdx);
+
+        entityManager.register(this);
+        RotationComponent rotationComponent = new RotationComponent(
+                100,
+                trajectorySize / 2,
+                -trajectorySize * Math.cos(Math.PI / 6)
+        );
+        entityManager.addComponents(this, rotationComponent);
+        this.getNode().getTransforms().add(rotationComponent.getRotateTransform());
     }
 
     @Override
@@ -49,5 +69,14 @@ public class ParticulateHex extends ParticulateObstacle {
     @Override
     public TrajectoryComponent generateTrajectory() {
         return new HexTrajectory(trajectorySize, trajectorySpeed, 0);
+    }
+
+    @Override
+    public Vector2D getCentre() {
+        Vector2D v = super.getCentre();
+        v.x += trajectorySize / 2;
+        v.y -= trajectorySize * Math.cos(Math.PI / 6);
+
+        return v;
     }
 }

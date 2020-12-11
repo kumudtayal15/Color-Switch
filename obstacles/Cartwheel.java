@@ -21,6 +21,8 @@ public class Cartwheel extends CompoundObstacle {
 
         this.length = length;
         this.rotationSpeed = rotationSpeed;
+
+        this.isHollow = false;
     }
 
     public Cartwheel(Vector2D anchorPoint, EntityManager entityManager, Level level) {
@@ -37,6 +39,7 @@ public class Cartwheel extends CompoundObstacle {
                 this.rotationSpeed = 200;
                 break;
         }
+        this.isHollow = false;
     }
 
     public void create(int colorIdx) {
