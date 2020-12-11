@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-public class ScrollingSystem extends BehaviourSystem {
+public class ScrollingSystem extends BehaviourSystem implements PlayerDeathSubscriber {
     private Ball player;
     protected final List<Node> nodes;
     private final double SCROLL_THRESHOLD;
@@ -59,6 +59,11 @@ public class ScrollingSystem extends BehaviourSystem {
                 node.setTranslateY(node.getTranslateY() + SCROLL_AMT);
             }
         }
+    }
+
+    @Override
+    public void onPlayerDeath() {
+        this.timer.stop();
     }
 
     public void add(Node e) {

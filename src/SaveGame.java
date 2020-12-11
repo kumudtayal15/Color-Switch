@@ -1,7 +1,11 @@
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.Random;
 
 public class SaveGame implements Serializable {
@@ -9,24 +13,32 @@ public class SaveGame implements Serializable {
     protected final long saveFileID;
     private Vector2D playerPosition;
     private double totalStars;
-    private final String filePath;
     private LocalDate date;
     private LocalTime time;
     private ArrayList<ObstacleStateContainer> queueContents;
 
     public SaveGame() {
+        double SCREEN_WIDTH = 0, SCREEN_HEIGHT = 0;
+        try (InputStream input = new FileInputStream("hyperparameters/display.properties")) {
+            Properties p = new Properties();
+           p.load(input);
+            SCREEN_WIDTH = Double.parseDouble(p.getProperty("scene.width"));
+            SCREEN_HEIGHT = Double.parseDouble(p.getProperty("scene.height"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         /*
         Generate a random 5 digit ID
         Random number generator is initialized with current time as the seed
          */
         Random random = new Random(System.currentTimeMillis());
         saveFileID = 10000 + random.nextInt(90000);
-        filePath = "" + saveFileID;
         queueContents = new ArrayList<>();
 
         date = LocalDate.now();
         time = LocalTime.now();
-        this.playerPosition = new Vector2D();
+        this.playerPosition = new Vector2D(SCREEN_WIDTH / 2, SCREEN_HEIGHT);
         this.totalStars = 0;
     }
 
@@ -47,10 +59,6 @@ public class SaveGame implements Serializable {
 
     public double getTotalStars() {
         return totalStars;
-    }
-
-    public String getFilePath() {
-        return filePath;
     }
 
     public ArrayList<ObstacleStateContainer> getQueueContents() {
@@ -75,7 +83,6 @@ public class SaveGame implements Serializable {
                 "saveFileID=" + saveFileID +
                 ", playerPosition=" + playerPosition +
                 ", totalStars=" + totalStars +
-                ", filePath='" + filePath + '\'' +
                 ", date=" + date +
                 ", time=" + time +
                 ", queueContents=" + queueContents +

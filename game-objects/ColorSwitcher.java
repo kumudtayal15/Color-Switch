@@ -7,7 +7,7 @@ import javafx.scene.shape.Shape;
 
 import java.util.Random;
 
-public class ColorSwitcher extends GameObject {
+public class ColorSwitcher extends GameObject implements Collectible {
     static final double radius = 20;
     static final Color[] colorMapping = {
             Color.web("#8C13FB"),

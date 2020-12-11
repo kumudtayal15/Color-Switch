@@ -1,3 +1,6 @@
+import javafx.scene.Group;
+import javafx.scene.Node;
+
 abstract public class GameObject {
 
     private int ID;

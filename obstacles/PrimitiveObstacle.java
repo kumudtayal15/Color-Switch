@@ -1,4 +1,3 @@
-import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 
@@ -15,7 +14,7 @@ public class PrimitiveObstacle extends Obstacle {
     }
 
     @Override
-    public Node getNode() {
+    public Shape getNode() {
         return mesh;
     }
 }

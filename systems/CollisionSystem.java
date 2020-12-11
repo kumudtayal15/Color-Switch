@@ -1,12 +1,15 @@
 import javafx.animation.AnimationTimer;
+import javafx.scene.Group;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
+import javafx.scene.transform.Rotate;
 
 import java.util.List;
+import java.util.Random;
 
-public class CollisionSystem extends BehaviourSystem {
+public class CollisionSystem extends BehaviourSystem implements PlayerDeathSubscriber {
     private Ball player;
-    private ScrollingSystem scrollingSystem;
+    private final ScrollingSystem scrollingSystem;
 
     public CollisionSystem(EntityManager entityManager, Pane sceneGraphRoot, Ball player, ScrollingSystem scrollingSystem) {
         super(entityManager, sceneGraphRoot);
@@ -46,19 +49,31 @@ public class CollisionSystem extends BehaviourSystem {
                     if (!meshComponent.mesh.getFill().equals(player.color)) {
                         player.isAlive = false;
                     }
-                } else if (gameObject instanceof Star) {
-                    player.setScore(player.score + 1);
-                    sceneGraphRoot.getChildren().remove(((Star) gameObject).getNode());
-                    scrollingSystem.remove(((Star) gameObject).getNode());
-//                    entityManager.remove(gameObject);
-                } else if (gameObject instanceof ColorSwitcher) {
-                    player.setColor(((ColorSwitcher) gameObject).deltaColor);
-                    sceneGraphRoot.getChildren().remove(((ColorSwitcher) gameObject).getNode());
-                    scrollingSystem.remove(((ColorSwitcher) gameObject).getNode());
-//                    entityManager.remove(gameObject);
+                } else if (gameObject instanceof Collectible) {
+                    Class<?> gameObjectClass = gameObject.getClass();
+                    if (gameObjectClass.equals(Star.class)) {
+                        player.setScore(player.score + 1);
+                    } else if (gameObjectClass.equals(RandomRotate.class)) {
+                        Rotate rotate = (Rotate) sceneGraphRoot.getTransforms().get(0);
+                        Random random = new Random(System.currentTimeMillis());
+                        rotate.setAngle(90 * (random.nextInt(3) + 1));
+                    } else if (gameObjectClass.equals(ColorSwitcher.class)) {
+                        player.setColor(((ColorSwitcher) gameObject).deltaColor);
+                    }
+
+                    Group node = ((Collectible) gameObject).getNode();
+                    sceneGraphRoot.getChildren().remove(node);
+                    scrollingSystem.remove(node);
+                    entityManager.deregister(gameObject);
                 }
             }
         }
+
+    }
+
+    @Override
+    public void onPlayerDeath() {
+        this.timer.stop();
     }
 
     public void setPlayer(Ball player) {

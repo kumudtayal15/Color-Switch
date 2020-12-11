@@ -6,7 +6,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 
-public class SpawnSystem extends BehaviourSystem {
+public class SpawnSystem extends BehaviourSystem implements PlayerDeathSubscriber {
     protected Deque<Obstacle> obstacleDeque;
     private final EntityManager entityManager;
     private final ScrollingSystem scrollingSystem;
@@ -31,6 +31,7 @@ public class SpawnSystem extends BehaviourSystem {
     @Override
     public void init() {
         assert obstacleDeque.peekFirst() != null;
+//        spawnNextObstacle();
         timer.start();
     }
 
@@ -53,13 +54,9 @@ public class SpawnSystem extends BehaviourSystem {
         assert obstacle != null;
         obstacle.create();
         sceneGraphRoot.getChildren().add(obstacle.getNode());
-//        System.out.println(spawnPolicy.getClass().getName() + " adding " + obstacle);
         scrollingSystem.add(obstacle.getNode());
 
         obstacleDeque.addLast(obstacle);
-
-//        System.out.println(spawnPolicy.getClass().getName() + " spawned a new obstacle at " +
-//                obstacle.getNode().getBoundsInParent().getCenterY());
     }
 
     private void removeHead() {
@@ -101,5 +98,10 @@ public class SpawnSystem extends BehaviourSystem {
         }
 
         spawnPolicy = new RandomSpawnPolicy(entityManager, sceneGraphRoot);
+    }
+
+    @Override
+    public void onPlayerDeath() {
+        this.timer.stop();
     }
 }

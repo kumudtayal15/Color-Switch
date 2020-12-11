@@ -12,6 +12,7 @@ import javafx.scene.transform.Translate;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -23,6 +24,7 @@ public class Ball extends GameObject {
     protected final Group ballMeshWrapper;
     protected int score;
     protected boolean isAlive;
+    private final ArrayList<PlayerDeathSubscriber> deathSubscribers;
     protected Color color;
     protected double velocity;
     protected double VELOCITY_UP;
@@ -57,6 +59,7 @@ public class Ball extends GameObject {
         }
 
         this.isAlive = true;
+        this.deathSubscribers = new ArrayList<>();
         this.velocity = 0;
 
         ballMeshWrapper = new Group();
@@ -87,6 +90,10 @@ public class Ball extends GameObject {
                             ballMeshWrapper.getTranslateY()
                     )));
 
+                    for(PlayerDeathSubscriber p : deathSubscribers) {
+                        p.onPlayerDeath();
+                    }
+
                     this.stop();
                 }
             }
@@ -108,7 +115,7 @@ public class Ball extends GameObject {
 
     public void update(double dt) {
         double dy = velocity * dt + 0.5 * GRAVITY * (dt * dt);
-        ballMeshWrapper.setTranslateY(Math.min(ballMeshWrapper.getTranslateY() + dy, 600));
+        ballMeshWrapper.setTranslateY(Math.min(ballMeshWrapper.getTranslateY() + dy, 700));
         velocity += GRAVITY * dt;
     }
 
@@ -130,6 +137,10 @@ public class Ball extends GameObject {
                 ballMeshWrapper.getTranslateX(),
                 ballMeshWrapper.getTranslateY()
         ));
+    }
+
+    public void addDeathSubscriber(PlayerDeathSubscriber deathSubscriber) {
+        deathSubscribers.add(deathSubscriber);
     }
 
     public double getVelocity() {
