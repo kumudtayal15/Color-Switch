@@ -77,15 +77,15 @@ public class BehaviourSystemTest extends Application {
         this.spawnSystem = new SpawnSystem(entityManager, root, scrollingSystem);
         player.addDeathSubscriber(spawnSystem);
 
-//        EightPointStar eightPointStar = new EightPointStar(
-//                new Vector2D(SCREEN_CENTRE.x, SCREEN_CENTRE.y),
-//                entityManager,
-//                Level.EASY
-//        );
-//        eightPointStar.create();
-//        root.getChildren().add(eightPointStar.getNode());
-//        scrollingSystem.add(eightPointStar.getNode());
-//        spawnSystem.obstacleDeque.addLast(eightPointStar);
+        EightPointStar eightPointStar = new EightPointStar(
+                new Vector2D(SCREEN_CENTRE.x, SCREEN_CENTRE.y),
+                entityManager,
+                Level.EASY
+        );
+        eightPointStar.create();
+        root.getChildren().add(eightPointStar.getNode());
+        scrollingSystem.add(eightPointStar.getNode());
+        spawnSystem.obstacleDeque.addLast(eightPointStar);
 //
 //        SVGCollectible svgCollectible = new RandomRotate(
 //                entityManager,

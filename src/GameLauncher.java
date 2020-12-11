@@ -21,7 +21,7 @@ public class GameLauncher extends Application {
     private Ball player;
 
     public GameLauncher() {
-        load(74580);
+        load(12619);
     }
 
     public static void main(String[] args) {

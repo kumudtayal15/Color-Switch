@@ -1,9 +1,11 @@
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -51,14 +53,20 @@ public class CollisionSystem extends BehaviourSystem implements PlayerDeathSubsc
                     }
                 } else if (gameObject instanceof Collectible) {
                     Class<?> gameObjectClass = gameObject.getClass();
+                    Random random = new Random(System.currentTimeMillis());
+
                     if (gameObjectClass.equals(Star.class)) {
                         player.setScore(player.score + 1);
                     } else if (gameObjectClass.equals(RandomRotate.class)) {
                         Rotate rotate = (Rotate) sceneGraphRoot.getTransforms().get(0);
-                        Random random = new Random(System.currentTimeMillis());
-                        rotate.setAngle(90 * (random.nextInt(3) + 1));
+                        rotate.setAngle(90 * (random.nextInt(4)));
                     } else if (gameObjectClass.equals(ColorSwitcher.class)) {
                         player.setColor(((ColorSwitcher) gameObject).deltaColor);
+                    } else if (gameObjectClass.equals(SkinChanger.class)) {
+                        SVGPath path = (SVGPath) player.ballMesh;
+                        ArrayList<String> skinSVGList = player.getSkinSVGList();
+                        String playerSkinSVG = skinSVGList.get(random.nextInt(skinSVGList.size()));
+                        path.setContent(playerSkinSVG);
                     }
 
                     Group node = ((Collectible) gameObject).getNode();

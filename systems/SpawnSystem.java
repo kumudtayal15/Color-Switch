@@ -81,13 +81,21 @@ public class SpawnSystem extends BehaviourSystem implements PlayerDeathSubscribe
 
 
         if (obstacle.isHollow) {
-            boolean toss = pseudoRandomGenerator.nextBoolean();
+            int toss = pseudoRandomGenerator.nextInt(3);
             SVGCollectible collectible;
 
-            if (toss) {
-                collectible = new Star(entityManager, obstacleCenter);
-            } else {
-                collectible = new RandomRotate(entityManager, obstacleCenter);
+            switch (toss) {
+                case 0:
+                    collectible = new Star(entityManager, obstacleCenter);
+                    break;
+                case 1:
+                    collectible = new RandomRotate(entityManager, obstacleCenter);
+                    break;
+                case 2:
+                    collectible = new SkinChanger(entityManager, obstacleCenter);
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + toss);
             }
 
             sceneGraphRoot.getChildren().add(collectible.getNode());

@@ -32,6 +32,9 @@ public class Cartwheel extends CompoundObstacle {
             case EASY:
                 this.rotationSpeed = 100;
                 break;
+            case EASY_NEG:
+                this.rotationSpeed = -100;
+                break;
             case MEDIUM:
                 this.rotationSpeed = 150;
                 break;

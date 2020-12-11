@@ -1,5 +1,6 @@
 import java.io.Serializable;
 
 public enum Level implements Serializable {
-    EASY, MEDIUM, HARD
+    // TODO: 12-12-2020 negative levels
+    EASY, EASY_NEG, MEDIUM, HARD
 }
