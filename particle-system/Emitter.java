@@ -3,6 +3,7 @@ import javafx.animation.Timeline;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.io.FileInputStream;
@@ -16,7 +17,7 @@ public class Emitter extends Group {
     private double SCENE_WIDTH;
     private double SCENE_HEIGHT;
 
-    public Emitter(Vector2D anchorPoint) {
+    public Emitter(Vector2D anchorPoint, Color[] particleColorMapping) {
         /*
         Absolute coordinates (relative to scene) of the ball must be provided
         as the anchor point vector
@@ -53,7 +54,10 @@ public class Emitter extends Group {
         );
 
         for (int i = 0; i < particleCount; i++) {
-            this.getChildren().add(new Particle(bounds));
+            Particle p = new Particle(bounds);
+            p.setCustomColorMapping(particleColorMapping);
+            p.generate();
+            this.getChildren().add(p);
         }
 
         animator = new Timeline();

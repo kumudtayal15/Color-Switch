@@ -13,6 +13,7 @@ public class CartwheelPair extends CompoundObstacle {
                 entityManager,
                 level
         );
+        cartwheelL.setColorMapping(this.colorMapping);
         cartwheelL.create(colorIdx);
         addChild(cartwheelL);
 
@@ -22,6 +23,7 @@ public class CartwheelPair extends CompoundObstacle {
                 entityManager,
                 level_neg
         );
+        cartwheelR.setColorMapping(this.colorMapping);
         cartwheelR.create(colorIdx);
         addChild(cartwheelR);
     }

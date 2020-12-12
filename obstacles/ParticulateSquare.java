@@ -1,7 +1,6 @@
 // TODO: 22/11/20 only rotates in anticlockwise direction!?
 
 import javafx.scene.paint.Color;
-import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 
 public class ParticulateSquare extends ParticulateObstacle {

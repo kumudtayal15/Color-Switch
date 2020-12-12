@@ -95,7 +95,14 @@ public class EightPointStar extends CompoundObstacle {
 
     @Override
     public Color getMeshColorSynced(int i, int colorIdx) {
-        return colorMapping[i % 4];
+        Color c;
+        try {
+            c = colorMapping[i % 4];
+        } catch (NullPointerException e) {
+            c = defaultColorMapping[i % 4];
+        }
+
+        return c;
     }
 
     private Group getDiagonalSliceContainer(double rotationAngle) {

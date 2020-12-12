@@ -59,13 +59,19 @@ public class CollisionSystem extends BehaviourSystem implements PlayerDeathSubsc
                         player.setScore(player.score + 1);
                     } else if (gameObjectClass.equals(RandomRotate.class)) {
                         Rotate rotate = (Rotate) sceneGraphRoot.getTransforms().get(0);
-                        rotate.setAngle(90 * (random.nextInt(4)));
+                        final int lowerBound = 60;
+                        rotate.setAngle(lowerBound + random.nextInt(361 - lowerBound));
+//                        rotate.setAngle(90 * random.nextInt(4));
                     } else if (gameObjectClass.equals(ColorSwitcher.class)) {
                         player.setColor(((ColorSwitcher) gameObject).deltaColor);
                     } else if (gameObjectClass.equals(SkinChanger.class)) {
                         SVGPath path = (SVGPath) player.ballMesh;
                         ArrayList<String> skinSVGList = player.getSkinSVGList();
-                        String playerSkinSVG = skinSVGList.get(random.nextInt(skinSVGList.size()));
+
+                        String playerSkinSVG;
+                        do {
+                            playerSkinSVG = skinSVGList.get(random.nextInt(skinSVGList.size()));
+                        } while (playerSkinSVG.equals(path.getContent()));
                         path.setContent(playerSkinSVG);
                     }
 

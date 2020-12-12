@@ -1,4 +1,5 @@
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 abstract public class SpawnPolicy {
     protected static final int NUM_OBSTACLES = 12;
@@ -9,11 +10,11 @@ abstract public class SpawnPolicy {
 
     public SpawnPolicy(EntityManager entityManager, Pane sceneGraphRoot) {
 
-
         this.sceneGraphRoot = sceneGraphRoot;
         this.entityManager = entityManager;
 
         obstacleClassNames = new String[]{
+//                ParticulateSinWave.class.getName(),
                 EightPointStar.class.getName(),
                 QuadArcCircle.class.getName(),
                 Rhombus.class.getName(),

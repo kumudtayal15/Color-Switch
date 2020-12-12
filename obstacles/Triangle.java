@@ -23,8 +23,8 @@ public class Triangle extends CompoundObstacle {
     public Triangle(Vector2D anchorPoint, EntityManager entityManager, Level level) {
         super(anchorPoint, entityManager, level);
 
-        this.sideLength = 250;
-        this.sideThickness = 25;
+        this.sideLength = 300;
+        this.sideThickness = 30;
 
         switch (level) {
             case EASY:
@@ -106,6 +106,13 @@ public class Triangle extends CompoundObstacle {
     @Override
     public Color getMeshColorSynced(int i, int colorIdx) {
         // TODO: 02-12-2020 Fix mapping scheme
-        return colorMapping[(i + colorIdx) % 4];
+        Color c;
+        try {
+            c = colorMapping[(i + colorIdx) % 4];
+        } catch (NullPointerException e) {
+            c = defaultColorMapping[(i + colorIdx) % 4];
+        }
+
+        return c;
     }
 }

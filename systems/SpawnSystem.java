@@ -1,6 +1,7 @@
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Bounds;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,8 +15,9 @@ public class SpawnSystem extends BehaviourSystem implements PlayerDeathSubscribe
     private SpawnPolicy spawnPolicy;
     protected double OBSTACLE_BUFFER;
     protected Random pseudoRandomGenerator;
+    protected Color[] customColorMapping;
 
-    public SpawnSystem(EntityManager entityManager, Pane sceneGraphRoot, ScrollingSystem scrollingSystem) {
+    public SpawnSystem(EntityManager entityManager, Pane sceneGraphRoot, ScrollingSystem scrollingSystem, Color[] customColorMapping) {
         super(entityManager, sceneGraphRoot);
 
         try (InputStream input = new FileInputStream("hyperparameters/anim.properties")) {
@@ -35,13 +37,14 @@ public class SpawnSystem extends BehaviourSystem implements PlayerDeathSubscribe
             }
         };
 
+        this.customColorMapping = customColorMapping;
         this.spawnPolicy = new RandomSpawnPolicy(entityManager, sceneGraphRoot, scrollingSystem, OBSTACLE_BUFFER);
         this.obstacleDeque = new ArrayDeque<>(3);
         this.entityManager = entityManager;
         this.sceneGraphRoot = sceneGraphRoot;
         this.scrollingSystem = scrollingSystem;
 
-        pseudoRandomGenerator = new Random(System.currentTimeMillis());
+        this.pseudoRandomGenerator = new Random(System.currentTimeMillis());
     }
 
     @Override
@@ -68,7 +71,8 @@ public class SpawnSystem extends BehaviourSystem implements PlayerDeathSubscribe
         ColorSwitcher colorSwitcher = new ColorSwitcher(
                 // TODO: 12-12-2020 dynamic distance calculation
                 new Vector2D(sceneGraphRoot.getWidth() / 2, -OBSTACLE_BUFFER / 4),
-                entityManager
+                entityManager,
+                customColorMapping
         );
         sceneGraphRoot.getChildren().add(colorSwitcher.getNode());
         scrollingSystem.add(colorSwitcher.getNode());
@@ -76,6 +80,7 @@ public class SpawnSystem extends BehaviourSystem implements PlayerDeathSubscribe
 
         CompoundObstacle obstacle = (CompoundObstacle) spawnPolicy.getNextObstacle();
         assert obstacle != null;
+        obstacle.setColorMapping(customColorMapping);
         obstacle.create(colorSwitcher.getDeltaColorIdx());
         Vector2D obstacleCenter = obstacle.getCentre();
 

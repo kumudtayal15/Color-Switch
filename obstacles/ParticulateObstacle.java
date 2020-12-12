@@ -69,7 +69,14 @@ abstract public class ParticulateObstacle extends CompoundObstacle {
 
     @Override
     public Color getMeshColorSynced(int i, int colorIdx) {
-        return colorMapping[i / (particleCount / 4)];
+        Color c;
+        try {
+            c = colorMapping[i / (particleCount / 4)];
+        } catch (NullPointerException e) {
+            c = defaultColorMapping[i / (particleCount / 4)];
+        }
+
+        return c;
     }
 
     public Shape generateParticle() {

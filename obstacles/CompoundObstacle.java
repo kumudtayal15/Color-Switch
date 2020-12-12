@@ -14,11 +14,13 @@ abstract public class CompoundObstacle extends Obstacle {
     protected Level level;
     protected boolean isHollow;
 
-    protected static final Color[] colorMapping = {
+    protected static final Color[] defaultColorMapping = {
             Color.web("#8C13FB"),
             Color.web("#F6DF0E"),
             Color.web("#35E2F2"),
             Color.web("#FF0080")};
+
+    protected Color[] colorMapping;
 
     public CompoundObstacle(Vector2D anchorPoint, EntityManager entityManager) {
         super(anchorPoint);
@@ -39,6 +41,10 @@ abstract public class CompoundObstacle extends Obstacle {
          */
         this(anchorPoint, entityManager);
         this.level = level;
+    }
+
+    public void setColorMapping(Color[] colorMapping) {
+        this.colorMapping = colorMapping;
     }
 
     abstract public void create(int colorIdx);

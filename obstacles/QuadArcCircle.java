@@ -89,7 +89,14 @@ public class QuadArcCircle extends CompoundObstacle {
 
     @Override
     public Color getMeshColorSynced(int i, int colorIdx) {
-        return colorMapping[(i + (colorIdx + 1)) % 4];
+        Color c;
+        try {
+            c = colorMapping[(i + (colorIdx + 1)) % 4];
+        } catch (NullPointerException e) {
+            c = defaultColorMapping[(i + (colorIdx + 1)) % 4];
+        }
+
+        return c;
     }
 
     private Shape getSolidArc(Vector2D circleCenter, double radius, double startAngle) {

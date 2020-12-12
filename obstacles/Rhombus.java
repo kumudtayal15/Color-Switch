@@ -26,7 +26,7 @@ public class Rhombus extends CompoundObstacle {
         super(anchorPoint, entityManager, level);
 
         this.sideLength = 250;
-        this.sideThickness = 25;
+        this.sideThickness = 30;
         this.skewAngle = 75;
 
         switch (level) {
@@ -104,6 +104,13 @@ public class Rhombus extends CompoundObstacle {
 
     @Override
     public Color getMeshColorSynced(int i, int colorIdx) {
-        return colorMapping[(i + (colorIdx + 3)) % 4];
+        Color c;
+        try {
+            c = colorMapping[(i + (colorIdx + 3)) % 4];
+        } catch (NullPointerException e) {
+            c = defaultColorMapping[(i + (colorIdx + 3)) % 4];
+        }
+
+        return c;
     }
 }

@@ -1,5 +1,6 @@
 import javafx.geometry.Bounds;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

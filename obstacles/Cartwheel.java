@@ -88,7 +88,14 @@ public class Cartwheel extends CompoundObstacle {
 
     @Override
     public Color getMeshColorSynced(int i, int colorIdx) {
-        return colorMapping[(i + (colorIdx + 2)) % 4];
+        Color c;
+        try {
+            c = colorMapping[(i + (colorIdx + 2)) % 4];
+        } catch (NullPointerException e) {
+            c = defaultColorMapping[(i + (colorIdx + 2)) % 4];
+        }
+
+        return c;
     }
 
     private Group getArmContainer(Vector2D wheelCenter, double length, double orientation) {

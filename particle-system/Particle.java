@@ -9,13 +9,14 @@ import java.util.Properties;
 import java.util.Random;
 
 public class Particle extends Circle {
-    protected static final Color[] colorMapping = {
+    static final Color[] defaultColorMapping = {
             Color.web("#8C13FB"),
             Color.web("#F6DF0E"),
             Color.web("#35E2F2"),
             Color.web("#FF0080")};
 
     static Random random = new Random();
+    protected Color[] customColorMapping;
     protected double MAX_PARTICLE_RADIUS;
     protected double dx;
     protected double dy;
@@ -43,9 +44,22 @@ public class Particle extends Circle {
         double theta = random.nextFloat() * (2 * Math.PI);
         this.dx = Math.cos(theta) * vx;
         this.dy = Math.sin(theta) * vy;
+//
+//        this.setRadius(MAX_PARTICLE_RADIUS * Math.max(random.nextFloat(), 0.4));
+//        try {
+//            this.setFill(customColorMapping[random.nextInt(4)]);
+//        } catch (NullPointerException e) {
+//            this.setFill(defaultColorMapping[random.nextInt(4)]);
+//        }
+    }
 
+    public void generate() {
         this.setRadius(MAX_PARTICLE_RADIUS * Math.max(random.nextFloat(), 0.4));
-        this.setFill(colorMapping[random.nextInt(4)]);
+        try {
+            this.setFill(customColorMapping[random.nextInt(4)]);
+        } catch (NullPointerException e) {
+            this.setFill(defaultColorMapping[random.nextInt(4)]);
+        }
     }
 
     public void doStep() {
@@ -65,5 +79,9 @@ public class Particle extends Circle {
         if (atTopBorder) {
             dy = -dy;
         }
+    }
+
+    public void setCustomColorMapping(Color[] customColorMapping) {
+        this.customColorMapping = customColorMapping;
     }
 }

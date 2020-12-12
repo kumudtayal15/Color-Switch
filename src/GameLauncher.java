@@ -66,14 +66,20 @@ public class GameLauncher extends Application {
         Canvas canvas = new Canvas(scene.getWidth(), scene.getHeight());
         root.getChildren().add(canvas);
 
+         /*
+        initialize color scheme
+         */
+        ColorScheme colorScheme = new ColorScheme();
+
         final Vector2D SCREEN_CENTRE = new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2);
-        player = new Ball(root);
+        player = new Ball(root, colorScheme.getColorMapping());
         player.create(
 //                saveGame.getPlayerPosition(),
                 new Vector2D(SCREEN_CENTRE.x, scene.getHeight()),
                 entityManager
         );
         scene.setOnKeyPressed(player::impulse);
+
 
         /*
         initialize systems
@@ -83,7 +89,7 @@ public class GameLauncher extends Application {
         this.scrollingSystem = new ScrollingSystem(entityManager, root, root.getLayoutBounds());
         scrollingSystem.setPlayer(player);
 
-        this.spawnSystem = new SpawnSystem(entityManager, root, scrollingSystem);
+        this.spawnSystem = new SpawnSystem(entityManager, root, scrollingSystem, colorScheme.getColorMapping());
         spawnSystem.unpackAndInitialize(saveGame.getQueueContents());
 
         this.collisionSystem = new CollisionSystem(entityManager, root, player, scrollingSystem);
@@ -106,13 +112,13 @@ public class GameLauncher extends Application {
         player.addDeathSubscriber(spawnSystem);
 
         /*
+        test space
+         */
+
+        /*
         initialize systems
          */
         initializeSystems();
-
-        /*
-        test space
-         */
 
         /*
         boilerplate

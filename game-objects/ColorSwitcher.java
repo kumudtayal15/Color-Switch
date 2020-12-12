@@ -9,23 +9,28 @@ import java.util.Random;
 
 public class ColorSwitcher extends GameObject implements Collectible {
     static final double radius = 20;
-    static final Color[] colorMapping = {
+    static final Color[] defaultColorMapping = {
             Color.web("#8C13FB"),
             Color.web("#F6DF0E"),
             Color.web("#35E2F2"),
             Color.web("#FF0080")};
     protected final Group container;
+    protected Color[] colorMapping;
     protected Color deltaColor;
     protected int deltaColorIdx;
 
-    public ColorSwitcher(Vector2D anchorPoint, EntityManager entityManager) {
+    public ColorSwitcher(Vector2D anchorPoint, EntityManager entityManager, Color[] colorMapping) {
         container = new Group();
 
         container.setTranslateX(anchorPoint.x);
         container.setTranslateY(anchorPoint.y);
 
         this.deltaColorIdx = new Random(System.currentTimeMillis()).nextInt(4);
-        this.deltaColor = colorMapping[deltaColorIdx];
+        try {
+            this.deltaColor = colorMapping[deltaColorIdx];
+        } catch (NullPointerException e) {
+            this.deltaColor = defaultColorMapping[deltaColorIdx];
+        }
 
         entityManager.register(this);
 
@@ -34,7 +39,13 @@ public class ColorSwitcher extends GameObject implements Collectible {
         container.getChildren().add(circleMesh);
 
         for (int i = 0; i < 4; i++) {
-            Shape roundArc = getRoundArc(i * 90, colorMapping[i % 4]);
+            Shape roundArc;
+            try {
+                roundArc = getRoundArc(i * 90, colorMapping[i % 4]);
+            } catch (NullPointerException e) {
+                roundArc = getRoundArc(i * 90, defaultColorMapping[i % 4]);
+            }
+
             container.getChildren().add(roundArc);
         }
     }
@@ -65,5 +76,9 @@ public class ColorSwitcher extends GameObject implements Collectible {
 
     public void setDeltaColor(Color deltaColor) {
         this.deltaColor = deltaColor;
+    }
+
+    public void setColorMapping(Color[] colorMapping) {
+        this.colorMapping = colorMapping;
     }
 }

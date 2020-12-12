@@ -55,7 +55,12 @@ public class BehaviourSystemTest extends Application {
 
         final Vector2D SCREEN_CENTRE = new Vector2D(scene.getWidth() / 2, scene.getHeight() / 2);
 
-        player = new Ball(root);
+        /*
+        initialize color scheme
+         */
+        ColorScheme colorScheme = new ColorScheme();
+
+        player = new Ball(root, colorScheme.getColorMapping());
         player.create(
 //                saveGame.getPlayerPosition(),
                 new Vector2D(SCREEN_CENTRE.x, scene.getHeight()),
@@ -74,7 +79,7 @@ public class BehaviourSystemTest extends Application {
         this.collisionSystem = new CollisionSystem(entityManager, root, player, scrollingSystem);
         player.addDeathSubscriber(collisionSystem);
 
-        this.spawnSystem = new SpawnSystem(entityManager, root, scrollingSystem);
+        this.spawnSystem = new SpawnSystem(entityManager, root, scrollingSystem, new ColorScheme().getColorMapping());
         player.addDeathSubscriber(spawnSystem);
 
         EightPointStar eightPointStar = new EightPointStar(

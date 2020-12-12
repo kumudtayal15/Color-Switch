@@ -8,7 +8,8 @@ public class SinWaveTrajectory extends TrajectoryComponent {
     public Vector2D getPositionVector(double timeInSeconds) {
         double x = size * (speed  * timeInSeconds - delay);
         return new Vector2D(
-                x % (SCENE_WIDTH + 200) , size * Math.sin(x / size)
+                // TODO: 12-12-2020 voodoo constant used
+                x % (SCENE_WIDTH + 230) , size * Math.sin(x / size)
         );
     }
 }
