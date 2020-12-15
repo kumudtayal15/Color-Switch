@@ -54,7 +54,7 @@ public class ScrollingSystem extends BehaviourSystem implements PlayerDeathSubsc
         above the threshold.
          */
 //        if (player.getVelocity() <= 0 && player.skin.getTranslateY() <= SCROLL_THRESHOLD) {
-        if (player.getVelocity() <= 0 && player.ballMeshWrapper.getTranslateY() <= SCROLL_THRESHOLD) {
+        if (player.getVelocity() <= 0 && player.ballMeshWrapper.getTranslateY() < SCROLL_THRESHOLD) {
             for (Node node : nodes) {
                 node.setTranslateY(node.getTranslateY() + SCROLL_AMT);
             }

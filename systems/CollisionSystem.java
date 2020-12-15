@@ -1,6 +1,8 @@
+import com.sun.media.jfxmediaimpl.HostUtils;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
@@ -12,18 +14,24 @@ import java.util.Random;
 public class CollisionSystem extends BehaviourSystem implements PlayerDeathSubscriber {
     private Ball player;
     private final ScrollingSystem scrollingSystem;
+    private double timestamp;
+    private double haltDuration;
 
     public CollisionSystem(EntityManager entityManager, Pane sceneGraphRoot, Ball player, ScrollingSystem scrollingSystem) {
         super(entityManager, sceneGraphRoot);
         timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                update(l * Math.pow(10, -9));
+                if ((System.currentTimeMillis() - timestamp) > haltDuration) {
+                    update(l * Math.pow(10, -9));
+                }
             }
         };
 
         this.scrollingSystem = scrollingSystem;
         this.player = player;
+        this.timestamp = 0;
+        this.haltDuration = 0;
     }
 
     @Override
@@ -64,6 +72,8 @@ public class CollisionSystem extends BehaviourSystem implements PlayerDeathSubsc
 //                        rotate.setAngle(90 * random.nextInt(4));
                     } else if (gameObjectClass.equals(ColorSwitcher.class)) {
                         player.setColor(((ColorSwitcher) gameObject).deltaColor);
+                    } else if (gameObjectClass.equals(Immunity.class)) {
+                        this.halt(5000);
                     } else if (gameObjectClass.equals(SkinChanger.class)) {
                         SVGPath path = (SVGPath) player.ballMesh;
                         ArrayList<String> skinSVGList = player.getSkinSVGList();
@@ -92,5 +102,10 @@ public class CollisionSystem extends BehaviourSystem implements PlayerDeathSubsc
 
     public void setPlayer(Ball player) {
         this.player = player;
+    }
+
+    public void halt(double timeInMillis) {
+        timestamp = System.currentTimeMillis();
+        haltDuration = timeInMillis;
     }
 }

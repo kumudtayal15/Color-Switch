@@ -16,6 +16,8 @@ public class SpawnSystem extends BehaviourSystem implements PlayerDeathSubscribe
     protected double OBSTACLE_BUFFER;
     protected Random pseudoRandomGenerator;
     protected Color[] customColorMapping;
+    private static final double[] COLLECTIBLE_WEIGHTS = {0.4, 0.2, 0.2, 0.2};
+    private static final double[] COLLECTIBLE_WEIGHTS_CDF = {0.4, 0.6, 0.8, 1.0};
 
     public SpawnSystem(EntityManager entityManager, Pane sceneGraphRoot, ScrollingSystem scrollingSystem, Color[] customColorMapping) {
         super(entityManager, sceneGraphRoot);
@@ -86,7 +88,8 @@ public class SpawnSystem extends BehaviourSystem implements PlayerDeathSubscribe
 
 
         if (obstacle.isHollow) {
-            int toss = pseudoRandomGenerator.nextInt(3);
+//            int toss = pseudoRandomGenerator.nextInt(4);
+            int toss = getRandomSample();
             SVGCollectible collectible;
 
             switch (toss) {
@@ -98,6 +101,9 @@ public class SpawnSystem extends BehaviourSystem implements PlayerDeathSubscribe
                     break;
                 case 2:
                     collectible = new SkinChanger(entityManager, obstacleCenter);
+                    break;
+                case 3:
+                    collectible = new Immunity(entityManager, obstacleCenter);
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + toss);
@@ -157,5 +163,15 @@ public class SpawnSystem extends BehaviourSystem implements PlayerDeathSubscribe
     @Override
     public void onPlayerDeath() {
         this.timer.stop();
+    }
+
+    private int getRandomSample() {
+        /*
+        https://stackoverflow.com/questions/4463561/weighted-random-selection-from-array
+         */
+
+        double randomKey = pseudoRandomGenerator.nextDouble();
+        int ret = Arrays.binarySearch(COLLECTIBLE_WEIGHTS_CDF, randomKey);
+        return (ret < 0) ? -ret - 1 : ret;
     }
 }

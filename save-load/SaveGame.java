@@ -12,7 +12,7 @@ public class SaveGame implements Serializable {
     private static final long serialVersionUID = 1234L;
     protected final long saveFileID;
     private Vector2D playerPosition;
-    private double totalStars;
+    private int score;
     private LocalDate date;
     private LocalTime time;
     private ArrayList<ObstacleStateContainer> queueContents;
@@ -39,13 +39,13 @@ public class SaveGame implements Serializable {
         date = LocalDate.now();
         time = LocalTime.now();
         this.playerPosition = new Vector2D(SCREEN_WIDTH / 2, SCREEN_HEIGHT);
-        this.totalStars = 0;
+        this.score = 0;
     }
 
-    public SaveGame(Vector2D playerPosition, double totalStars) {
+    public SaveGame(Vector2D playerPosition, int score) {
         this();
         this.playerPosition = playerPosition;
-        this.totalStars = totalStars;
+        this.score = score;
     }
 
     public void updateTimestamp() {
@@ -57,8 +57,8 @@ public class SaveGame implements Serializable {
         return playerPosition;
     }
 
-    public double getTotalStars() {
-        return totalStars;
+    public double getScore() {
+        return score;
     }
 
     public ArrayList<ObstacleStateContainer> getQueueContents() {
@@ -73,8 +73,8 @@ public class SaveGame implements Serializable {
         this.playerPosition = playerPosition;
     }
 
-    public void setTotalStars(double totalStars) {
-        this.totalStars = totalStars;
+    public void setScore(int score) {
+        this.score = score;
     }
 
     @Override
@@ -82,7 +82,7 @@ public class SaveGame implements Serializable {
         return "SaveGame{" +
                 "saveFileID=" + saveFileID +
                 ", playerPosition=" + playerPosition +
-                ", totalStars=" + totalStars +
+                ", totalScore=" + score +
                 ", date=" + date +
                 ", time=" + time +
                 ", queueContents=" + queueContents +
