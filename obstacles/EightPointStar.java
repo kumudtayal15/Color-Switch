@@ -28,7 +28,7 @@ public class EightPointStar extends CompoundObstacle {
     public EightPointStar(Vector2D anchorPoint, EntityManager entityManager, Level level) {
         super(anchorPoint, entityManager, level);
 
-        this.scaleFactor = 1.25;
+        this.scaleFactor = 0.8;
         switch (level) {
             case EASY:
                 this.rotationSpeed = 50;

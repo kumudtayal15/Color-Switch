@@ -10,10 +10,11 @@ public class CircleAndCartwheel extends CompoundObstacle {
     public void create(int colorIdx) {
         Level level_neg = Level.valueOf(level.toString() + "_NEG");
         Cartwheel cartwheel = new Cartwheel(
-                new Vector2D(-50, 0),
+                new Vector2D(-40, 0),
                 entityManager,
                 level_neg
         );
+        cartwheel.armSize = "small";
         cartwheel.setColorMapping(this.colorMapping);
         cartwheel.create(colorIdx);
         addChild(cartwheel);
@@ -23,6 +24,7 @@ public class CircleAndCartwheel extends CompoundObstacle {
                 entityManager,
                 level
         );
+        circle.width = "thick";
         circle.setColorMapping(this.colorMapping);
         circle.create(colorIdx);
         addChild(circle);

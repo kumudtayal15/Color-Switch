@@ -1,46 +1,54 @@
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 public class Score {
-    int totalScore;
-    int bestScore;
+    static int totalScore;
+    static int bestScore;
 
     public Score() {
         try (InputStream input = new FileInputStream("hyperparameters/score.properties")) {
             Properties p = new Properties();
             p.load(input);
 
-            this.totalScore = Integer.parseInt(p.getProperty("score.total"));
-            this.bestScore = Integer.parseInt(p.getProperty("score.best"));
+            totalScore = Integer.parseInt(p.getProperty("score.total"));
+            bestScore = Integer.parseInt(p.getProperty("score.best"));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public int getTotalScore() {
+    public static int getTotalScore() {
         return totalScore;
     }
 
-    public int getBestScore() {
+    public static int getBestScore() {
         return bestScore;
     }
 
-    public void setTotalScore(int totalScore) {
-        this.totalScore = totalScore;
+    public static void setTotalScore(int totalScore1) {
+        totalScore += totalScore1;
 
-        try (InputStream input = new FileInputStream("hyperparameters/score.properties")) {
-
+        try (InputStream input = new FileInputStream("hyperparameters\\score.properties")) {
+            Properties p = new Properties();
+            p.load(input);
+            p.setProperty("score.total", String.valueOf(totalScore));
+            p.store(new FileWriter("hyperparameters\\score.properties"),"Total score");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void setBestScore(int bestScore) {
-        this.bestScore = Math.max(bestScore, this.bestScore);
+    public static void setBestScore(int bestScore1) {
+        bestScore = Math.max(bestScore,bestScore1);
 
         try (InputStream input = new FileInputStream("hyperparameters/score.properties")) {
+            Properties p = new Properties();
+            p.load(input);
+            p.setProperty("score.best", String.valueOf(bestScore));
+            p.store(new FileWriter("hyperparameters\\score.properties"),"Best score");
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -17,9 +17,9 @@ public class HarmonicCircle extends ParticulateObstacle {
     public HarmonicCircle(Vector2D anchorPoint, EntityManager entityManager, Level level) {
         super(anchorPoint, entityManager, level);
 
-        this.trajectorySize = 150;
+        this.trajectorySize = 100;
         this.particleCount = 20;
-        this.particleRadius = 20;
+        this.particleRadius = 15;
         this.delayFactor = 2 * Math.PI / particleCount;
 
         switch (level) {

@@ -57,8 +57,18 @@ public class SaveGame implements Serializable {
         return playerPosition;
     }
 
-    public double getScore() {
+    public int getScore() {
         return score;
+    }
+
+    public String getDate() {
+        return date.toString();
+    }
+
+    public String getTime() {
+//        String f_time = time;
+        String f_time = time.getHour() + ":" + time.getMinute();
+        return f_time;
     }
 
     public ArrayList<ObstacleStateContainer> getQueueContents() {

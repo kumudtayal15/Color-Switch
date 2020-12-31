@@ -18,14 +18,17 @@ public class ParticulateCircle extends ParticulateObstacle {
     public ParticulateCircle(Vector2D anchorPoint, EntityManager entityManager, Level level) {
         super(anchorPoint, entityManager, level);
 
-        this.trajectorySize = 150;
+        this.trajectorySize = 130;
         this.particleCount = 20;
-        this.particleRadius = 20;
+        this.particleRadius = 17;
         this.delayFactor = 2 * Math.PI / particleCount;
 
         switch (level) {
             case EASY:
                 this.trajectorySpeed = 1.5;
+                break;
+            case EASY_NEG:
+                this.trajectorySpeed = -1.5;
                 break;
             case MEDIUM:
                 this.trajectorySpeed = 2;

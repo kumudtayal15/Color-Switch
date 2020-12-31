@@ -5,29 +5,43 @@ import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 
+import java.util.HashMap;
+
 public class Cartwheel extends CompoundObstacle {
 
-    protected double length;
+    private final HashMap<String, String> ARM_SIZE;
     protected double rotationSpeed;
+    protected String armSize;
 
     // TODO: 02-12-2020 length is a redundant parameter
     public Cartwheel(
             Vector2D anchorPoint,
             EntityManager entityManager,
-            double length,
+            String armSize,
             double rotationSpeed) {
 
         super(anchorPoint, entityManager);
 
-        this.length = length;
-        this.rotationSpeed = rotationSpeed;
+        this.ARM_SIZE = new HashMap<>(2);
+        ARM_SIZE.put("small", "M14,7.2V53.52A6.5,6.5,0,0,1,7.52,60h-1A6.5,6.5,0,0,1,0,53.52V7.2L7,0Z");
+        ARM_SIZE.put("large", "M28,14V86A14,14,0,0,1,0,86V14a14.6,14.6,0,0,1,.14-2,.78.78,0,0,0,0-.14L14,0,27.84,11.86a.78.78,0,0,0,0,.14A14.6,14.6,0,0,1,28,14Z");
 
+        this.armSize = "large";
+
+        this.armSize = armSize;
+        this.rotationSpeed = rotationSpeed;
         this.isHollow = false;
     }
 
     public Cartwheel(Vector2D anchorPoint, EntityManager entityManager, Level level) {
         super(anchorPoint, entityManager, level);
-        this.length = 100;
+
+        this.ARM_SIZE = new HashMap<>(2);
+        ARM_SIZE.put("small", "M14,7.2V53.52A6.5,6.5,0,0,1,7.52,60h-1A6.5,6.5,0,0,1,0,53.52V7.2L7,0Z");
+        ARM_SIZE.put("large", "M28,14V86A14,14,0,0,1,0,86V14a14.6,14.6,0,0,1,.14-2,.78.78,0,0,0,0-.14L14,0,27.84,11.86a.78.78,0,0,0,0,.14A14.6,14.6,0,0,1,28,14Z");
+
+        this.armSize = "large";
+
         switch (level) {
             case EASY:
                 this.rotationSpeed = 100;
@@ -56,7 +70,7 @@ public class Cartwheel extends CompoundObstacle {
             wheelArm[i] = new PrimitiveObstacle(wheelCentre);
             entityManager.register(wheelArm[i]);
 
-            Group armMeshContainer = getArmContainer(wheelCentre, length, i * 90);
+            Group armMeshContainer = getArmContainer(wheelCentre,i * 90);
             Shape wheelArmMesh = (SVGPath) armMeshContainer.getChildren().get(0);
 
             meshComponent = new MeshComponent(
@@ -98,16 +112,18 @@ public class Cartwheel extends CompoundObstacle {
         return c;
     }
 
-    private Group getArmContainer(Vector2D wheelCenter, double length, double orientation) {
+    private Group getArmContainer(Vector2D wheelCenter, double orientation) {
         Group container = new Group();
 
         SVGPath svgPath = new SVGPath();
-        svgPath.setContent("M28,14V86A14,14,0,0,1,0,86V14a14.6,14.6,0,0,1,.14-2,.78.78,0,0,0,0-.14L14,0,27.84,11.86a.78.78,0,0,0,0,.14A14.6,14.6,0,0,1,28,14Z");
+        svgPath.setContent(ARM_SIZE.get(armSize));
+//        svgPath.setContent("M28,14V86A14,14,0,0,1,0,86V14a14.6,14.6,0,0,1,.14-2,.78.78,0,0,0,0-.14L14,0,27.84,11.86a.78.78,0,0,0,0,.14A14.6,14.6,0,0,1,28,14Z");
         /*
-        Arm is 28 pixels wide, so an offset of -14 translates it to
+        Arm is 28/14 pixels wide, so an offset of -14/-7 translates it to
         the container's origin
          */
-        svgPath.getTransforms().add(new Translate(-14, 0));
+        final double offset = (this.armSize.equals("large")) ? -14 : -7;
+        svgPath.getTransforms().add(new Translate(offset, 0));
 
         container.getTransforms().add(new Rotate(orientation, 0, 0));
         container.getChildren().add(svgPath);

@@ -137,7 +137,8 @@ public class SpawnSystem extends BehaviourSystem implements PlayerDeathSubscribe
             Bounds obstacleNodeBounds = o.getNode().getBoundsInParent();
             Vector2D position = new Vector2D(
                     sceneGraphRoot.getWidth() / 2,
-                    obstacleNodeBounds.getCenterY()
+                    (obstacleNodeBounds.getMinY() + obstacleNodeBounds.getMaxY()) / 2
+//                    obstacleNodeBounds.getCenterY()
             );
             Level level = ((CompoundObstacle) o).level;
 

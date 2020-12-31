@@ -1,6 +1,7 @@
 import com.sun.media.jfxmediaimpl.HostUtils;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
@@ -64,16 +65,29 @@ public class CollisionSystem extends BehaviourSystem implements PlayerDeathSubsc
                     Random random = new Random(System.currentTimeMillis());
 
                     if (gameObjectClass.equals(Star.class)) {
+                        String path = "C:\\Users\\sarth\\Desktop\\2019445_2019429_deadline3\\Color Switch\\fxml\\images\\star.mpeg";
+                        AudioPlayer a = new AudioPlayer(path);
+//                        a.setVolume(0.04);
+                        Thread t1 = new Thread(a);
+                        t1.start();
                         player.setScore(player.score + 1);
+                        Label score = (Label)GameLauncher.top_root.getChildren().get(1);
+                        score.setText(Integer.toString(player.getScore()));
+                        try {
+                            t1.join();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     } else if (gameObjectClass.equals(RandomRotate.class)) {
                         Rotate rotate = (Rotate) sceneGraphRoot.getTransforms().get(0);
                         final int lowerBound = 60;
                         rotate.setAngle(lowerBound + random.nextInt(361 - lowerBound));
 //                        rotate.setAngle(90 * random.nextInt(4));
+                        halt(800);
                     } else if (gameObjectClass.equals(ColorSwitcher.class)) {
                         player.setColor(((ColorSwitcher) gameObject).deltaColor);
                     } else if (gameObjectClass.equals(Immunity.class)) {
-                        this.halt(5000);
+                        this.halt(3000);
                     } else if (gameObjectClass.equals(SkinChanger.class)) {
                         SVGPath path = (SVGPath) player.ballMesh;
                         ArrayList<String> skinSVGList = player.getSkinSVGList();

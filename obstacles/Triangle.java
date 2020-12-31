@@ -23,8 +23,8 @@ public class Triangle extends CompoundObstacle {
     public Triangle(Vector2D anchorPoint, EntityManager entityManager, Level level) {
         super(anchorPoint, entityManager, level);
 
-        this.sideLength = 300;
-        this.sideThickness = 30;
+        this.sideLength = 240;
+        this.sideThickness = 23;
 
         switch (level) {
             case EASY:

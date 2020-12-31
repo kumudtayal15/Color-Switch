@@ -29,9 +29,9 @@ public class ParticulateSquare extends ParticulateObstacle {
     public ParticulateSquare(Vector2D anchorPoint, EntityManager entityManager, Level level) {
         super(anchorPoint, entityManager, level);
 
-        this.trajectorySize = 300;
+        this.trajectorySize = 200;
         this.particleCount = 20;
-        this.particleRadius = 20;
+        this.particleRadius = 14;
 
         switch (level) {
             case EASY:

@@ -23,13 +23,13 @@ public class ParticulateHex extends ParticulateObstacle {
     public ParticulateHex(Vector2D anchorPoint, EntityManager entityManager, Level level) {
         super(anchorPoint, entityManager, level);
 
-        this.trajectorySize = 200;
+        this.trajectorySize = 140;
         this.particleCount = 20;
-        this.particleRadius = 20;
+        this.particleRadius = 17;
 
         switch (level) {
             case EASY:
-                this.trajectorySpeed = 170;
+                this.trajectorySpeed = 200;
                 break;
             case MEDIUM:
                 this.trajectorySpeed = 250;
@@ -53,7 +53,7 @@ public class ParticulateHex extends ParticulateObstacle {
 
         entityManager.register(this);
         RotationComponent rotationComponent = new RotationComponent(
-                100,
+                150,
                 trajectorySize / 2,
                 -trajectorySize * Math.cos(Math.PI / 6)
         );

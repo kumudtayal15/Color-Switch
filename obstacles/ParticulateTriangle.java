@@ -23,13 +23,13 @@ public class ParticulateTriangle extends ParticulateObstacle {
     public ParticulateTriangle(Vector2D anchorPoint, EntityManager entityManager, Level level) {
         super(anchorPoint, entityManager, level);
 
-        this.trajectorySize = 350;
+        this.trajectorySize = 250;
         this.particleCount = 20;
-        this.particleRadius = 20;
+        this.particleRadius = 14;
 
         switch (level) {
             case EASY:
-                this.trajectorySpeed = 170;
+                this.trajectorySpeed = 200;
                 break;
             case MEDIUM:
                 this.trajectorySpeed = 250;

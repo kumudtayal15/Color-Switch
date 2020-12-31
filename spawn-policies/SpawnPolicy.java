@@ -1,8 +1,7 @@
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 
 abstract public class SpawnPolicy {
-    protected static final int NUM_OBSTACLES = 12;
+    protected static final int NUM_OBSTACLES = 16;
 
     protected Pane sceneGraphRoot;
     protected EntityManager entityManager;
@@ -14,7 +13,6 @@ abstract public class SpawnPolicy {
         this.entityManager = entityManager;
 
         obstacleClassNames = new String[]{
-//                ParticulateSinWave.class.getName(),
                 EightPointStar.class.getName(),
                 QuadArcCircle.class.getName(),
                 Rhombus.class.getName(),
@@ -27,6 +25,10 @@ abstract public class SpawnPolicy {
                 ParticulateHex.class.getName(),
                 CircleAndCartwheel.class.getName(),
                 CartwheelPair.class.getName(),
+                NestedQuadCircles.class.getName(),
+                NestedParticleCircles.class.getName(),
+                AdjacentQuadCirclesHorizontal.class.getName(),
+                AdjacentQuadCirclesVertical.class.getName(),
         };
     }
 

@@ -38,9 +38,9 @@ public class Lemniscate extends CompoundObstacle {
 
     public Lemniscate(Vector2D anchorPoint, EntityManager entityManager, Level level) {
         super(anchorPoint, entityManager, level);
-        this.trajectoryRadius = 100;
+        this.trajectoryRadius = 80;
         this.particleCount = 12;
-        this.particleRadius = 18;
+        this.particleRadius = 16;
 
         switch (level) {
             case EASY:
